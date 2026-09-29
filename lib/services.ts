@@ -169,7 +169,7 @@ const data: Record<ServiceSlug, ServiceData> = {
       },
       { question: "Sa kushton pastrimi i zyrës?", answer: priceAnswer },
     ],
-    images: [],
+    images: [photos.officeRenovation],
     related: ["hotele", "me-themel"],
   },
 
@@ -249,7 +249,7 @@ const data: Record<ServiceSlug, ServiceData> = {
       },
       { question: "Sa kushton pastrimi me themel?", answer: priceAnswer },
     ],
-    images: [],
+    images: [photos.steamFrame, photos.kitchen],
     related: ["apartamente", "pas-ndertimit"],
   },
 
@@ -290,7 +290,7 @@ const data: Record<ServiceSlug, ServiceData> = {
       },
       { question: "Sa kushton pastrimi pas ndërtimit?", answer: priceAnswer },
     ],
-    images: [],
+    images: [photos.windowsTeam, photos.constructionBefore, photos.constructionGlass, photos.steamFrame],
     related: ["me-themel", "apartamente"],
   },
 
@@ -328,7 +328,7 @@ const data: Record<ServiceSlug, ServiceData> = {
       },
       { question: "Sa kushton pastrimi për një hotel?", answer: priceAnswer },
     ],
-    images: [],
+    images: [photos.guestRoom],
     related: ["airbnb", "zyra"],
   },
 };
@@ -344,12 +344,17 @@ export function getService(slug: ServiceSlug): Service {
   return services.find((s) => s.slug === slug)!;
 }
 
+/** Photo for cards: the first one sharp enough to show at card size. */
+export function cardImage(service: Service): PhotoAsset | undefined {
+  return service.images.find((img) => !img.lowRes);
+}
+
 export function serviceMetadata(slug: ServiceSlug): Metadata {
   const service = getService(slug);
   return pageMetadata({
     title: service.metaTitle,
     description: service.metaDescription,
     path: service.path,
-    ogImage: service.images[0]?.src,
+    ogImage: cardImage(service)?.src,
   });
 }

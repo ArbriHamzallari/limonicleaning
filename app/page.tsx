@@ -22,7 +22,7 @@ export const metadata = pageMetadata({
   path: "/",
 });
 
-const workPhotos = [photos.kitchen, photos.bedroom, photos.livingRoomClean, photos.hallwayClean];
+const workPhotos = [photos.windowsTeam, photos.kitchen, photos.bedroom, photos.guestRoom];
 
 export default function Home() {
   return (

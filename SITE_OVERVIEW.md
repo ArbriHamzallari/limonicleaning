@@ -93,14 +93,20 @@ Leads are read with `npx prisma studio` or the DB console (no admin UI by design
 - **Removed on purpose:** Fraunces/italic kickers, 01/02/03 numerals, arrow links, ✓
   characters, em dashes in copy, placeholder image frames, price lines.
 
-## 7. Photos
+## 7. Photos and videos
 
-Only eight real images exist (`public/images`, max 1600px, metadata stripped). The raw
-originals in `media-source/` are git-ignored because phone photos can carry GPS data. The
-before/after pair was rebuilt from the two full-frame originals of the same living room,
-aligned and cropped to the shared view, so the slider compares like with like. Zyra, vila,
-me themel, pas ndërtimit and hotele pages are text-only until real photos from those jobs
-exist.
+All in `public/images` / `public/videos`, max 1600px, metadata (including GPS) stripped; raw
+originals live in git-ignored `media-source/`. Never put raw phone files in `public/`.
+`lib/photos.ts` lists every photo with alt text describing what it actually shows;
+`lib/portfolio.ts` groups them into the jobs shown on `/puna-jone`.
+
+- Apartments/Airbnb: kitchen, bed-making, living room before/after (aligned from two full
+  frames of the same view), hallway, guest-ready bedroom.
+- Post-construction: team cleaning windows, the same flat before cleaning, glass and frames,
+  steam-cleaning a sliding door track (photo + 4 s video).
+- Office: a frame from a 360×640 phone video of an office mid-renovation (`lowRes`, so it is
+  never shown large or on cards) + the clip itself.
+- **Villa: no photo yet**, page is text-only.
 
 ## 8. Verification status (29 Sep 2026)
 
@@ -116,14 +122,14 @@ exist.
 
 ## 9. Still needed from Arbri
 
-- **Domain/DNS:** `limonicleaning.al` did not resolve on 29 Sep 2026. Set `NEXT_PUBLIC_SITE_URL`
-  to the real domain; canonicals, sitemap and JSON-LD use it.
+- **Domain:** limonicleaning.com (Hostinger). Follow `DEPLOY.md`; `NEXT_PUBLIC_SITE_URL` must be
+  `https://limonicleaning.com` in Vercel.
 - **Email:** `RESEND_API_KEY`, `EMAIL_TO`, and `EMAIL_FROM` on a verified domain.
 - **WhatsApp alerts:** the four `WHATSAPP_*` / `OWNER_WHATSAPP` vars and an approved template
   with body variables {{1}} service, {{2}} name, {{3}} phone.
 - **Response time (D6):** a real number before promising "brenda X orësh".
 - **Guarantee (D7):** only if one exists, with its terms.
-- **Photos per service:** offices, villas, hotels, post-construction, deep clean.
+- **Photos:** a villa job, and a sharper office photo (the current one is a small video frame).
 - **Google Business Profile** (service-area business), then real Google reviews, then a
   reviews section linking to the profile. Submit the sitemap in Search Console once the
   domain resolves.

@@ -9,7 +9,11 @@ export const business = {
   phoneDisplay: "+355 68 900 7252",
   phoneE164: "+355689007252",
   whatsappUrl: "https://wa.me/355689007252",
-  // No business email, social links, street address, or hours confirmed yet.
+  // Google Maps listing (share link from Arbri, 29 Sep 2026). Used for the "Google Maps" link
+  // and as sameAs in the JSON-LD. Swap for the full maps.google.com/?cid=… URL if available.
+  googleMapsUrl: "https://share.google/3oNsn9iygdcwmc4Gt",
+  // Set once the Hostinger mailbox exists (e.g. "info@limonicleaning.com"); it then shows on
+  // /kontakt. No social links, street address or hours confirmed yet.
   email: null as string | null,
   instagramUrl: null as string | null,
   facebookUrl: null as string | null,

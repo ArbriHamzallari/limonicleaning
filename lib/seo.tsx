@@ -2,7 +2,7 @@ import type { Metadata } from "next";
 import { business } from "@/lib/business";
 import { services } from "@/lib/services";
 
-export const siteUrl = process.env.NEXT_PUBLIC_SITE_URL ?? "https://limonicleaning.al";
+export const siteUrl = process.env.NEXT_PUBLIC_SITE_URL ?? "https://limonicleaning.com";
 
 interface PageMetadataInput {
   /** Set `absoluteTitle` to skip the "| Limoni Cleaning" template (homepage). */
@@ -46,7 +46,7 @@ const businessId = `${siteUrl}/#business`;
 
 /** One @graph for the whole site, rendered once in the root layout. */
 export function siteGraphJsonLd() {
-  const sameAs = [business.instagramUrl, business.facebookUrl].filter(Boolean) as string[];
+  const sameAs = [business.googleMapsUrl, business.instagramUrl, business.facebookUrl].filter(Boolean) as string[];
 
   return {
     "@context": "https://schema.org",
@@ -73,7 +73,9 @@ export function siteGraphJsonLd() {
             itemOffered: { "@type": "Service", name: s.h1, url: `${siteUrl}${s.path}` },
           })),
         },
-        // Filled only once real profiles exist (Google Business Profile, social).
+        hasMap: business.googleMapsUrl,
+        ...(business.email ? { email: business.email } : {}),
+        // Only real profiles (Google Maps listing now; social once they exist).
         ...(sameAs.length ? { sameAs } : {}),
       },
       {

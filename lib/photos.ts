@@ -8,6 +8,8 @@ export interface PhotoAsset {
   /** Short visible caption. */
   caption: string;
   orientation: "portrait" | "landscape";
+  /** Source is small (e.g. a frame from a phone video): never display it large. */
+  lowRes?: boolean;
 }
 
 export const photos = {
@@ -34,6 +36,43 @@ export const photos = {
     alt: "Korridor apartamenti me dysheme të pastër pas pastrimit",
     caption: "Korridor pas pastrimit",
     orientation: "portrait",
+  },
+  windowsTeam: {
+    src: "/images/ekipi-pastrim-xhamash-pas-ndertimit-tirane.jpg",
+    alt: "Dy punonjëse të Limoni Cleaning duke pastruar xhamat e mëdhenj të një apartamenti të ri pas punimeve në Tiranë",
+    caption: "Pastrimi i xhamave pas punimeve",
+    orientation: "landscape",
+  },
+  constructionBefore: {
+    src: "/images/apartament-pas-ndertimit-para-pastrimit.jpg",
+    alt: "Apartament i ri pas punimeve, me najlon në dysheme, kuti dhe ngjitëse mbi xhama, para pastrimit",
+    caption: "E njëjta pronë, para pastrimit",
+    orientation: "portrait",
+  },
+  constructionGlass: {
+    src: "/images/xhama-dhe-korniza-apartament-i-ri.jpg",
+    alt: "Xhamat e mëdhenj dhe kornizat e zeza të dritareve në një apartament të ri në Tiranë",
+    caption: "Xhamat dhe kornizat e dritareve",
+    orientation: "landscape",
+  },
+  steamFrame: {
+    src: "/images/pastrim-me-avull-korniza-dere.jpg",
+    alt: "Punonjëse duke pastruar me avull kornizën dhe binarin e një dere xhami rrëshqitëse",
+    caption: "Pastrim me avull i kornizave dhe binarëve",
+    orientation: "portrait",
+  },
+  guestRoom: {
+    src: "/images/dhome-e-pergatitur-per-mysafire.jpg",
+    alt: "Dhomë gjumi e rregullt me peshqirë të palosur mbi shtrat, gati për mysafirët",
+    caption: "Dhomë e përgatitur për mysafirët",
+    orientation: "landscape",
+  },
+  officeRenovation: {
+    src: "/images/zyre-gjate-rinovimit-para-pastrimit.jpg",
+    alt: "Zyrë gjatë rinovimit, me mure të sapolyera dhe najlon mbi dysheme, para pastrimit",
+    caption: "Zyrë gjatë rinovimit, para pastrimit",
+    orientation: "portrait",
+    lowRes: true,
   },
 } satisfies Record<string, PhotoAsset>;
 

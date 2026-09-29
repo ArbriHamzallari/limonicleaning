@@ -1,59 +1,35 @@
+import Link from "next/link";
 import { Section } from "@/components/Section";
+import { SectionHeading } from "@/components/SectionHeading";
 import { Breadcrumbs } from "@/components/Breadcrumbs";
 import { BeforeAfterSlider } from "@/components/BeforeAfterSlider";
 import { PortfolioVideo } from "@/components/PortfolioVideo";
-import { JsonLd, breadcrumbJsonLd, videoJsonLd, pageMetadata } from "@/lib/seo";
-import { SectionHeading } from "@/components/SectionHeading";
 import { LeadActions } from "@/components/LeadActions";
 import { Photo } from "@/components/Photo";
-import { photos, beforeAfter } from "@/lib/photos";
+import { JsonLd, breadcrumbJsonLd, videoJsonLd, pageMetadata } from "@/lib/seo";
+import { beforeAfter } from "@/lib/photos";
+import { portfolioProjects } from "@/lib/portfolio";
+import { serviceIndex } from "@/lib/service-index";
 
-const breadcrumbItems = [{ name: "Kryefaqja", path: "/" }, { name: "Puna jonë", path: "/puna-jone" }];
+const breadcrumbItems = [
+  { name: "Kryefaqja", path: "/" },
+  { name: "Puna jonë", path: "/puna-jone" },
+];
 
 export const metadata = pageMetadata({
   title: "Puna Jonë: Foto Para dhe Pas Pastrimit",
   description:
-    "Foto dhe video reale nga pastrimet e Limoni Cleaning në apartamente në Tiranë, me krahasim para dhe pas. Na lini numrin ose na shkruani në WhatsApp.",
+    "Foto dhe video reale nga pastrimet e Limoni Cleaning në Tiranë: apartamente, pas ndërtimit, zyra dhe dhoma për mysafirë. Na lini numrin për ofertë.",
   path: "/puna-jone",
 });
 
-const videos = [
-  {
-    src: "/videos/puna-jone-para-pastrimit.mp4",
-    poster: "/images/puna-jone-para-pastrimit.jpg",
-    caption: "Apartament, para fillimit të pastrimit",
-    name: "Vizitë e apartamentit para fillimit të pastrimit",
-    description: "Pamje reale nga celulari i ekipit, në apartamentin ku po nisim punën.",
-    uploadDate: "2026-09-10",
-    durationSeconds: 17.87,
-  },
-  {
-    src: "/videos/puna-jone-vizite-apartamenti-1.mp4",
-    poster: "/images/puna-jone-vizite-apartamenti-1.jpg",
-    caption: "Apartament pas pastrimit",
-    name: "Vizitë e apartamentit pas pastrimit",
-    description: "Pamje reale nga celulari i ekipit, në apartamentin pas pastrimit.",
-    uploadDate: "2026-09-11",
-    durationSeconds: 25.97,
-  },
-  {
-    src: "/videos/puna-jone-vizite-apartamenti-2.mp4",
-    poster: "/images/puna-jone-vizite-apartamenti-2.jpg",
-    caption: "Apartament që mirëmbajmë rregullisht",
-    name: "Vizitë e një apartamenti që Limoni Cleaning mirëmban rregullisht",
-    description: "Pamje reale nga celulari i ekipit, në një nga pronat që mirëmbajmë me vizita periodike.",
-    uploadDate: "2026-09-11",
-    durationSeconds: 34.57,
-  },
-];
-
-const gallery = [photos.kitchen, photos.bedroom, photos.livingRoomClean, photos.hallwayClean];
+const allVideos = portfolioProjects.flatMap((p) => p.videos);
 
 export default function PunaJonePage() {
   return (
     <>
       <JsonLd data={breadcrumbJsonLd(breadcrumbItems)} />
-      {videos.map((v) => (
+      {allVideos.map((v) => (
         <JsonLd
           key={v.src}
           data={videoJsonLd({
@@ -66,45 +42,63 @@ export default function PunaJonePage() {
           })}
         />
       ))}
+
       <Section className="pt-6 sm:pt-10">
         <Breadcrumbs items={breadcrumbItems} />
         <h1 className="text-3xl leading-tight font-extrabold tracking-tight sm:text-5xl">
           Puna jonë: para dhe pas pastrimit
         </h1>
         <p className="mt-4 max-w-2xl text-xl text-text-muted">
-          Foto dhe video reale nga celulari i ekipit. Lëvizni vijën mbi foto për të parë dhomën para
-          dhe pas pastrimit.
+          Të gjitha fotot dhe videot janë nga puna e ekipit, të bëra me celular gjatë pastrimeve. Nuk
+          përdorim foto stoku.
         </p>
-        <BeforeAfterSlider {...beforeAfter} className="mt-10 max-w-3xl" />
+        <nav aria-label="Punët në këtë faqe" className="mt-6 flex flex-wrap gap-2">
+          {portfolioProjects.map((p) => (
+            <a
+              key={p.id}
+              href={`#${p.id}`}
+              className="inline-flex min-h-12 items-center rounded-full border-2 border-border px-4 text-base font-medium hover:border-primary hover:text-primary"
+            >
+              {p.title}
+            </a>
+          ))}
+        </nav>
       </Section>
 
-      <Section tone="muted">
-        <SectionHeading title="Foto nga pastrimet" />
-        <div className="grid gap-6 sm:grid-cols-2">
-          {gallery.map((photo) => (
-            <Photo
-              key={photo.src}
-              src={photo.src}
-              alt={photo.alt}
-              caption={photo.caption}
-              aspect="aspect-[4/3]"
-              sizes="(min-width: 640px) 50vw, 100vw"
-            />
-          ))}
-        </div>
-      </Section>
+      {portfolioProjects.map((project, i) => (
+        <Section key={project.id} id={project.id} tone={i % 2 === 0 ? "muted" : "default"} className="scroll-mt-20">
+          <SectionHeading title={project.title} intro={project.text} />
 
-      <Section>
-        <SectionHeading
-          title="Video nga puna jonë"
-          intro="Pamje të papërpunuara, direkt nga celulari i ekipit. Videot ngarkohen vetëm kur i hapni."
-        />
-        <div className="grid gap-6 sm:grid-cols-3">
-          {videos.map((v) => (
-            <PortfolioVideo key={v.src} src={v.src} poster={v.poster} caption={v.caption} />
-          ))}
-        </div>
-      </Section>
+          {project.beforeAfter && <BeforeAfterSlider {...beforeAfter} className="mb-8 max-w-3xl" />}
+
+          {(project.photos.length > 0 || project.videos.length > 0) && (
+            <div className="grid items-start gap-6 sm:grid-cols-2 lg:grid-cols-3">
+              {project.photos.map((photo) => (
+                <Photo
+                  key={photo.src}
+                  src={photo.src}
+                  alt={photo.alt}
+                  caption={photo.caption}
+                  aspect={photo.orientation === "portrait" ? "aspect-[3/4]" : "aspect-[4/3]"}
+                  sizes="(min-width: 1024px) 33vw, (min-width: 640px) 50vw, 100vw"
+                />
+              ))}
+              {project.videos.map((v) => (
+                <PortfolioVideo key={v.src} src={v.src} poster={v.poster} caption={v.caption} className="max-w-xs" />
+              ))}
+            </div>
+          )}
+
+          <p className="mt-8">
+            <Link
+              href={serviceIndex[project.service].path}
+              className="inline-flex min-h-12 items-center font-semibold text-primary underline decoration-2 underline-offset-4"
+            >
+              {`Më shumë për shërbimin: ${serviceIndex[project.service].navLabel}`}
+            </Link>
+          </p>
+        </Section>
+      ))}
 
       <Section tone="warm">
         <SectionHeading title="Ju pëlqen si punojmë?" intro="Na tregoni për pronën tuaj dhe ju japim ofertën." />

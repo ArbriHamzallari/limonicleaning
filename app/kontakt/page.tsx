@@ -18,7 +18,7 @@ export const metadata = pageMetadata({
   path: "/kontakt",
 });
 
-// Only confirmed details: no email, hours, address or map until they exist (CLAUDE.md).
+// Only confirmed details: email shows once set in lib/business.ts; no hours or street address yet.
 export default function KontaktPage() {
   return (
     <>
@@ -40,7 +40,27 @@ export default function KontaktPage() {
               <div className="py-4">
                 <dt className="text-text-muted">Zona</dt>
                 <dd className="mt-1 text-xl font-bold">{business.areaServed}</dd>
+                <dd>
+                  <a
+                    href={business.googleMapsUrl}
+                    target="_blank"
+                    rel="noopener noreferrer"
+                    className="inline-flex min-h-12 items-center font-semibold text-primary underline decoration-2 underline-offset-4"
+                  >
+                    Na gjeni në Google Maps
+                  </a>
+                </dd>
               </div>
+              {business.email && (
+                <div className="py-4">
+                  <dt className="text-text-muted">Email</dt>
+                  <dd className="mt-1 text-xl font-bold">
+                    <a href={`mailto:${business.email}`} className="inline-flex min-h-12 items-center underline underline-offset-4">
+                      {business.email}
+                    </a>
+                  </dd>
+                </div>
+              )}
             </dl>
             <div className="mt-6 grid gap-3">
               <WhatsAppButton placement="kontakt" size="lg" />

@@ -17,7 +17,7 @@ export function Photo({
   src,
   alt,
   aspect = "aspect-[4/3]",
-  sizes = "(min-width: 1024px) 50vw, 100vw",
+  sizes,
   priority = false,
   caption,
   className = "",
@@ -29,7 +29,7 @@ export function Photo({
           src={src}
           alt={alt}
           fill
-          sizes={sizes}
+          sizes={sizes ?? "(min-width: 1024px) 50vw, 100vw"}
           className="object-cover"
           {...(priority ? { loading: "eager" as const, fetchPriority: "high" as const } : {})}
         />

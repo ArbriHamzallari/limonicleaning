@@ -21,7 +21,7 @@ WhatsApp Cloud API (optional owner alerts) · Zod.
 
 3. **Environment variables.** Copy `.env.example` to `.env` (Prisma CLI) and `.env.local`
    (Next.js) and fill in:
-   - `DATABASE_URL`: Postgres connection string.
+   - `DATABASE_URL` (and `DATABASE_URL_UNPOOLED`, same value locally): Postgres connection strings.
    - `RESEND_API_KEY`, `EMAIL_FROM`, `EMAIL_TO`: lead notification emails. `EMAIL_FROM` must be
      on a domain verified in Resend. Without them, leads are still saved and a skip line is
      logged.
@@ -65,5 +65,7 @@ WhatsApp Cloud API (optional owner alerts) · Zod.
 
 ## Deploy
 
-Target is Vercel. Set the variables from `.env.example` in the project settings and run
-`npx prisma migrate deploy` against the production database before the first deploy.
+Full step-by-step (GitHub, Vercel, Hostinger DNS, Resend) is in `DEPLOY.md`.
+
+Target is Vercel. Migrations run automatically during the Vercel build (`vercel.json` →
+`npm run vercel-build`).

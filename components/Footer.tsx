@@ -55,6 +55,14 @@ export function Footer() {
           <div>
             <h2 className="text-lg font-bold text-text">Na kontaktoni</h2>
             <p className="mt-3 text-text-muted">{business.areaServed}</p>
+            <a
+              href={business.googleMapsUrl}
+              target="_blank"
+              rel="noopener noreferrer"
+              className="inline-flex min-h-12 items-center text-text-muted underline underline-offset-4 hover:text-primary"
+            >
+              Google Maps
+            </a>
             <div className="mt-4 grid gap-3">
               <PhoneButton placement="footer" className="w-full sm:w-auto" />
               <WhatsAppButton placement="footer" className="w-full sm:w-auto" />

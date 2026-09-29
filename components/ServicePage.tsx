@@ -9,7 +9,7 @@ import { Photo } from "./Photo";
 import { FaqItem } from "./FaqItem";
 import { ServiceCard } from "./ServiceCard";
 import { CheckList } from "./icons";
-import { getService, type ServiceSlug } from "@/lib/services";
+import { cardImage, getService, type ServiceSlug } from "@/lib/services";
 import { JsonLd, breadcrumbJsonLd, serviceJsonLd } from "@/lib/seo";
 
 interface ServicePageProps {
@@ -49,7 +49,8 @@ export function ServicePage({ slug, children }: ServicePageProps) {
               src={hero.src}
               alt={hero.alt}
               aspect={hero.orientation === "portrait" ? "aspect-[4/5]" : "aspect-[4/3]"}
-              className="mx-auto w-full max-w-md lg:max-w-none"
+              className={`mx-auto w-full ${hero.lowRes ? "max-w-xs" : "max-w-md lg:max-w-none"}`}
+              sizes={hero.lowRes ? "320px" : undefined}
               priority
             />
           )}
@@ -77,15 +78,15 @@ export function ServicePage({ slug, children }: ServicePageProps) {
       {gallery.length > 0 && (
         <Section>
           <SectionHeading title="Nga puna jonë" intro="Foto reale nga pastrimet e ekipit." />
-          <div className="grid gap-6 sm:grid-cols-2">
+          <div className="grid items-start gap-6 sm:grid-cols-2 lg:grid-cols-3">
             {gallery.map((photo) => (
               <Photo
                 key={photo.src}
                 src={photo.src}
                 alt={photo.alt}
                 caption={photo.caption}
-                aspect="aspect-[4/3]"
-                sizes="(min-width: 640px) 50vw, 100vw"
+                aspect={photo.orientation === "portrait" ? "aspect-[3/4]" : "aspect-[4/3]"}
+                sizes="(min-width: 1024px) 33vw, (min-width: 640px) 50vw, 100vw"
               />
             ))}
           </div>
@@ -111,7 +112,7 @@ export function ServicePage({ slug, children }: ServicePageProps) {
               path={s.path}
               name={s.navLabel}
               summary={s.summary}
-              image={s.images[0]}
+              image={cardImage(s)}
             />
           ))}
         </div>
