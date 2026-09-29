@@ -7,7 +7,7 @@ const breadcrumbItems = [{ name: "Kryefaqja", path: "/" }, { name: "Politika e P
 
 export const metadata = pageMetadata({
   title: "Politika e Privatësisë",
-  description: "Si mbledh, përdor dhe ruan Limoni Cleaning të dhënat e klientëve.",
+  description: "Si i mbledh, i përdor dhe i ruan Limoni Cleaning të dhënat që na jepni kur kërkoni ofertë për pastrim, dhe si mund të kërkoni t'i shihni ose t'i fshini.",
   path: "/privatesia",
 });
 

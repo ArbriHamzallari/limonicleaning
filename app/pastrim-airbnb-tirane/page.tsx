@@ -30,8 +30,8 @@ function OwnersSection() {
         <div className="rounded-lg border border-border-on-dark p-6 sm:p-8">
           <h3 className="text-xl font-bold">Ju duhet edhe menaxhimi i pronës?</h3>
           <p className="mt-3 text-text-on-dark-muted">
-            Partneri ynë zyrtar, {prago.name}, merret me menaxhimin e Airbnb: çmimet, kalendarin dhe
-            komunikimin me mysafirët. Limoni Cleaning dhe {prago.name} janë dy kompani të ndara: ne
+            Partneri ynë zyrtar, {prago.name}, merret me menaxhimin e pronave në Airbnb, nga kalendari
+            te komunikimi me mysafirët. Limoni Cleaning dhe {prago.name} janë dy kompani të ndara: ne
             pastrojmë, ata menaxhojnë.
           </p>
           <a

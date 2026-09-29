@@ -256,7 +256,7 @@ const data: Record<ServiceSlug, ServiceData> = {
   "pas-ndertimit": {
     metaTitle: "Pastrim pas Ndërtimit në Tiranë",
     metaDescription:
-      "Pastrim pas ndërtimit ose rinovimit në Tiranë: pluhuri nga dyshemetë, xhamat, dyert dhe dritaret, gati për t'u banuar. Na lini numrin ose shkruani në WhatsApp.",
+      "Pastrim pas ndërtimit ose rinovimit në Tiranë: heqim pluhurin nga dyshemetë, xhamat, dyert dhe dritaret. Na lini numrin ose na shkruani në WhatsApp.",
     h1: "Pastrim pas ndërtimit dhe rinovimit në Tiranë",
     intro:
       "Pas rinovimit ose ndërtimit, prona ka nevojë për një pastrim të thellë që largon pluhurin e llaçit, të bojës dhe të punimeve. Pastrojmë dyshemetë, xhamat, kornizat e dyerve dhe dritaret.",

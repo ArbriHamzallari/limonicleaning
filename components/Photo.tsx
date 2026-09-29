@@ -5,8 +5,8 @@ interface PhotoProps {
   alt: string;
   aspect?: string;
   sizes?: string;
-  /** Only the page's hero / LCP image. */
-  preload?: boolean;
+  /** Only the page's hero / LCP image: loads eagerly with high fetch priority. */
+  priority?: boolean;
   caption?: string;
   className?: string;
 }
@@ -18,14 +18,21 @@ export function Photo({
   alt,
   aspect = "aspect-[4/3]",
   sizes = "(min-width: 1024px) 50vw, 100vw",
-  preload = false,
+  priority = false,
   caption,
   className = "",
 }: PhotoProps) {
   return (
     <figure className={className}>
       <div className={`relative overflow-hidden rounded-lg bg-bg-muted ${aspect}`}>
-        <Image src={src} alt={alt} fill sizes={sizes} preload={preload} className="object-cover" />
+        <Image
+          src={src}
+          alt={alt}
+          fill
+          sizes={sizes}
+          className="object-cover"
+          {...(priority ? { loading: "eager" as const, fetchPriority: "high" as const } : {})}
+        />
       </div>
       {caption && <figcaption className="mt-2 text-sm text-(--fg-muted)">{caption}</figcaption>}
     </figure>

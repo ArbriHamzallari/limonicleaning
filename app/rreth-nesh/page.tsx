@@ -16,7 +16,7 @@ const breadcrumbItems = [
 export const metadata = pageMetadata({
   title: "Rreth Nesh",
   description:
-    "Limoni Cleaning është kompani pastrimi në Tiranë, me bazë në Komunën e Parisit. Ekip me mbi 10 vjet eksperiencë. Na lini numrin ose na shkruani në WhatsApp.",
+    "Njihuni me Limoni Cleaning, kompani pastrimi në Tiranë me bazë në Komunën e Parisit dhe ekip me mbi 10 vjet eksperiencë. Na shkruani në WhatsApp.",
   path: "/rreth-nesh",
 });
 
@@ -49,7 +49,7 @@ export default function RrethNeshPage() {
             alt={photos.kitchen.alt}
             aspect="aspect-[4/5]"
             className="mx-auto w-full max-w-md lg:max-w-none"
-            preload
+            priority
           />
         </div>
       </Section>

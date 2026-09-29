@@ -2,7 +2,7 @@ import { Section } from "@/components/Section";
 import { SectionHeading } from "@/components/SectionHeading";
 import { Breadcrumbs } from "@/components/Breadcrumbs";
 import { LeadActions } from "@/components/LeadActions";
-import { ServiceCard } from "@/components/ServiceCard";
+import { ServiceGrid } from "@/components/ServiceGrid";
 import { JsonLd, breadcrumbJsonLd, pageMetadata } from "@/lib/seo";
 import { services } from "@/lib/services";
 
@@ -34,19 +34,7 @@ export default function SherbimePage() {
       </Section>
 
       <Section tone="muted">
-        <div className="grid gap-6 sm:grid-cols-2 lg:grid-cols-3">
-          {services.map((s) => (
-            <ServiceCard
-              key={s.slug}
-              slug={s.slug}
-              path={s.path}
-              name={s.navLabel}
-              summary={s.summary}
-              image={s.images[0]}
-              headingLevel="h2"
-            />
-          ))}
-        </div>
+        <ServiceGrid services={services} headingLevel="h2" />
       </Section>
 
       <Section>

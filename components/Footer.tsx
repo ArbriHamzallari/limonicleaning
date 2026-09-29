@@ -5,7 +5,7 @@ import { PhoneButton } from "./PhoneButton";
 import { business, prago } from "@/lib/business";
 import { footerServiceLinks, footerCompanyLinks, footerLegalLinks } from "@/lib/nav";
 
-const linkClasses = "inline-flex min-h-12 items-center text-text-muted hover:text-primary";
+const linkClasses = "inline-flex min-h-12 min-w-12 items-center text-text-muted hover:text-primary";
 
 export function Footer() {
   const year = new Date().getFullYear();

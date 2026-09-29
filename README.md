@@ -1,11 +1,12 @@
 # Limoni Cleaning
 
-Marketing + booking website for Limoni Cleaning (Tirana, Albania). See `CLAUDE.md` for the full
-project brief, brand system, and business facts.
+Lead-first marketing website for Limoni Cleaning (Tirana, Albania). See `CLAUDE.md` for the
+project brief, rules and business facts, and `SITE_OVERVIEW.md` for how the code fits together.
 
 ## Stack
 
-Next.js (App Router, TypeScript) · Tailwind CSS v4 · Prisma + Postgres · Resend (email) · Zod.
+Next.js 16 (App Router, TypeScript) · Tailwind CSS v4 · Prisma + Postgres · Resend (email) ·
+WhatsApp Cloud API (optional owner alerts) · Zod.
 
 ## Local setup
 
@@ -15,21 +16,20 @@ Next.js (App Router, TypeScript) · Tailwind CSS v4 · Prisma + Postgres · Rese
    npm install
    ```
 
-2. **Database.** Provision a free Postgres database on either [Vercel Postgres](https://vercel.com/docs/storage/vercel-postgres)
-   or [Supabase](https://supabase.com) (either works — the app just needs a standard
-   `postgresql://` connection string).
+2. **Database.** Any Postgres works (Vercel Postgres, Supabase, or a local one). The app only
+   needs a `postgresql://` connection string.
 
 3. **Environment variables.** Copy `.env.example` to `.env` (Prisma CLI) and `.env.local`
-   (Next.js dev server reads this too) and fill in:
-   - `DATABASE_URL` — your Postgres connection string.
-   - `RESEND_API_KEY`, `EMAIL_FROM`, `EMAIL_TO` — for booking/contact email notifications.
-     Get a free key at [resend.com](https://resend.com). Without these set, submissions still
-     persist to the database, but the notification email is skipped (logged to the console)
-     instead of failing the request.
-   - `NEXT_PUBLIC_SITE_URL` — used for canonical URLs, sitemap, and OG tags.
-   - `NEXT_PUBLIC_GA_MEASUREMENT_ID` — optional. Leave unset and no analytics script loads at
-     all. Set a real GA4 ID and key events start firing (see `lib/analytics.ts`): CTA clicks,
-     WhatsApp clicks, phone clicks, booking started/completed, contact submitted.
+   (Next.js) and fill in:
+   - `DATABASE_URL`: Postgres connection string.
+   - `RESEND_API_KEY`, `EMAIL_FROM`, `EMAIL_TO`: lead notification emails. `EMAIL_FROM` must be
+     on a domain verified in Resend. Without them, leads are still saved and a skip line is
+     logged.
+   - `WHATSAPP_TOKEN`, `WHATSAPP_PHONE_NUMBER_ID`, `OWNER_WHATSAPP`,
+     `WHATSAPP_TEMPLATE_NEW_LEAD`: optional owner alert on WhatsApp (see comments in
+     `.env.example` and `lib/notify.ts`).
+   - `NEXT_PUBLIC_SITE_URL`: canonical URLs, sitemap, OG tags, JSON-LD.
+   - `NEXT_PUBLIC_GA_MEASUREMENT_ID`: optional. Unset means no analytics script at all.
 
 4. **Run migrations**
 
@@ -43,32 +43,27 @@ Next.js (App Router, TypeScript) · Tailwind CSS v4 · Prisma + Postgres · Rese
    npm run dev
    ```
 
-   Open [http://localhost:3000](http://localhost:3000).
+## Testing the lead form locally
 
-## Testing the booking/contact flow locally
-
-- Go to `/rezervo`, complete the wizard, and submit. On success you'll see a reference number
-  (e.g. `LC-20260903-AB12`) — that means the row was written to `bookings` in Postgres.
-- Go to `/kontakt` and submit the form — check the `contact_messages` table.
-- Inspect the database directly with `npx prisma studio`.
-- If `RESEND_API_KEY`/`EMAIL_TO` aren't set, the terminal running `next dev` logs a warning
-  instead of sending an email — the submission still succeeds and persists.
+- Submit the form on `/kerko-oferte` (or any service page). Wait at least 3 seconds after the
+  page loads; faster submissions are treated as bots.
+- Check the `leads` table with `npx prisma studio`. The phone is stored in E.164
+  (`068 900 7252` → `+355689007252`).
+- Without email/WhatsApp keys, the server log shows `[notify:email] … skipping` and
+  `[notify:whatsapp] … skipping`; the lead is still saved.
 
 ## Project structure
 
-- `app/` — routes (see `CLAUDE.md` for the full site map).
-- `app/api/booking`, `app/api/contact` — Route Handlers that validate (Zod), persist (Prisma),
-  and email-notify (Resend) each submission.
-- `components/` — shared UI (`Header`, `Footer`, `Button`, `Card`, `Section`, `PriceTable`,
-  `FaqItem`, `WhatsAppLink`, `PhoneLink`, `PlaceholderImage`, `Breadcrumbs`, `MobileStickyCta`,
-  `Analytics`, `Logo`).
-- `lib/` — business facts, pricing, structured content (migrated from `content/source-copy.md`),
-  validation schemas, Prisma client, email sending, WhatsApp message presets, analytics event
-  wrapper, SEO/JSON-LD helpers.
-- `prisma/schema.prisma` — `Booking` and `ContactMessage` models.
+- `app/`: routes. Service pages are five-line files rendering `components/ServicePage.tsx`.
+- `app/api/lead`: the only form endpoint (validation, spam checks, save, notify).
+- `components/`: shared UI (`Button`, `WhatsAppButton`, `PhoneButton`, `LeadActions`,
+  `LeadForm`, `ServicePage`, `ServiceCard`, `ServiceGrid`, `Section`, `SectionHeading`, `Photo`,
+  `Header`, `Footer`, `MobileStickyCta`, …).
+- `lib/`: service data, site copy, photos, WhatsApp messages, phone normalisation, validation,
+  rate limiting, notifications, SEO helpers, business facts.
+- `prisma/schema.prisma`: `Lead` (in use); `Booking` and `ContactMessage` kept for history.
 
 ## Deploy
 
-Target is Vercel. Set the same environment variables from `.env.example` in the Vercel project
-settings, then deploy. Run `npx prisma migrate deploy` against the production database before
-(or as part of) the first deploy.
+Target is Vercel. Set the variables from `.env.example` in the project settings and run
+`npx prisma migrate deploy` against the production database before the first deploy.

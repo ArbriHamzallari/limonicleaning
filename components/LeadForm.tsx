@@ -57,6 +57,7 @@ export function LeadForm({ service: preselected, placement }: LeadFormProps) {
   const startedAt = useRef(0);
   const successRef = useRef<HTMLDivElement>(null);
   const formRef = useRef<HTMLFormElement>(null);
+  const errorRef = useRef<HTMLDivElement>(null);
 
   useEffect(() => {
     startedAt.current = Date.now();
@@ -65,6 +66,10 @@ export function LeadForm({ service: preselected, placement }: LeadFormProps) {
   useEffect(() => {
     if (status === "success") successRef.current?.focus();
   }, [status]);
+
+  useEffect(() => {
+    if (errors.form) errorRef.current?.scrollIntoView({ block: "center" });
+  }, [errors.form]);
 
   function focusFirstError(next: FieldErrors) {
     const first = (["service", "name", "phone"] as const).find((k) => next[k]);
@@ -326,7 +331,7 @@ export function LeadForm({ service: preselected, placement }: LeadFormProps) {
       </div>
 
       {errors.form && (
-        <div role="alert" className="mt-6 rounded-lg border-2 border-red-700/30 bg-red-50 p-4 text-red-800">
+        <div ref={errorRef} role="alert" className="mt-6 rounded-lg border-2 border-red-700/30 bg-red-50 p-4 text-red-800">
           <p className="font-medium">{errors.form}</p>
           <WhatsAppButton service={waService} placement={`${placement}_error`} className="mt-3" />
         </div>

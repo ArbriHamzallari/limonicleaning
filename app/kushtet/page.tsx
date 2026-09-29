@@ -7,7 +7,7 @@ const breadcrumbItems = [{ name: "Kryefaqja", path: "/" }, { name: "Kushtet e Sh
 
 export const metadata = pageMetadata({
   title: "Kushtet e Shërbimit",
-  description: "Kushtet e përdorimit të shërbimeve të pastrimit të Limoni Cleaning.",
+  description: "Kushtet e shërbimit të Limoni Cleaning: si funksionojnë kërkesat për ofertë, oferta, shtyrja ose anulimi i pastrimit dhe si trajtohen shqetësimet tuaja.",
   path: "/kushtet",
 });
 
@@ -32,7 +32,7 @@ export default function KushtetPage() {
 
           <h2 className="mt-10 text-2xl font-bold">Oferta</h2>
           <p className="mt-3 text-text-muted">
-            Faqja nuk publikon çmime. Oferta varet nga madhësia dhe gjendja e pronës, lloji i
+            Faqja nuk publikon tarifa. Oferta varet nga madhësia dhe gjendja e pronës, lloji i
             pastrimit dhe shërbimet shtesë të kërkuara, dhe konfirmohet me ju para pastrimit.
           </p>
 

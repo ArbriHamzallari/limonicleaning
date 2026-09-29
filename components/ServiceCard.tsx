@@ -31,8 +31,8 @@ export function ServiceCard({ slug, path, name, summary, image, headingLevel = "
         </div>
       )}
       <div className="flex flex-1 flex-col p-5 sm:p-6">
-        <Heading className="text-xl font-bold text-text">
-          <Link href={path} className="hover:text-primary">
+        <Heading className="-my-2 text-xl font-bold text-text">
+          <Link href={path} className="inline-flex min-h-12 min-w-12 items-center hover:text-primary">
             {name}
           </Link>
         </Heading>

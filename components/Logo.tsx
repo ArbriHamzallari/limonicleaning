@@ -8,10 +8,10 @@ export function Logo({ className = "" }: { className?: string }) {
         alt=""
         width={46}
         height={62}
-        priority
-        className="h-8 w-auto shrink-0"
+        loading="eager"
+        className="h-7 w-auto shrink-0 sm:h-8"
       />
-      <span className="text-lg font-extrabold tracking-tight text-text">Limoni Cleaning</span>
+      <span className="text-base font-extrabold tracking-tight whitespace-nowrap text-text sm:text-lg">Limoni Cleaning</span>
     </span>
   );
 }

@@ -50,7 +50,7 @@ export function ServicePage({ slug, children }: ServicePageProps) {
               alt={hero.alt}
               aspect={hero.orientation === "portrait" ? "aspect-[4/5]" : "aspect-[4/3]"}
               className="mx-auto w-full max-w-md lg:max-w-none"
-              preload
+              priority
             />
           )}
         </div>

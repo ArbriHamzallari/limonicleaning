@@ -5,7 +5,7 @@ import { Button } from "@/components/Button";
 import { LeadActions } from "@/components/LeadActions";
 import { LeadForm } from "@/components/LeadForm";
 import { Photo } from "@/components/Photo";
-import { ServiceCard } from "@/components/ServiceCard";
+import { ServiceGrid } from "@/components/ServiceGrid";
 import { FaqItem } from "@/components/FaqItem";
 import { BeforeAfterSlider } from "@/components/BeforeAfterSlider";
 import { services } from "@/lib/services";
@@ -47,7 +47,7 @@ export default function Home() {
               aspect="aspect-[4/5]"
               sizes="(min-width: 1024px) 40vw, 100vw"
               className="mx-auto max-w-md lg:max-w-none"
-              preload
+              priority
             />
           </div>
         </div>
@@ -68,18 +68,7 @@ export default function Home() {
           title="Shërbimet tona"
           intro="Zgjidhni llojin e pronës për të parë çfarë përfshin pastrimi."
         />
-        <div className="grid gap-6 sm:grid-cols-2 lg:grid-cols-3">
-          {services.map((s) => (
-            <ServiceCard
-              key={s.slug}
-              slug={s.slug}
-              path={s.path}
-              name={s.navLabel}
-              summary={s.summary}
-              image={s.images[0]}
-            />
-          ))}
-        </div>
+        <ServiceGrid services={services} />
       </Section>
 
       {/* Puna jonë */}
