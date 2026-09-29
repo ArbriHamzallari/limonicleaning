@@ -1,0 +1,105 @@
+@import "tailwindcss";
+
+:root {
+  /* Brand */
+  --color-primary: #184a2c;
+  --color-primary-hover: #0f3520;
+  --color-primary-soft: #21603a;
+  --color-accent: #f5c518;
+  --color-accent-hover: #e5b60c;
+
+  /* Surfaces */
+  --color-bg: #ffffff;
+  --color-bg-muted: #f6f5f0;
+  --color-bg-warm: #fefbea;
+  --color-bg-warm-strong: #fdf3d3;
+  --color-bg-ink: #102019;
+
+  /* Text */
+  --color-text: #16241c;
+  --color-text-muted: #5b6b60;
+  --color-text-on-dark: #f3f6f2;
+  --color-text-on-dark-muted: rgba(243, 246, 242, 0.72);
+
+  --color-border: #e7e3d7;
+  --color-border-on-dark: rgba(243, 246, 242, 0.16);
+
+  /* Motion */
+  --ease-out: cubic-bezier(0.16, 1, 0.3, 1);
+  --duration-fast: 150ms;
+  --duration-base: 320ms;
+  --duration-slow: 600ms;
+}
+
+@theme inline {
+  --color-primary: var(--color-primary);
+  --color-primary-hover: var(--color-primary-hover);
+  --color-primary-soft: var(--color-primary-soft);
+  --color-accent: var(--color-accent);
+  --color-accent-hover: var(--color-accent-hover);
+  --color-bg: var(--color-bg);
+  --color-bg-muted: var(--color-bg-muted);
+  --color-bg-warm: var(--color-bg-warm);
+  --color-bg-warm-strong: var(--color-bg-warm-strong);
+  --color-bg-ink: var(--color-bg-ink);
+  --color-text: var(--color-text);
+  --color-text-muted: var(--color-text-muted);
+  --color-text-on-dark: var(--color-text-on-dark);
+  --color-text-on-dark-muted: var(--color-text-on-dark-muted);
+  --color-border: var(--color-border);
+  --color-border-on-dark: var(--color-border-on-dark);
+  --font-sans: var(--font-inter);
+  --font-display: var(--font-fraunces);
+}
+
+body {
+  background: var(--color-bg);
+  color: var(--color-text);
+  font-family: var(--font-sans), Arial, Helvetica, sans-serif;
+}
+
+/* Display type: used sparingly, headings only. Optical sizing + a slightly negative
+   tracking at large sizes keeps Fraunces from reading as decorative — it should feel
+   structural, not ornamental. */
+.font-display {
+  font-family: var(--font-display), Georgia, serif;
+  font-feature-settings: "ss01" 1;
+}
+
+a:focus-visible,
+button:focus-visible,
+input:focus-visible,
+textarea:focus-visible,
+select:focus-visible,
+summary:focus-visible,
+[tabindex]:focus-visible {
+  outline: 2px solid var(--color-primary);
+  outline-offset: 2px;
+  border-radius: 4px;
+}
+
+::selection {
+  background: var(--color-accent);
+  color: var(--color-bg-ink);
+}
+
+/* Respect reduced-motion globally: anything using these utility classes collapses to an
+   instant, static state instead of skipping the entry state entirely (avoids
+   content popping in unstyled). */
+@media (prefers-reduced-motion: reduce) {
+  *,
+  *::before,
+  *::after {
+    animation-duration: 0.01ms !important;
+    animation-iteration-count: 1 !important;
+    transition-duration: 0.01ms !important;
+    scroll-behavior: auto !important;
+  }
+}
+
+/* Thin citrus-line texture: a restrained, brand-specific decorative mark (not a stock
+   pattern) used only behind hero/media slots at low opacity — never a dominant motif. */
+.bg-citrus-texture {
+  background-image: radial-gradient(circle at 1px 1px, rgba(245, 197, 24, 0.35) 1px, transparent 0);
+  background-size: 22px 22px;
+}
