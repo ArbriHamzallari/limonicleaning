@@ -33,7 +33,7 @@ Production marketing and **lead-capture** website for **Limoni Cleaning**, a cle
 - City: Tirana, Albania. Based in the "Komuna e Parisit" area — no verified street address yet.
 - Phone / WhatsApp: **+355 68 900 7252** — `https://wa.me/355689007252`
 - Domain: **limonicleaning.com** (bought at Hostinger, Sep 2026). Hosted on Vercel; DNS and business email stay at Hostinger. Deployment steps are in `DEPLOY.md`.
-- Email: Hostinger mailbox on limonicleaning.com is being set up; the exact address isn't confirmed yet. Add it to `lib/business.ts` (`email`) once it exists.
+- Email: **info@limonicleaning.com** (Hostinger mailbox). Lead notifications are *sent* via Resend from `kerkesa@limonicleaning.com` and delivered to info@. DNS is managed in Vercel (nameservers moved there), so all mail records live in Vercel DNS.
 - Google Maps listing: https://share.google/3oNsn9iygdcwmc4Gt (`business.googleMapsUrl`).
 - Social media: none yet.
 - Hours: not defined — do not display specific opening hours until Arbri provides them.

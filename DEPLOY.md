@@ -1,5 +1,11 @@
 # Deploying limonicleaning.com
 
+> **Current setup (29 Sep 2026):** the domain's nameservers point to **Vercel**
+> (`ns1/ns2.vercel-dns.com`). So every DNS record, including the Hostinger email records
+> (MX, SPF, DKIM, DMARC) and Resend's records, is added in **Vercel → Domains →
+> limonicleaning.com → DNS Records**, not in Hostinger. Where the steps below say "Hostinger
+> DNS", use Vercel DNS instead.
+
 Order: **GitHub → database → Vercel → domain DNS at Hostinger → email sending (Resend) →
 Google.** The site is hosted on Vercel. The domain and the business mailbox stay at Hostinger;
 you only change a few DNS records there. **Keep Hostinger's nameservers** (don't switch them to

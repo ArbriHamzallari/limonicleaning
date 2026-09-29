@@ -12,9 +12,9 @@ export const business = {
   // Google Maps listing (share link from Arbri, 29 Sep 2026). Used for the "Google Maps" link
   // and as sameAs in the JSON-LD. Swap for the full maps.google.com/?cid=… URL if available.
   googleMapsUrl: "https://share.google/3oNsn9iygdcwmc4Gt",
-  // Set once the Hostinger mailbox exists (e.g. "info@limonicleaning.com"); it then shows on
-  // /kontakt. No social links, street address or hours confirmed yet.
-  email: null as string | null,
+  // Hostinger mailbox, confirmed 29 Sep 2026. Shown on /kontakt and in the JSON-LD.
+  // No social links, street address or hours confirmed yet.
+  email: "info@limonicleaning.com" as string | null,
   instagramUrl: null as string | null,
   facebookUrl: null as string | null,
   streetAddress: null as string | null,
