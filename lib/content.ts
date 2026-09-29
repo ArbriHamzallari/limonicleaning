@@ -8,19 +8,47 @@ export interface FaqEntry {
   answer: string;
 }
 
-// The four confirmed facts. Plain text, no icons, no numbers dressed up as "stats".
+// Three confirmed facts. Plain text, no icons, no numbers dressed up as "stats".
 // "10 vjet" is the team's experience, never the company's age (Limoni is new).
-export const trustFacts = [
-  "50+ prona të pastruara",
-  "Ekip me mbi 10 vjet eksperiencë",
-  "Partner zyrtar i Prago",
-  "Punojmë në Tiranë",
+export const trustFacts = ["50+ prona të pastruara", "Ekip me mbi 10 vjet përvojë", "Tiranë"];
+
+/** What happens after someone writes to us (homepage and service page closers). */
+export const closerSteps = [
+  { title: "Na kontaktoni.", text: "Na dërgoni në WhatsApp madhësinë, zonën dhe llojin e pronës." },
+  { title: "Ju japim çmimin.", text: "Shikojmë çfarë ju nevojitet dhe ju japim ofertën." },
+  { title: "Vijmë dhe pastrojmë.", text: "Caktojmë ditën dhe orën dhe ekipi vjen në pronë." },
 ];
 
-export const howItWorks = [
-  "Na lini numrin ose na shkruani në WhatsApp.",
-  "Ju kontaktojmë, pyesim për pronën dhe ju japim ofertën.",
-  "Vijmë në orarin e rënë dakord dhe pastrojmë.",
+/** Homepage "Çfarë pastrojmë": four groups instead of seven cards. Inline links are rendered
+ *  from `links` (label must appear verbatim in `text`). */
+export const serviceGroups = [
+  {
+    name: "Airbnb",
+    text: "Pas çdo check-out-i, e pastrojmë pronën dhe e përgatisim për mysafirin tjetër.",
+    href: "/pastrim-airbnb-tirane",
+    links: [] as { label: string; href: string }[],
+  },
+  {
+    name: "Shtëpi dhe apartamente",
+    text: "Pastrim i rregullt për apartamente, shtëpi dhe vila, sipas gjendjes së pronës.",
+    href: "/pastrim-apartamentesh-tirane",
+    links: [{ label: "vila", href: "/pastrim-vilash-tirane" }],
+  },
+  {
+    name: "Biznese",
+    text: "Zyra, hotele dhe ambiente të tjera biznesi, me plan sipas orarit tuaj.",
+    href: "/pastrim-zyrash-tirane",
+    links: [{ label: "hotele", href: "/pastrim-hotelesh-tirane" }],
+  },
+  {
+    name: "Pastrime të veçanta",
+    text: "Pastrim me themel dhe pastrim pas ndërtimit ose rinovimit.",
+    href: "/pastrim-me-themel-tirane",
+    links: [
+      { label: "Pastrim me themel", href: "/pastrim-me-themel-tirane" },
+      { label: "pastrim pas ndërtimit ose rinovimit", href: "/pastrim-pas-ndertimit-tirane" },
+    ],
+  },
 ];
 
 const faqPrice: FaqEntry = { question: "Sa kushton pastrimi?", answer: priceAnswer };
@@ -102,7 +130,7 @@ export const aboutValues = [
   {
     title: "Eksperiencë",
     description:
-      "Njerëzit e ekipit kanë mbi 10 vjet eksperiencë në pastrim dhe mirëmbajtje ambientesh, të fituar në kompani të tjera pastrimi.",
+      "Njerëzit e ekipit kanë mbi 10 vjet përvojë në pastrim dhe mirëmbajtje ambientesh, të fituar në kompani të tjera pastrimi.",
   },
   {
     title: "Punë e rregullt",

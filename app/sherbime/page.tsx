@@ -1,8 +1,7 @@
 import { Section } from "@/components/Section";
-import { SectionHeading } from "@/components/SectionHeading";
 import { Breadcrumbs } from "@/components/Breadcrumbs";
-import { LeadActions } from "@/components/LeadActions";
-import { ServiceGrid } from "@/components/ServiceGrid";
+import { ServiceList } from "@/components/ServiceList";
+import { ContactActions } from "@/components/ContactActions";
 import { JsonLd, breadcrumbJsonLd, pageMetadata } from "@/lib/seo";
 import { services } from "@/lib/services";
 
@@ -28,21 +27,17 @@ export default function SherbimePage() {
           Shërbime pastrimi në Tiranë
         </h1>
         <p className="mt-4 max-w-2xl text-xl text-text-muted">
-          Pastrojmë shtëpi, zyra, vila, prona Airbnb dhe hotele, si dhe prona pas rinovimit.
-          Zgjidhni shërbimin për të parë çfarë përfshin.
+          Shtëpi, prona Airbnb, zyra, vila, hotele, prona pas rinovimit. Zgjidhni shërbimin që ju nevojitet.
         </p>
+        <div className="mt-10">
+          <ServiceList services={services} />
+        </div>
       </Section>
 
-      <Section tone="muted">
-        <ServiceGrid services={services} headingLevel="h2" />
-      </Section>
-
-      <Section>
-        <SectionHeading
-          title="Nuk jeni të sigurt cili shërbim ju duhet?"
-          intro="Na tregoni për pronën dhe ju sugjerojmë ne."
-        />
-        <LeadActions placement="sherbime_footer" />
+      <Section className="pt-0!">
+        <h2 className="text-2xl font-bold tracking-tight sm:text-3xl">Nuk e dini cili ju duhet?</h2>
+        <p className="mt-3 text-text-muted">Na tregoni për pronën dhe ju sugjerojmë ne.</p>
+        <ContactActions placement="sherbime_footer" className="mt-6" />
       </Section>
     </>
   );

@@ -1,8 +1,7 @@
 import Link from "next/link";
 import { Logo } from "./Logo";
-import { WhatsAppButton } from "./WhatsAppButton";
 import { PhoneButton } from "./PhoneButton";
-import { business, prago } from "@/lib/business";
+import { business } from "@/lib/business";
 import { footerServiceLinks, footerCompanyLinks, footerLegalLinks } from "@/lib/nav";
 
 const linkClasses = "inline-flex min-h-12 min-w-12 items-center text-text-muted hover:text-primary";
@@ -11,19 +10,12 @@ export function Footer() {
   const year = new Date().getFullYear();
 
   return (
-    <footer className="border-t border-border bg-bg-muted">
+    <footer className="border-t border-border bg-bg">
       <div className="mx-auto max-w-6xl px-4 py-12 sm:px-6 lg:px-8">
         <div className="grid gap-10 sm:grid-cols-2 lg:grid-cols-4">
           <div>
             <Logo />
             <p className="mt-4 text-text-muted">Pastrim profesional në {business.city}.</p>
-            <p className="mt-2 text-text-muted">
-              Partner zyrtar i{" "}
-              <a href={prago.url} target="_blank" rel="noopener noreferrer" className="underline underline-offset-4 hover:text-primary">
-                {prago.name}
-              </a>
-              .
-            </p>
           </div>
 
           <div>
@@ -54,19 +46,24 @@ export function Footer() {
 
           <div>
             <h2 className="text-lg font-bold text-text">Na kontaktoni</h2>
-            <p className="mt-3 text-text-muted">{business.areaServed}</p>
-            <a
-              href={business.googleMapsUrl}
-              target="_blank"
-              rel="noopener noreferrer"
-              className="inline-flex min-h-12 items-center text-text-muted underline underline-offset-4 hover:text-primary"
-            >
-              Google Maps
-            </a>
-            <div className="mt-4 grid gap-3">
-              <PhoneButton placement="footer" className="w-full sm:w-auto" />
-              <WhatsAppButton placement="footer" className="w-full sm:w-auto" />
-            </div>
+            <ul className="mt-2">
+              <li>
+                <PhoneButton placement="footer" variant="link" showIcon={false} className="no-underline! text-text hover:underline!" />
+              </li>
+              {business.email && (
+                <li>
+                  <a href={`mailto:${business.email}`} className={linkClasses}>
+                    {business.email}
+                  </a>
+                </li>
+              )}
+              <li className="pt-2 text-text-muted">{business.areaServed}</li>
+              <li>
+                <a href={business.googleMapsUrl} target="_blank" rel="noopener noreferrer" className={linkClasses}>
+                  Google Maps
+                </a>
+              </li>
+            </ul>
           </div>
         </div>
 

@@ -1,7 +1,7 @@
 import Link from "next/link";
 import { Section } from "@/components/Section";
 import { Breadcrumbs } from "@/components/Breadcrumbs";
-import { LeadActions } from "@/components/LeadActions";
+import { ContactActions } from "@/components/ContactActions";
 import { JsonLd, breadcrumbJsonLd, pageMetadata } from "@/lib/seo";
 import { blogPosts } from "@/lib/blog";
 
@@ -31,7 +31,7 @@ export default function BlogIndexPage() {
             <p className="text-xl text-text-muted">
               Ende nuk kemi publikuar artikuj. Nëse keni një pyetje për pastrimin, na shkruani.
             </p>
-            <LeadActions placement="blog_empty" className="mt-8" />
+            <ContactActions placement="blog_empty" className="mt-8" />
           </div>
         ) : (
           <ul className="mt-10 grid gap-6 sm:grid-cols-2 lg:grid-cols-3">

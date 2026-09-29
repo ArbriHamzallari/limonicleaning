@@ -3,7 +3,7 @@ import type { Metadata } from "next";
 import Link from "next/link";
 import { Section } from "@/components/Section";
 import { Breadcrumbs } from "@/components/Breadcrumbs";
-import { LeadActions } from "@/components/LeadActions";
+import { ContactActions } from "@/components/ContactActions";
 import { JsonLd, breadcrumbJsonLd, pageMetadata } from "@/lib/seo";
 import { blogPosts, getBlogPostBySlug } from "@/lib/blog";
 
@@ -64,7 +64,7 @@ export default async function BlogPostPage({
           </div>
 
           <div className="mt-12 border-t border-border pt-8">
-            <LeadActions placement="blog_post" />
+            <ContactActions placement="blog_post" />
             <Link href="/blog" className="mt-6 inline-flex min-h-12 items-center font-medium text-primary underline underline-offset-4">
               Të gjithë artikujt
             </Link>

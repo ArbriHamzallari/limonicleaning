@@ -37,10 +37,10 @@ Production marketing and **lead-capture** website for **Limoni Cleaning**, a cle
 - Google Maps listing: https://share.google/3oNsn9iygdcwmc4Gt (`business.googleMapsUrl`).
 - Social media: none yet.
 - Hours: not defined — do not display specific opening hours until Arbri provides them.
-- **Team experience: confirmed real, ~10+ years.** This describes the team's individual/combined backgrounds (staff hand-picked from other cleaning companies), NOT how long Limoni Cleaning itself has existed, Limoni is a new company. Always phrase this as the team's experience ("ekip me mbi 10 vjet eksperiencë"), never as the company's age or years in operation.
+- **Team experience: confirmed real, ~10+ years.** This describes the team's individual/combined backgrounds (staff hand-picked from other cleaning companies), NOT how long Limoni Cleaning itself has existed, Limoni is a new company. Always phrase this as the team's experience ("ekip me mbi 10 vjet përvojë"; always "përvojë", never "eksperiencë"), never as the company's age or years in operation.
 - **Properties cleaned: confirmed real, 50+.** Safe to use on-site as "50+ prona të pastruara."
 - Reviews / ratings: still none. Do not display star ratings, review counts, or testimonials until real ones exist, this is unchanged by the two confirmed stats above.
-- **Related business: Prago** (https://www.prago.al/) — Arbri's short-term rental property management company. Official partner of Limoni Cleaning (two separate companies, formal partnership, not the same legal entity).
+- **Related business: Prago** (https://www.prago.al/) — Arbri's short-term rental property management company. Two separate companies that work together. Mention Prago only on the homepage Airbnb section and in `/pastrim-airbnb-tirane#pronare`, always as: "Bashkëpunojmë me Prago, kompani që menaxhon prona me qira ditore, për pastrimin e pronave Airbnb." Never "partner zyrtar" and never in the trust row or footer.
 
 ## Services & pricing
 

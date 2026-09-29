@@ -16,6 +16,10 @@ const messages: Record<ServiceSlug, string> = {
 
 const defaultMessage = "Përshëndetje! Do të doja një ofertë për pastrim.";
 
+/** Homepage closer: a fill-in message, because that's exactly what we ask people to send. */
+export const waQuoteTemplate =
+  "Përshëndetje! Dua një ofertë për pastrim.\nZona: \nMadhësia e pronës (m²): \nLloji i pastrimit: ";
+
 export function waMessageFor(service?: ServiceSlug): string {
   return service ? messages[service] : defaultMessage;
 }

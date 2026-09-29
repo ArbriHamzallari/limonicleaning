@@ -7,11 +7,35 @@ import type { FaqEntry } from "./content";
 export type { ServiceSlug } from "./service-index";
 
 // All service page copy. Every app/pastrim-*-tirane/page.tsx renders one entry through
-// components/ServicePage.tsx. Rules: no prices, no em dashes, no claims beyond what the
-// business confirmed (see CLAUDE.md). Price questions always get the same answer.
+// components/ServicePage.tsx, but each service picks its own sections and headings so the
+// pages don't read as copies. Rules: no prices, no em dashes, no claims beyond what the
+// business confirmed (CLAUDE.md). Voice: short sentences, concrete things, "we" verbs.
 
 export const priceAnswer =
   "Çmimi varet nga madhësia dhe gjendja e pronës. Na lini numrin dhe ju japim ofertën.";
+
+export type ChecklistItem = string | { label: string; text: string };
+
+export type ServiceSection =
+  | { kind: "checklist"; title: string; items: ChecklistItem[]; note?: string; id?: string }
+  | { kind: "steps"; title: string; steps: { title: string; text: string }[]; id?: string }
+  | { kind: "photoStory"; title: string; text: string; photos: PhotoAsset[]; id?: string }
+  | {
+      kind: "pair";
+      title: string;
+      text?: string;
+      left: PhotoAsset;
+      right: PhotoAsset;
+      id?: string;
+    }
+  | {
+      kind: "text";
+      title: string;
+      paragraphs: string[];
+      link?: { href: string; label: string };
+      id?: string;
+    }
+  | { kind: "note"; text: string; id?: string };
 
 export interface Service {
   slug: ServiceSlug;
@@ -21,68 +45,81 @@ export interface Service {
   /** 140 to 155 characters, ends in the lead action. */
   metaDescription: string;
   h1: string;
-  /** Two sentences max. */
+  /** Two or three short sentences. */
   intro: string;
-  /** One sentence for cards. */
+  /** One sentence, used on /sherbime. */
   summary: string;
-  includes: string[];
-  /** Qualifier shown under the includes list (what is extra or excluded). */
-  includesNote?: string;
-  goodFor: string[];
-  howWeWork: { title: string; text: string };
+  /** Hero photo. Omitted = text-only hero. Never the homepage hero (windowsTeam). */
+  hero?: PhotoAsset;
+  sections: ServiceSection[];
+  /** Rendered only when there are 3 or more. */
   faq: FaqEntry[];
-  /** First image is the hero; the rest form the photo block. Empty = text-only page. */
-  images: PhotoAsset[];
   related: [ServiceSlug, ServiceSlug];
 }
 
 type ServiceData = Omit<Service, "slug" | "path" | "navLabel">;
 
+/** The apartment checklist, also shown on the homepage ("Çfarë përfshin një pastrim"). */
+export const apartmentIncludes = [
+  "Fshirje pluhuri në të gjitha dhomat",
+  "Sipërfaqet dhe pasqyrat",
+  "Kuzhina: sipërfaqet dhe lavamani",
+  "Banjo: lavamani, dushi, tualeti",
+  "Fshirje dhe larje e dyshemeve",
+  "Zbrazje e koshave dhe rregullim bazë",
+];
+
 const data: Record<ServiceSlug, ServiceData> = {
   apartamente: {
     metaTitle: "Pastrim Shtëpie dhe Apartamenti në Tiranë",
     metaDescription:
-      "Pastrim shtëpie dhe apartamenti në Tiranë, i rregullt ose me themel, nga ekip me mbi 10 vjet eksperiencë. Na lini numrin ose na shkruani në WhatsApp.",
+      "Pastrim shtëpie dhe apartamenti në Tiranë, i rregullt ose me themel, nga ekip me mbi 10 vjet përvojë. Na lini numrin ose na shkruani në WhatsApp.",
     h1: "Pastrim shtëpie dhe apartamenti në Tiranë",
     intro:
-      "Pastrojmë apartamente dhe shtëpi të çdo madhësie, nga studio deri te 4+1. Ekipi vjen i pajisur dhe trajton çdo dhomë me kujdes.",
-    summary: "Pastrim i rregullt ose me themel për apartamente dhe shtëpi të çdo madhësie.",
-    includes: [
-      "Fshirje pluhuri në të gjitha dhomat",
-      "Pastrim i sipërfaqeve dhe i pasqyrave",
-      "Larje e dyshemeve",
-      "Pastrim i kuzhinës dhe i banjës",
-      "Zbrazje e koshave dhe rregullim bazë",
+      "Vijmë në apartament ose në shtëpi, nga studio deri te 4+1. Pastrojmë dhomë pas dhome: kuzhinën, banjon, dhomat dhe dyshemetë.",
+    summary: "Pastrim i rregullt ose pastrim i thellë për apartamente dhe shtëpi të çdo madhësie.",
+    hero: photos.livingRoomClean,
+    sections: [
+      {
+        kind: "checklist",
+        title: "Dhomë pas dhome",
+        items: [
+          { label: "Kuzhina", text: "Sipërfaqet dhe lavamani." },
+          { label: "Banjo", text: "Lavamani, dushi, tualeti dhe pasqyra." },
+          { label: "Dhomat", text: "Fshijmë pluhurin, pastrojmë sipërfaqet, rregullojmë." },
+          { label: "Dyshemetë", text: "I fshijmë dhe i lajmë në të gjithë shtëpinë." },
+          { label: "Koshat", text: "I zbrazim para se të largohemi." },
+        ],
+        note: "Larja dhe hekurosja e rrobave mund të organizohen veçmas.",
+      },
+      {
+        kind: "photoStory",
+        title: "Nga kuzhina te korridori",
+        text: "Çdo pastrim ndjek të njëjtën listë pune, që rezultati të mos varet nga rastësia. Kuzhina, banjo, dhomat, pastaj dyshemetë deri te dera e hyrjes.",
+        photos: [photos.kitchen, photos.hallwayClean],
+      },
+      {
+        kind: "text",
+        title: "I rregullt apo me themel?",
+        paragraphs: [
+          "Pastrimi i rregullt e mban shtëpinë të pastër javë pas jave.",
+          "Kur hyni në një pronë të re, ose kur shtëpia s'është pastruar thellë prej kohësh, zgjidhni pastrimin me themel: aty hyjnë edhe dollapët, frigoriferi dhe furra nga brenda.",
+        ],
+        link: { href: "/pastrim-me-themel-tirane", label: "Si bëhet pastrimi me themel" },
+      },
     ],
-    includesNote: "Larja dhe hekurosja e rrobave mund të organizohen veçmas, si shërbim shtesë.",
-    goodFor: [
-      "Kush do ta mbajë shtëpinë të pastër rregullisht, pa u marrë vetë me të",
-      "Kush po hyn ose po largohet nga një apartament me qira",
-      "Pronarë që duan ta dorëzojnë apartamentin të pastër te qiramarrësi i ri",
-      "Pas festave ose pas një periudhe të gjatë pa pastrim",
-    ],
-    howWeWork: {
-      title: "I rregullt apo me themel?",
-      text: "Pastrimi i rregullt e mban shtëpinë të pastër javë pas jave. Kur apartamenti ka nevojë për më shumë, para se të hyni në një pronë të re ose pas një kohe të gjatë pa pastrim, sugjerojmë pastrimin me themel, që përfshin edhe brenda dollapëve, frigoriferit dhe furrës.",
-    },
     faq: [
       {
         question: "Çfarë përfshin pastrimi i rregullt?",
         answer:
-          "Fshirje pluhuri, pastrim sipërfaqesh dhe pasqyrash, larje dyshemesh, pastrim i kuzhinës dhe i banjës, zbrazje koshash dhe rregullim bazë.",
-      },
-      {
-        question: "Cili është ndryshimi mes pastrimit të rregullt dhe atij me themel?",
-        answer:
-          "Pastrimi i rregullt e mban ambientin të pastër. Pastrimi me themel shkon më thellë: brenda dollapëve, frigoriferit, furrës dhe te kornizat. Ka kuptim një ose dy herë në vit, ose kur hyni në një pronë të re.",
+          "Fshijmë pluhurin, pastrojmë sipërfaqet dhe pasqyrat, lajmë dyshemetë, pastrojmë kuzhinën dhe banjon, zbrazim koshat dhe rregullojmë.",
       },
       {
         question: "A mund të vini rregullisht?",
-        answer: "Po. Organizojmë pastrim periodik sipas nevojës suaj. Frekuencën e vendosim bashkë.",
+        answer: "Po. Frekuencën e vendosim bashkë: çdo javë, çdo dy javë ose kur ju duhet.",
       },
       { question: "Sa kushton pastrimi i apartamentit?", answer: priceAnswer },
     ],
-    images: [photos.kitchen, photos.livingRoomClean, photos.hallwayClean],
     related: ["me-themel", "airbnb"],
   },
 
@@ -92,45 +129,67 @@ const data: Record<ServiceSlug, ServiceData> = {
       "Pastrim Airbnb në Tiranë pas çdo check-out, që prona të jetë gati për mysafirin tjetër. Për një ose disa prona. Na lini numrin ose shkruani në WhatsApp.",
     h1: "Pastrim Airbnb në Tiranë",
     intro:
-      "Pastrojmë dhe përgatisim pronën pas çdo check-out, që të jetë gati për mysafirin tjetër. Ky është shërbimi ku kemi përvojën më të madhe.",
-    summary: "Nga check-out te prona gati për mysafirin tjetër, për një ose disa prona.",
-    includes: [
-      "Pastrim i dhomave, i banjës dhe i kuzhinës sipas gjendjes së pronës",
-      "Rregullim i krevatit dhe ndërrim i çarçafëve kur ka të pastër në pronë",
-      "Pastrim i sipërfaqeve, i dyshemeve dhe i lavamanëve",
-      "Organizim i ambientit për mysafirin tjetër",
-      "Kontroll final përpara se prona të jetë gati",
+      "Mysafiri del, ne hyjmë. Pastrojmë pronën pas çdo check-out-i, ndërrojmë çarçafët dhe e lëmë gati për mysafirin tjetër.",
+    summary: "Pas çdo check-out-i, pastrimi dhe përgatitja e pronës për mysafirin tjetër.",
+    hero: photos.bedroom,
+    sections: [
+      {
+        kind: "steps",
+        title: "Si funksionon pastrimi pas check-out-it",
+        steps: [
+          { title: "Kalendari", text: "Na dërgoni datat e check-out-it ose kalendarin e rezervimeve." },
+          { title: "Pastrimi", text: "Vijmë pasi del mysafiri dhe pastrojmë dhomat, banjon dhe kuzhinën." },
+          {
+            title: "Shtrati",
+            text: "Rregullojmë shtratin dhe ndërrojmë çarçafët kur ka të pastër në pronë.",
+          },
+          { title: "Kontrolli", text: "Kontrollojmë ambientin në fund. Prona është gati për mysafirin tjetër." },
+        ],
+      },
+      {
+        kind: "checklist",
+        title: "Çfarë bëjmë në çdo pastrim",
+        items: [
+          { label: "Dhoma e gjumit", text: "Krevati, çarçafët kur janë në pronë, sipërfaqet, dyshemeja." },
+          { label: "Banjo", text: "Tualeti, dushi, lavamani, pasqyra, dyshemeja." },
+          { label: "Kuzhina", text: "Sipërfaqet, banaku, pianura dhe lavamani." },
+          { label: "Në fund", text: "Përgatitje e pronës për mysafirin tjetër dhe një kontroll i fundit." },
+        ],
+        note: "Larja dhe hekurosja e çarçafëve, si dhe rimbushja e produkteve të konsumit, organizohen veçmas.",
+      },
+      {
+        kind: "photoStory",
+        title: "Gati për mysafirin tjetër",
+        text: "Shtrati i rregulluar, peshqirët në vend, dhoma e ndenjes e rregullt pas qëndrimit të fundit.",
+        photos: [photos.guestRoom, photos.livingRoomClean],
+      },
+      {
+        kind: "text",
+        id: "pronare",
+        title: "Për një pronë apo për disa prona",
+        paragraphs: [
+          "Me disa prona, rëndësi ka jo vetëm pastrimi, por edhe organizimi i tij sipas kalendarit. Na tregoni sa prona keni dhe sa shpesh ndërrohen mysafirët, dhe e planifikojmë bashkë.",
+          "Bashkëpunojmë me Prago, kompani që menaxhon prona me qira ditore, për pastrimin e pronave Airbnb.",
+        ],
+        link: { href: "https://www.prago.al/", label: "Rreth Prago" },
+      },
     ],
-    includesNote:
-      "Larja dhe hekurosja e çarçafëve, si dhe rimbushja e produkteve të konsumit, mund të organizohen veçmas.",
-    goodFor: [
-      "Pronarë me një apartament me qira ditore",
-      "Pronarë dhe menaxherë me disa prona",
-      "Prona me hyrje dhe dalje të shpeshta mysafirësh",
-    ],
-    howWeWork: {
-      title: "Pastrimi sipas kalendarit të pronës",
-      text: "Na tregoni sa shpesh ndërrohen mysafirët dhe e planifikojmë pastrimin rreth hyrjeve dhe daljeve. Për pastrime të përsëritura, oraret organizohen sipas kalendarit të rezervimeve.",
-    },
     faq: [
       { question: "Sa kushton pastrimi i një Airbnb?", answer: priceAnswer },
       {
-        question: "A ndërroni çarçafët?",
-        answer:
-          "Po, ndërrojmë çarçafët e pastër kur janë në dispozicion në pronë. Larja dhe hekurosja mund të organizohen veçmas.",
+        question: "A i ndërroni çarçafët?",
+        answer: "Po, kur ka çarçafë të pastër në pronë. Larjen dhe hekurosjen i organizojmë veçmas.",
       },
       {
         question: "Sa shpesh duhet pastruar një Airbnb?",
-        answer:
-          "Varet nga rezervimet. Zakonisht pas çdo check-out. Na tregoni kalendarin e pronës dhe e organizojmë bashkë.",
+        answer: "Zakonisht pas çdo check-out-i. Na tregoni kalendarin e pronës dhe e organizojmë bashkë.",
       },
       {
-        question: "Çfarë informacioni ju duhet për ofertën?",
+        question: "Çfarë ju duhet për ofertën?",
         answer:
-          "Sa prona keni, sa të mëdha janë, sa herë në muaj nevojitet pastrimi dhe në cilën zonë ndodhen. Mund t'i shkruani te formulari ose në WhatsApp.",
+          "Sa prona keni, sa të mëdha janë, sa herë në muaj pastrohen dhe në cilën zonë ndodhen. Na i shkruani te formulari ose në WhatsApp.",
       },
     ],
-    images: [photos.bedroom, photos.livingRoomClean],
     related: ["apartamente", "hotele"],
   },
 
@@ -140,37 +199,46 @@ const data: Record<ServiceSlug, ServiceData> = {
       "Pastrim zyrash dhe ambientesh biznesi në Tiranë, me plan sipas orarit tuaj të punës: para hapjes ose pas mbylljes. Na lini numrin ose shkruani në WhatsApp.",
     h1: "Pastrim zyrash në Tiranë",
     intro:
-      "Ofrojmë pastrim periodik për zyra dhe biznese të vogla e të mesme në Tiranë. Plani i pastrimit përshtatet me orarin tuaj të punës.",
-    summary: "Pastrim periodik për zyra dhe biznese, pa ndërhyrë në orarin e punës.",
-    includes: [
-      "Pastrim i rregullt periodik i ambienteve të punës",
-      "Fshirje pluhuri nga tavolinat dhe sipërfaqet",
-      "Fshirje dhe larje e dyshemeve",
-      "Pastrim i kuzhinës ose i sallës së çajit",
-      "Zbrazje e koshave",
+      "Pastrojmë zyra dhe biznese të vogla e të mesme në Tiranë. Vijmë kur nuk ju pengojmë: para hapjes, pas mbylljes ose në ditët që zgjidhni.",
+    summary: "Pastrim periodik për zyra dhe biznese në Tiranë.",
+    sections: [
+      {
+        kind: "text",
+        title: "Sipas orarit tuaj",
+        paragraphs: [
+          "Zyra duhet të jetë e pastër kur vjen stafi, jo plot me njerëz që pastrojnë. Orarin e vizitave e vendosim bashkë.",
+          "Përpiqemi të dërgojmë të njëjtin ekip çdo herë, që stafi juaj ta njohë kush hyn në zyrë.",
+        ],
+      },
+      {
+        kind: "checklist",
+        title: "Në çdo vizitë",
+        items: [
+          "Tavolinat dhe sipërfaqet e punës",
+          "Kuzhina ose salla e çajit",
+          "Fshirje dhe larje e dyshemeve",
+          "Zbrazje e koshave",
+        ],
+      },
+      {
+        kind: "photoStory",
+        title: "Edhe pas rinovimit",
+        text: "Kur zyra rinovohet, e pastrojmë pasi mbarojnë punimet: pluhuri, boja, najloni mbi dysheme.",
+        photos: [photos.officeRenovation],
+      },
     ],
-    goodFor: [
-      "Zyra dhe biznese të vogla e të mesme",
-      "Ambiente pune që duan pastrim para hapjes ose pas mbylljes",
-      "Biznese që duan një plan të rregullt, jo pastrim të rastësishëm",
-    ],
-    howWeWork: {
-      title: "Plan sipas orarit tuaj",
-      text: "Zyrat kanë nevojë për pastrim që nuk ndërhyn në ditën e punës. Koordinojmë orarin e vizitave, para hapjes, pas mbylljes ose në ditë të caktuara të javës, dhe përpiqemi të dërgojmë të njëjtin ekip, që stafi juaj ta njohë kush hyn në zyrë.",
-    },
     faq: [
       {
         question: "A pastroni jashtë orarit të punës?",
-        answer: "Po. Orarin e vendosim bashkë: para hapjes, pas mbylljes ose në ditë të caktuara të javës.",
+        answer: "Po. Vijmë para hapjes, pas mbylljes ose në ditë të caktuara të javës.",
       },
       {
         question: "Sa shpesh vini?",
-        answer: "Frekuencën e vendosim me ju, sipas madhësisë së zyrës dhe numrit të njerëzve që punojnë aty.",
+        answer: "E vendosim bashkë, sipas madhësisë së zyrës dhe numrit të njerëzve që punojnë aty.",
       },
       { question: "Sa kushton pastrimi i zyrës?", answer: priceAnswer },
     ],
-    images: [photos.officeRenovation],
-    related: ["hotele", "me-themel"],
+    related: ["hotele", "pas-ndertimit"],
   },
 
   vila: {
@@ -179,36 +247,34 @@ const data: Record<ServiceSlug, ServiceData> = {
       "Pastrim vile në Tiranë me ekip të dedikuar dhe plan sipas kateve, dhomave dhe banjove të shtëpisë. Na lini numrin ose na shkruani në WhatsApp për ofertë.",
     h1: "Pastrim vile në Tiranë",
     intro:
-      "Vilat kërkojnë një ekip të dedikuar dhe një plan pastrimi të menduar për to. Fillojmë me një vlerësim të pronës për të përcaktuar kohën dhe ekipin e nevojshëm.",
+      "Një vilë ka më shumë kate, më shumë banjo, më shumë xhama. Vijmë me ekip të dedikuar dhe fillojmë me një vlerësim të pronës.",
     summary: "Ekip i dedikuar dhe plan pastrimi për vila dhe shtëpi private të mëdha.",
-    includes: [
-      "Vlerësim fillestar i pronës",
-      "Plan pastrimi sipas kateve, dhomave dhe banjove",
-      "Ekip i dedikuar për prona të mëdha",
-      "Pastrim i dhomave, i kuzhinës dhe i banjove",
+    sections: [
+      {
+        kind: "steps",
+        title: "Si e organizojmë",
+        steps: [
+          { title: "Vlerësimi", text: "Shohim katet, dhomat dhe banjot, që të dimë sa kohë dhe sa njerëz duhen." },
+          { title: "Plani", text: "Vendosim bashkë çfarë pastrohet dhe në çfarë radhe." },
+          { title: "Pastrimi", text: "Ekipi vjen në ditën e caktuar dhe pastron dhomat, kuzhinën dhe banjot." },
+        ],
+      },
+      {
+        kind: "note",
+        text: "E përgatitni vilën para sezonit ose pas tij? Na shkruani datat dhe e planifikojmë.",
+      },
     ],
-    goodFor: [
-      "Vila dhe shtëpi private me disa kate",
-      "Pronarë që e përgatisin vilën para ose pas sezonit",
-      "Vila që jepen me qira për pushime",
-    ],
-    howWeWork: {
-      title: "Fillon me një vlerësim",
-      text: "Çdo vilë është ndryshe. Numri i kateve, i ambienteve dhe i banjove ndikon te koha dhe ekipi i nevojshëm. Prandaj fillojmë me një vlerësim të shkurtër të pronës, që plani dhe oferta të jenë realiste.",
-    },
     faq: [
       {
         question: "Pse duhet një vlerësim para pastrimit?",
-        answer:
-          "Sepse vilat ndryshojnë shumë nga njëra te tjetra. Vlerësimi na tregon sa kohë dhe sa njerëz duhen, që oferta të jetë e saktë.",
+        answer: "Sepse vilat ndryshojnë shumë. Vlerësimi na tregon sa kohë dhe sa njerëz duhen, që oferta të jetë e saktë.",
       },
       {
         question: "A bëni pastrim me themel për vila?",
-        answer: "Po, pastrimi me themel mund të bëhet për çdo lloj prone, përfshirë vilat.",
+        answer: "Po, pastrimi me themel bëhet për çdo lloj prone, edhe për vila.",
       },
       { question: "Sa kushton pastrimi i vilës?", answer: priceAnswer },
     ],
-    images: [],
     related: ["apartamente", "me-themel"],
   },
 
@@ -218,25 +284,34 @@ const data: Record<ServiceSlug, ServiceData> = {
       "Pastrim me themel në Tiranë: brenda dollapëve, frigoriferit dhe furrës, prapa mobilieve dhe te kornizat. Na lini numrin ose na shkruani në WhatsApp.",
     h1: "Pastrim me themel në Tiranë",
     intro:
-      "Pastrimi me themel është pastrimi më i thellë që bëjmë. Përfshin çdo cep që pastrimi i rregullt nuk e mbulon: brenda dollapëve, frigoriferit dhe furrës, prapa mobilieve dhe te kornizat.",
-    summary: "Pastrimi më i thellë: brenda dollapëve, frigoriferit, furrës dhe prapa mobilieve.",
-    includes: [
-      "Gjithçka që përfshin pastrimi i rregullt",
-      "Brenda dollapëve, frigoriferit dhe furrës",
-      "Prapa dhe poshtë mobilieve që lëvizen",
-      "Kornizat e dyerve dhe të dritareve, bazamentet",
-      "Pastrim i detajuar i banjës dhe i kuzhinës",
+      "Një pastrim i thellë për ambiente që kanë nevojë për më shumë se pastrimi i përditshëm. Hapim dollapët, lëvizim mobiljet, pastrojmë kornizat dhe binarët.",
+    summary: "Pastrim i thellë, nga sipërfaqet deri te vendet që zakonisht harrohen.",
+    hero: photos.steamFrame,
+    sections: [
+      {
+        kind: "checklist",
+        title: "Vendet që zakonisht harrohen",
+        items: [
+          "Brenda dollapëve të kuzhinës",
+          "Frigoriferi dhe furra nga brenda",
+          "Prapa dhe poshtë mobilieve që lëvizen",
+          "Kornizat e dyerve dhe të dritareve",
+          "Bazamentet",
+          "Banjo dhe kuzhina, çdo sipërfaqe",
+        ],
+        note: "Plus gjithçka që bëjmë në pastrimin e rregullt.",
+      },
+      {
+        kind: "checklist",
+        title: "Kur ka kuptim",
+        items: [
+          "Para se të hyni në një apartament ose zyrë të re",
+          "Kur prona s'është pastruar thellë prej kohësh",
+          "Një ose dy herë në vit",
+          "Para ose pas një feste me shumë të ftuar",
+        ],
+      },
     ],
-    goodFor: [
-      "Para se të hyni në një apartament ose zyrë të re",
-      "Kur prona nuk është pastruar thellë prej kohësh",
-      "Një ose dy herë në vit, si mirëmbajtje",
-      "Para ose pas një feste me shumë të ftuar",
-    ],
-    howWeWork: {
-      title: "Për çdo lloj prone",
-      text: "Pastrimin me themel e bëjmë në apartamente, shtëpi, vila dhe zyra. Oferta varet nga lloji i pronës dhe gjendja e saj, jo nga një tarifë e njëjtë për të gjithë.",
-    },
     faq: [
       {
         question: "Sa shpesh duhet bërë pastrimi me themel?",
@@ -245,11 +320,10 @@ const data: Record<ServiceSlug, ServiceData> = {
       {
         question: "Cili është ndryshimi nga pastrimi i rregullt?",
         answer:
-          "Pastrimi i rregullt mban pastër sipërfaqet që përdoren çdo ditë. Pastrimi me themel shkon edhe brenda dollapëve, frigoriferit e furrës dhe prapa mobilieve.",
+          "Pastrimi i rregullt mban pastër atë që përdoret çdo ditë. Pastrimi me themel shkon edhe brenda dollapëve, frigoriferit e furrës dhe prapa mobilieve.",
       },
       { question: "Sa kushton pastrimi me themel?", answer: priceAnswer },
     ],
-    images: [photos.steamFrame, photos.kitchen],
     related: ["apartamente", "pas-ndertimit"],
   },
 
@@ -259,39 +333,46 @@ const data: Record<ServiceSlug, ServiceData> = {
       "Pastrim pas ndërtimit ose rinovimit në Tiranë: heqim pluhurin nga dyshemetë, xhamat, dyert dhe dritaret. Na lini numrin ose na shkruani në WhatsApp.",
     h1: "Pastrim pas ndërtimit dhe rinovimit në Tiranë",
     intro:
-      "Pas rinovimit ose ndërtimit, prona ka nevojë për një pastrim të thellë që largon pluhurin e llaçit, të bojës dhe të punimeve. Pastrojmë dyshemetë, xhamat, kornizat e dyerve dhe dritaret.",
+      "Punimet mbarojnë, pluhuri mbetet: mbi dysheme, mbi xhama, brenda binarëve të dyerve. Ne e heqim, që prona të jetë gati për t'u banuar.",
     summary: "Heqja e pluhurit të punimeve nga çdo sipërfaqe, para se prona të banohet.",
-    includes: [
-      "Heqje e pluhurit nga çdo sipërfaqe",
-      "Pastrim i detajuar i dyshemeve dhe i pllakave",
-      "Pastrim i xhamave dhe i kornizave",
-      "Grumbullim i mbetjeve të lehta të pastrimit",
+    hero: photos.constructionGlass,
+    sections: [
+      {
+        kind: "pair",
+        title: "Një apartament i ri në Tiranë",
+        text: "Najlon mbi dysheme, kuti dhe ngjitëse mbi xhama. Pastaj ekipi te dritaret.",
+        left: photos.constructionBefore,
+        right: photos.windowsTeam,
+      },
+      {
+        kind: "checklist",
+        title: "Çfarë pastrojmë pas punimeve",
+        items: [
+          "Pluhurin nga çdo sipërfaqe",
+          "Dyshemetë dhe pllakat",
+          "Xhamat dhe kornizat",
+          "Binarët e dyerve rrëshqitëse",
+          "Mbetjet e lehta të pastrimit",
+        ],
+      },
+      {
+        kind: "note",
+        text: "Na kontaktoni pasi punimet të kenë përfunduar dhe mbetjet e mëdha të jenë larguar.",
+      },
     ],
-    includesNote:
-      "Mbetjet e rënda të ndërtimit (inerte, tulla, materiale) duhet të largohen nga prona para se të vijë ekipi ynë.",
-    goodFor: [
-      "Apartamente dhe shtëpi pas rinovimit",
-      "Prona të reja para se të mobilohen ose të banohen",
-      "Zyra dhe ambiente biznesi pas punimeve",
-    ],
-    howWeWork: {
-      title: "Kur të na thërrisni",
-      text: "Na thërrisni kur punimet të kenë mbaruar dhe mbetjet e rënda të jenë larguar. Ne merremi me pluhurin e imët që mbulon çdo sipërfaqe pas një rinovimi.",
-    },
     faq: [
       {
         question: "A i largoni edhe mbetjet e ndërtimit?",
         answer:
-          "Jo. Ne largojmë pluhurin dhe papastërtinë e punimeve. Mbetjet e rënda (inerte, tulla, materiale) duhet të largohen para se të vijmë.",
+          "Jo. Ne heqim pluhurin dhe papastërtinë e punimeve. Mbetjet e mëdha (inerte, tulla, materiale) duhet të largohen para se të vijmë.",
       },
       {
-        question: "Kur duhet t'ju thërras?",
-        answer: "Kur punimet të kenë mbaruar plotësisht. Pluhuri bie edhe për disa ditë, ndaj është mirë ta bëjmë pastrimin në fund.",
+        question: "Kur duhet t'ju kontaktoj?",
+        answer: "Pasi punimet të kenë përfunduar dhe mbetjet e mëdha të jenë larguar.",
       },
       { question: "Sa kushton pastrimi pas ndërtimit?", answer: priceAnswer },
     ],
-    images: [photos.windowsTeam, photos.constructionBefore, photos.constructionGlass, photos.steamFrame],
-    related: ["me-themel", "apartamente"],
+    related: ["me-themel", "zyra"],
   },
 
   hotele: {
@@ -300,27 +381,23 @@ const data: Record<ServiceSlug, ServiceData> = {
       "Pastrim hotelesh dhe apart-hotelesh në Tiranë: dhoma sipas check-in/check-out dhe hapësira të përbashkëta. Na lini numrin ose na shkruani në WhatsApp.",
     h1: "Pastrim hotelesh në Tiranë",
     intro:
-      "Ndihmojmë hotele dhe apart-hotele në Tiranë me pastrimin e dhomave dhe të hapësirave të përbashkëta. Ekipi përshtatet me volumin dhe orarin e check-in/check-out të pronës suaj.",
+      "Pastrojmë dhoma dhe hapësira të përbashkëta për hotele dhe apart-hotele. Ekipi përshtatet me numrin e dhomave dhe me orarin e check-in/check-out.",
     summary: "Dhoma dhe hapësira të përbashkëta, me ekip që përshtatet me volumin tuaj.",
-    includes: [
-      "Pastrim i dhomave sipas check-in dhe check-out",
-      "Pastrim i hapësirave të përbashkëta",
-      "Ekip shtesë në periudhat me shumë punë",
-      "I njëjti standard në çdo dhomë",
+    hero: photos.guestRoom,
+    sections: [
+      {
+        kind: "text",
+        title: "Fillojmë me një bisedë",
+        paragraphs: [
+          "Numri i dhomave, ritmi i check-in/check-out dhe orët e pikut ndryshojnë nga një hotel te tjetri. Na tregoni si punoni dhe ju propozojmë një plan.",
+          "Në sezonin e lartë mund të sjellim ekip shtesë, sipas marrëveshjes.",
+        ],
+      },
     ],
-    goodFor: [
-      "Hotele të vogla dhe apart-hotele",
-      "Prona që kanë nevojë për ndihmë shtesë në sezonin e lartë",
-      "Menaxherë që duan një partner të rregullt për pastrimin",
-    ],
-    howWeWork: {
-      title: "Ekip që përshtatet me volumin tuaj",
-      text: "Numri i dhomave, ritmi i check-in/check-out dhe orët e pikut ndryshojnë nga një hotel te tjetri. Prandaj fillojmë me një bisedë të shkurtër për volumin dhe orarin real të pronës, para se të propozojmë një plan.",
-    },
     faq: [
       {
         question: "A mund të na ndihmoni vetëm gjatë sezonit?",
-        answer: "Po. Mund të sjellim ekip shtesë në periudhat me shumë punë, sipas marrëveshjes.",
+        answer: "Po. Sjellim ekip shtesë në periudhat me shumë punë, sipas marrëveshjes.",
       },
       {
         question: "A pastroni edhe hapësirat e përbashkëta?",
@@ -328,7 +405,6 @@ const data: Record<ServiceSlug, ServiceData> = {
       },
       { question: "Sa kushton pastrimi për një hotel?", answer: priceAnswer },
     ],
-    images: [photos.guestRoom],
     related: ["airbnb", "zyra"],
   },
 };
@@ -344,9 +420,9 @@ export function getService(slug: ServiceSlug): Service {
   return services.find((s) => s.slug === slug)!;
 }
 
-/** Photo for cards: the first one sharp enough to show at card size. */
+/** A photo for list rows and social previews: the hero, if it's sharp enough. */
 export function cardImage(service: Service): PhotoAsset | undefined {
-  return service.images.find((img) => !img.lowRes);
+  return service.hero && !service.hero.lowRes ? service.hero : undefined;
 }
 
 export function serviceMetadata(slug: ServiceSlug): Metadata {

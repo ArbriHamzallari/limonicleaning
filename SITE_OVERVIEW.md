@@ -26,7 +26,7 @@ No test framework; verification is `npm run build`, `npm run lint`, and browser 
 
 | Route | What |
 |---|---|
-| `/` | Hero, trust facts, services, before/after + photos, how it works, Airbnb block, form, FAQ |
+| `/` | Hero, 3 facts, Çfarë pastrojmë (4 groups), Airbnb (dark), before/after + photos, checklist, Rreth Limoni, closer (WhatsApp, phone, steps, form, FAQ) |
 | `/sherbime` | All services as cards |
 | `/pastrim-apartamentesh-tirane` | Service page (template) |
 | `/pastrim-airbnb-tirane` | Service page + `#pronare` section (Prago partnership) |
@@ -75,23 +75,35 @@ Permanent redirects in `next.config.ts`: `/rezervo`, `/cmimet` → `/kerko-ofert
 Leads are read with `npx prisma studio` or the DB console (no admin UI by design). `status`
 (`E_RE`, `KONTAKTUAR`, `OFERTE_DERGUAR`, `FITUAR`, `HUMBUR`) is there for manual tracking.
 
-## 6. Design system
+## 6. Design system (editorial, since prompt 04)
 
-- **Type:** Inter only. Body 18px everywhere; `text-sm` only for captions and legal lines.
-  Hierarchy from size and weight.
-- **Colours:** tokens in `app/globals.css`. Primary `#184A2C`, accent `#F5C518` (always with
-  dark text), WhatsApp buttons `#157A3E` (white text 5.4:1). Never yellow text on white.
-- **Components:** `Button` (`primary`, `secondary` = yellow, `outline`, `whatsapp`, `link`;
-  sizes `md` 48px, `lg` 56px), `WhatsAppButton`, `PhoneButton`, `LeadActions` (the
-  [Kërko ofertë] [WhatsApp] pair), `LeadForm`, `SectionHeading`, `Section` (tones set
-  `--fg-muted` so text stays readable on dark), `ServiceCard`, `ServiceGrid` (photo cards and
-  text cards in separate rows), `Photo` (real images only, no empty state), `CheckList` /
-  `CheckIcon`, `FaqItem`, `Breadcrumbs`, `BeforeAfterSlider`, `PortfolioVideo`.
-- **Mobile:** sticky bar with WhatsApp · Telefono · Kërko ofertë (56px), hidden on
-  `/kerko-oferte` and while a field is focused. Header has a 48px phone button and a
-  full-screen menu with 56px rows. Every tap target is at least 48×48.
-- **Removed on purpose:** Fraunces/italic kickers, 01/02/03 numerals, arrow links, ✓
-  characters, em dashes in copy, placeholder image frames, price lines.
+- **Feel:** editorial and photographic, not a component kit. White by default; per page at
+  most one muted block and one dark green block. Asymmetric photo + text (roughly 7/5),
+  photos at their natural aspect (`naturalAspect()` in `lib/photos.ts`), big photos bleed to
+  the screen edge on phones (`Photo bleed`, `BeforeAfterSlider bleed`).
+- **Not allowed:** gradients, glass, blobs, decorative icons, shadows, pills/badges for
+  claims, grids of 3+ identical bordered cards, a background change every section, secondary
+  actions styled as buttons. `rounded-full` only on real buttons.
+- **Type:** Inter only, body 18px, `text-sm` only for captions and legal lines.
+- **Actions:** "Kërko ofertë" only in the header and in heroes (`LeadActions`: yellow button
+  + outline WhatsApp). Elsewhere: `ContactActions` (WhatsApp button + phone as a link) or the
+  `Closer`. Secondary actions are `TextLink`s (underlined, 48px tap area).
+- **Homepage closer / service closer (`Closer`):** heading "Keni një pronë për të pastruar?",
+  WhatsApp (homepage uses the fill-in `waQuoteTemplate`), phone, three numbered steps, then
+  "Ose na lini numrin…" with `LeadForm`, then FAQ.
+- **Service pages:** `lib/services.ts` gives each service a `hero` and its own `sections`
+  (`checklist`, `steps`, `photoStory`, `pair`, `text`, `note`) with its own headings.
+  `ServicePage` adds only breadcrumbs, hero, a "Mund t'ju interesojë edhe:" link row and the
+  closer (FAQ shown only with 3+ questions). No service hero repeats the homepage hero.
+- **Lists:** hairline dividers (`Checklist`, `FaqItem`, `ServiceList` on `/sherbime`), no boxes.
+- **Photo rule:** a photo appears once per page. `npm run check:images` (after a build) fails
+  if `/` or any service page renders the same image twice.
+- **LeadForm:** service, name, phone, optional message. `Lead.area` / `channel` keep their
+  defaults.
+- **Mobile:** sticky bar with WhatsApp · Telefono (56px), hidden on `/kerko-oferte` and while
+  typing. Header: 48px phone button + full-screen menu (includes Kontakt and FAQ).
+- **Copy:** "përvojë" (never "eksperiencë"), always the team's experience. Prago only on the
+  homepage Airbnb block and `/pastrim-airbnb-tirane#pronare`, as "Bashkëpunojmë me Prago…".
 
 ## 7. Photos and videos
 

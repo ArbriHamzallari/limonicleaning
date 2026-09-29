@@ -1,6 +1,6 @@
 import { NextResponse, after } from "next/server";
 import { prisma } from "@/lib/prisma";
-import { leadSchema, composeLeadMessage } from "@/lib/validation";
+import { leadSchema } from "@/lib/validation";
 import { allowRequest, clientIp } from "@/lib/rate-limit";
 import { notifyNewLead } from "@/lib/notify";
 
@@ -54,7 +54,7 @@ export async function POST(request: Request) {
         phone: input.phone,
         channel: input.channel,
         area: input.area,
-        message: composeLeadMessage(input),
+        message: input.message,
         pagePath: input.pagePath,
         utmSource: input.utmSource,
         utmCampaign: input.utmCampaign,

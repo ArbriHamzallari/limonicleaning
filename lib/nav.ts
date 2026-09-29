@@ -1,12 +1,12 @@
 import { serviceIndex, serviceSlugs } from "./service-index";
 
-// Header nav: five links, the lead button and the phone number sit beside it.
+// Header nav: four links; the phone number and the "Kërko ofertë" button sit beside them.
+// Kontakt lives in the footer and the mobile menu (the phone is already in the header).
 export const mainNav = [
   { label: "Shërbimet", href: "/sherbime" },
   { label: "Airbnb", href: "/pastrim-airbnb-tirane" },
   { label: "Puna jonë", href: "/puna-jone" },
   { label: "Rreth nesh", href: "/rreth-nesh" },
-  { label: "Kontakt", href: "/kontakt" },
 ] as const;
 
 export const footerServiceLinks = serviceSlugs.map((slug) => ({
@@ -19,7 +19,7 @@ export const footerCompanyLinks = [
   { label: "Puna jonë", href: "/puna-jone" },
   { label: "Pyetje të shpeshta", href: "/faq" },
   { label: "Kontakt", href: "/kontakt" },
-  { label: "Kërko ofertë", href: "/kerko-oferte" },
+  { label: "Na lini numrin", href: "/kerko-oferte" },
 ] as const;
 
 export const footerLegalLinks = [

@@ -2,7 +2,7 @@ import { Section } from "@/components/Section";
 import { SectionHeading } from "@/components/SectionHeading";
 import { FaqItem } from "@/components/FaqItem";
 import { Breadcrumbs } from "@/components/Breadcrumbs";
-import { LeadActions } from "@/components/LeadActions";
+import { ContactActions } from "@/components/ContactActions";
 import { JsonLd, breadcrumbJsonLd, faqJsonLd, pageMetadata } from "@/lib/seo";
 import { faqEntries } from "@/lib/content";
 
@@ -30,16 +30,16 @@ export default function FaqPage() {
         <p className="mt-4 max-w-2xl text-xl text-text-muted">
           Nuk e gjeni përgjigjen? Na shkruani në WhatsApp ose na lini numrin.
         </p>
-        <div className="mt-10 max-w-3xl space-y-3">
+        <div className="mt-10 max-w-3xl border-t border-border">
           {faqEntries.map((entry) => (
             <FaqItem key={entry.question} question={entry.question} answer={entry.answer} />
           ))}
         </div>
       </Section>
 
-      <Section tone="warm">
-        <SectionHeading title="Keni një pyetje tjetër?" />
-        <LeadActions placement="faq_footer" />
+      <Section tone="muted">
+        <SectionHeading title="Keni një pyetje tjetër?" intro="Na shkruani ose na telefononi." />
+        <ContactActions placement="faq_footer" />
       </Section>
     </>
   );

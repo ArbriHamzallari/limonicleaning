@@ -2,15 +2,17 @@ import { Button } from "./Button";
 import { WhatsAppButton } from "./WhatsAppButton";
 import type { ServiceSlug } from "@/lib/service-index";
 
-interface LeadActionsProps {
+// Hero only. "Kërko ofertë" appears in exactly two places site-wide: the header and heroes.
+// Everywhere else the action is WhatsApp or the phone (ContactActions / Closer).
+export function LeadActions({
+  service,
+  placement,
+  className = "",
+}: {
   service?: ServiceSlug;
   placement: string;
   className?: string;
-}
-
-// The two actions every page ends in: the short form (preselected to this page's service)
-// and a WhatsApp chat with the matching prefilled message.
-export function LeadActions({ service, placement, className = "" }: LeadActionsProps) {
+}) {
   const quoteHref = service ? `/kerko-oferte?sherbimi=${service}` : "/kerko-oferte";
 
   return (
@@ -18,7 +20,9 @@ export function LeadActions({ service, placement, className = "" }: LeadActionsP
       <Button href={quoteHref} variant="secondary" size="lg">
         Kërko ofertë
       </Button>
-      <WhatsAppButton service={service} placement={placement} size="lg" />
+      <WhatsAppButton service={service} placement={placement} variant="outline" size="lg">
+        WhatsApp
+      </WhatsAppButton>
     </div>
   );
 }

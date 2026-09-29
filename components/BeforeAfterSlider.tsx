@@ -12,6 +12,8 @@ interface BeforeAfterSliderProps {
   caption?: string;
   aspect?: string;
   className?: string;
+  /** Edge to edge on phones. */
+  bleed?: boolean;
 }
 
 // A single native <input type="range"> drives the reveal, so dragging, touch, and
@@ -26,13 +28,14 @@ export function BeforeAfterSlider({
   caption,
   aspect = "aspect-[3/2]",
   className = "",
+  bleed = false,
 }: BeforeAfterSliderProps) {
   const [value, setValue] = useState(50);
 
   return (
     <div className={className}>
       <div
-        className={`group relative select-none overflow-hidden rounded-lg border border-border ${aspect}`}
+        className={`group relative select-none overflow-hidden border-border ${bleed ? "-mx-4 border-y sm:mx-0 sm:rounded-lg sm:border" : "rounded-lg border"} ${aspect}`}
       >
         {/* After — full frame, base layer */}
         <Image

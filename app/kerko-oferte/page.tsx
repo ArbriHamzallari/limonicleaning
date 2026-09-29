@@ -6,7 +6,7 @@ import { WhatsAppButton } from "@/components/WhatsAppButton";
 import { PhoneButton } from "@/components/PhoneButton";
 import { CheckList } from "@/components/icons";
 import { JsonLd, breadcrumbJsonLd, pageMetadata } from "@/lib/seo";
-import { howItWorks } from "@/lib/content";
+import { closerSteps } from "@/lib/content";
 import { LeadFormFromQuery } from "./LeadFormFromQuery";
 
 const breadcrumbItems = [
@@ -52,7 +52,7 @@ export default function KerkoOfertePage() {
                 <PhoneButton placement="kerko_oferte_aside" size="lg" />
               </div>
               <h2 className="mt-10 text-xl font-bold">Çfarë ndodh më pas</h2>
-              <CheckList items={howItWorks} className="mt-4" />
+              <CheckList items={closerSteps.map((s) => `${s.title} ${s.text}`)} className="mt-4" />
             </div>
           </aside>
         </div>

@@ -10,6 +10,8 @@ import type { ServiceSlug } from "@/lib/service-index";
 
 interface WhatsAppButtonProps {
   service?: ServiceSlug;
+  /** Overrides the service message (e.g. the homepage fill-in template). */
+  message?: string;
   /** Where on the page the button sits, for the whatsapp_click event. */
   placement: string;
   variant?: "whatsapp" | "outline" | "link";
@@ -22,6 +24,7 @@ interface WhatsAppButtonProps {
 
 export function WhatsAppButton({
   service,
+  message,
   placement,
   variant = "whatsapp",
   size = "md",
@@ -29,7 +32,7 @@ export function WhatsAppButton({
   className = "",
   children = "Na shkruani në WhatsApp",
 }: WhatsAppButtonProps) {
-  const href = whatsappLink(waMessageFor(service));
+  const href = whatsappLink(message ?? waMessageFor(service));
   const onClick = () => trackEvent("whatsapp_click", { service: service ?? "pergjithshem", placement });
 
   if (iconOnly) {

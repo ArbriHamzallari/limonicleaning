@@ -8,6 +8,8 @@ interface PhotoProps {
   /** Only the page's hero / LCP image: loads eagerly with high fetch priority. */
   priority?: boolean;
   caption?: string;
+  /** Runs edge to edge on phones (cancels the 16px page gutter), normal from sm up. */
+  bleed?: boolean;
   className?: string;
 }
 
@@ -20,11 +22,12 @@ export function Photo({
   sizes,
   priority = false,
   caption,
+  bleed = false,
   className = "",
 }: PhotoProps) {
   return (
-    <figure className={className}>
-      <div className={`relative overflow-hidden rounded-lg bg-bg-muted ${aspect}`}>
+    <figure className={`${bleed ? "-mx-4 sm:mx-0" : ""} ${className}`}>
+      <div className={`relative overflow-hidden bg-bg-muted ${bleed ? "sm:rounded-lg" : "rounded-lg"} ${aspect}`}>
         <Image
           src={src}
           alt={alt}
@@ -34,7 +37,9 @@ export function Photo({
           {...(priority ? { loading: "eager" as const, fetchPriority: "high" as const } : {})}
         />
       </div>
-      {caption && <figcaption className="mt-2 text-sm text-(--fg-muted)">{caption}</figcaption>}
+      {caption && (
+        <figcaption className={`mt-2 text-sm text-(--fg-muted) ${bleed ? "px-4 sm:px-0" : ""}`}>{caption}</figcaption>
+      )}
     </figure>
   );
 }

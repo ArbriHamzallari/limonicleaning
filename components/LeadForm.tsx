@@ -15,7 +15,6 @@ interface LeadFormProps {
   placement: string;
 }
 
-type Channel = "WHATSAPP" | "TELEFON";
 type FieldErrors = Partial<Record<"service" | "name" | "phone" | "form", string>>;
 
 const serviceOptions = leadServiceValues.map((value) => ({
@@ -29,7 +28,7 @@ const inputClasses =
   "mt-2 block min-h-12 w-full rounded-lg border-2 border-border bg-bg px-4 py-2 text-lg text-text focus:border-primary aria-[invalid=true]:border-red-700";
 const labelClasses = "block text-lg font-semibold text-text";
 const chipClasses =
-  "inline-flex min-h-12 cursor-pointer items-center rounded-full border-2 border-border bg-bg px-4 text-base font-medium text-text has-checked:border-primary has-checked:bg-primary has-checked:text-white has-focus-visible:outline-3 has-focus-visible:outline-offset-2 has-focus-visible:outline-primary";
+  "inline-flex min-h-12 cursor-pointer items-center rounded-lg border-2 border-border bg-bg px-4 text-base font-medium text-text has-checked:border-primary has-checked:bg-primary has-checked:text-white has-focus-visible:outline-3 has-focus-visible:outline-offset-2 has-focus-visible:outline-primary";
 
 function FieldError({ id, children }: { id: string; children?: ReactNode }) {
   if (!children) return null;
@@ -45,10 +44,7 @@ export function LeadForm({ service: preselected, placement }: LeadFormProps) {
   const [service, setService] = useState<LeadService | "">(preselected ?? "");
   const [name, setName] = useState("");
   const [phone, setPhone] = useState("");
-  const [channel, setChannel] = useState<Channel>("WHATSAPP");
-  const [area, setArea] = useState("");
   const [message, setMessage] = useState("");
-  const [airbnb, setAirbnb] = useState({ properties: "", size: "", turnovers: "" });
   const [honeypot, setHoneypot] = useState("");
   const [errors, setErrors] = useState<FieldErrors>({});
   const [status, setStatus] = useState<"idle" | "submitting" | "success">("idle");
@@ -102,12 +98,7 @@ export function LeadForm({ service: preselected, placement }: LeadFormProps) {
           service,
           name,
           phone,
-          channel,
-          area,
           message,
-          ...(service === "airbnb"
-            ? { airbnbProperties: airbnb.properties, airbnbSize: airbnb.size, airbnbTurnovers: airbnb.turnovers }
-            : {}),
           pagePath: window.location.pathname,
           utmSource: params.get("utm_source") ?? undefined,
           utmCampaign: params.get("utm_campaign") ?? undefined,
@@ -192,38 +183,6 @@ export function LeadForm({ service: preselected, placement }: LeadFormProps) {
         <FieldError id={`${id}-service-error`}>{errors.service}</FieldError>
       </fieldset>
 
-      {service === "airbnb" && (
-        <fieldset className="mt-6 rounded-lg bg-bg-muted p-4">
-          <legend className="sr-only">Detaje për Airbnb (opsionale)</legend>
-          <p className="font-semibold">Për Airbnb (opsionale, na ndihmon për ofertën)</p>
-          <div className="mt-2 grid gap-4 sm:grid-cols-3">
-            {(
-              [
-                ["properties", "Sa prona keni?"],
-                ["size", "Sa metra katrorë është secila?"],
-                ["turnovers", "Sa pastrime në muaj për pronë?"],
-              ] as const
-            ).map(([key, label]) => (
-              <div key={key}>
-                <label htmlFor={`${id}-airbnb-${key}`} className="block text-base font-medium">
-                  {label}
-                </label>
-                <input
-                  id={`${id}-airbnb-${key}`}
-                  type="text"
-                  inputMode="numeric"
-                  pattern="[0-9]*"
-                  maxLength={5}
-                  value={airbnb[key]}
-                  onChange={(e) => setAirbnb((a) => ({ ...a, [key]: e.target.value.replace(/\D/g, "") }))}
-                  className={inputClasses}
-                />
-              </div>
-            ))}
-          </div>
-        </fieldset>
-      )}
-
       <div className="mt-6 grid gap-6 sm:grid-cols-2">
         <div>
           <label htmlFor={`${id}-name`} className={labelClasses}>
@@ -263,51 +222,16 @@ export function LeadForm({ service: preselected, placement }: LeadFormProps) {
         </div>
       </div>
 
-      <fieldset className="mt-6">
-        <legend className={labelClasses}>Si preferoni t&apos;ju kontaktojmë?</legend>
-        <div className="mt-3 flex flex-wrap gap-2">
-          {(
-            [
-              ["WHATSAPP", "WhatsApp"],
-              ["TELEFON", "Telefonatë"],
-            ] as const
-          ).map(([value, label]) => (
-            <label key={value} className={chipClasses}>
-              <input
-                type="radio"
-                name="channel"
-                value={value}
-                checked={channel === value}
-                onChange={() => setChannel(value)}
-                className="sr-only"
-              />
-              {label}
-            </label>
-          ))}
-        </div>
-      </fieldset>
-
-      <div className="mt-6">
-        <label htmlFor={`${id}-area`} className={labelClasses}>
-          Zona në Tiranë (opsionale)
-        </label>
-        <input
-          id={`${id}-area`}
-          type="text"
-          autoComplete="address-level3"
-          value={area}
-          onChange={(e) => setArea(e.target.value)}
-          maxLength={120}
-          className={inputClasses}
-        />
-      </div>
-
       <div className="mt-6">
         <label htmlFor={`${id}-message`} className={labelClasses}>
-          Diçka tjetër që duhet të dimë? (opsionale)
+          Mesazh (opsional)
         </label>
+        <p id={`${id}-message-hint`} className="mt-1 text-base text-text-muted">
+          P.sh. zona, madhësia e pronës ose kur ju duhet pastrimi.
+        </p>
         <textarea
           id={`${id}-message`}
+          aria-describedby={`${id}-message-hint`}
           rows={3}
           value={message}
           onChange={(e) => setMessage(e.target.value)}

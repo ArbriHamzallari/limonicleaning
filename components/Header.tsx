@@ -97,7 +97,12 @@ export function Header() {
 
           <nav aria-label="Kryesore" className="mt-6">
             <ul className="border-t border-border">
-              {[{ label: "Kryefaqja", href: "/" }, ...mainNav, { label: "Pyetje të shpeshta", href: "/faq" }].map(
+              {[
+                { label: "Kryefaqja", href: "/" },
+                ...mainNav,
+                { label: "Kontakt", href: "/kontakt" },
+                { label: "Pyetje të shpeshta", href: "/faq" },
+              ].map(
                 (item) => (
                   <li key={item.href} className="border-b border-border">
                     <Link
