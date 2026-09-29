@@ -1,20 +1,25 @@
 import type { Metadata } from "next";
 import { business } from "@/lib/business";
+import { services } from "@/lib/services";
 
 export const siteUrl = process.env.NEXT_PUBLIC_SITE_URL ?? "https://limonicleaning.al";
 
 interface PageMetadataInput {
+  /** Set `absoluteTitle` to skip the "| Limoni Cleaning" template (homepage). */
   title: string;
+  absoluteTitle?: boolean;
+  noindex?: boolean;
   description: string;
   path: string;
   ogImage?: string;
 }
 
-export function pageMetadata({ title, description, path, ogImage }: PageMetadataInput): Metadata {
+export function pageMetadata({ title, absoluteTitle, noindex, description, path, ogImage }: PageMetadataInput): Metadata {
   const url = `${siteUrl}${path}`;
 
   return {
-    title,
+    title: absoluteTitle ? { absolute: title } : title,
+    ...(noindex ? { robots: { index: false, follow: true } } : {}),
     description,
     alternates: { canonical: url },
     openGraph: {
@@ -37,45 +42,49 @@ export function pageMetadata({ title, description, path, ogImage }: PageMetadata
   };
 }
 
-export function localBusinessJsonLd() {
-  return {
-    "@context": "https://schema.org",
-    "@type": "HousekeepingService",
-    name: business.name,
-    url: siteUrl,
-    telephone: business.phoneE164,
-    areaServed: {
-      "@type": "City",
-      name: "Tiranë",
-    },
-    address: {
-      "@type": "PostalAddress",
-      addressLocality: business.city,
-      addressRegion: business.areaServed,
-      addressCountry: "AL",
-    },
-    sameAs: [] as string[],
-  };
-}
+const businessId = `${siteUrl}/#business`;
 
-export function organizationJsonLd() {
-  return {
-    "@context": "https://schema.org",
-    "@type": "Organization",
-    name: business.name,
-    url: siteUrl,
-    logo: `${siteUrl}/logo.png`,
-    telephone: business.phoneE164,
-  };
-}
+/** One @graph for the whole site, rendered once in the root layout. */
+export function siteGraphJsonLd() {
+  const sameAs = [business.instagramUrl, business.facebookUrl].filter(Boolean) as string[];
 
-export function websiteJsonLd() {
   return {
     "@context": "https://schema.org",
-    "@type": "WebSite",
-    name: business.name,
-    url: siteUrl,
-    inLanguage: "sq-AL",
+    "@graph": [
+      {
+        "@type": "HousekeepingService",
+        "@id": businessId,
+        name: business.name,
+        url: siteUrl,
+        telephone: business.phoneE164,
+        image: `${siteUrl}/images/ekipi-shtrim-shtrati-tirane.jpg`,
+        logo: `${siteUrl}/logo.png`,
+        address: {
+          "@type": "PostalAddress",
+          addressLocality: "Tiranë",
+          addressCountry: "AL",
+        },
+        areaServed: { "@type": "City", name: "Tiranë" },
+        hasOfferCatalog: {
+          "@type": "OfferCatalog",
+          name: "Shërbime pastrimi",
+          itemListElement: services.map((s) => ({
+            "@type": "Offer",
+            itemOffered: { "@type": "Service", name: s.h1, url: `${siteUrl}${s.path}` },
+          })),
+        },
+        // Filled only once real profiles exist (Google Business Profile, social).
+        ...(sameAs.length ? { sameAs } : {}),
+      },
+      {
+        "@type": "WebSite",
+        "@id": `${siteUrl}/#website`,
+        name: business.name,
+        url: siteUrl,
+        inLanguage: "sq-AL",
+        publisher: { "@id": businessId },
+      },
+    ],
   };
 }
 
@@ -86,15 +95,8 @@ export function serviceJsonLd(name: string, description: string, path: string) {
     serviceType: name,
     name,
     description,
-    provider: {
-      "@type": "HousekeepingService",
-      name: business.name,
-      telephone: business.phoneE164,
-    },
-    areaServed: {
-      "@type": "City",
-      name: "Tiranë",
-    },
+    provider: { "@id": businessId },
+    areaServed: { "@type": "City", name: "Tiranë" },
     url: `${siteUrl}${path}`,
   };
 }
@@ -120,14 +122,7 @@ export function videoJsonLd(input: {
     uploadDate: input.uploadDate,
     duration: isoDuration,
     contentUrl: `${siteUrl}${input.contentPath}`,
-    publisher: {
-      "@type": "Organization",
-      name: business.name,
-      logo: {
-        "@type": "ImageObject",
-        url: `${siteUrl}/logo.png`,
-      },
-    },
+    publisher: { "@id": businessId },
   };
 }
 

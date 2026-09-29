@@ -3,17 +3,17 @@ import { Breadcrumbs } from "@/components/Breadcrumbs";
 import { BeforeAfterSlider } from "@/components/BeforeAfterSlider";
 import { PortfolioVideo } from "@/components/PortfolioVideo";
 import { JsonLd, breadcrumbJsonLd, videoJsonLd, pageMetadata } from "@/lib/seo";
-import { Button } from "@/components/Button";
-import { WhatsAppLink } from "@/components/WhatsAppLink";
-import { waMessages } from "@/lib/whatsapp-messages";
-import { PortfolioGrid } from "./PortfolioGrid";
+import { SectionHeading } from "@/components/SectionHeading";
+import { LeadActions } from "@/components/LeadActions";
+import { Photo } from "@/components/Photo";
+import { photos, beforeAfter } from "@/lib/photos";
 
 const breadcrumbItems = [{ name: "Kryefaqja", path: "/" }, { name: "Puna jonë", path: "/puna-jone" }];
 
 export const metadata = pageMetadata({
-  title: "Puna Jonë — Para dhe Mbas Pastrimit",
+  title: "Puna Jonë: Foto Para dhe Pas Pastrimit",
   description:
-    "Foto dhe video reale nga pastrimet tona për Airbnb, apartamente, vila dhe zyra në Tiranë, me krahasim para/mbas.",
+    "Foto dhe video reale nga pastrimet e Limoni Cleaning në apartamente në Tiranë, me krahasim para dhe pas. Na lini numrin ose na shkruani në WhatsApp.",
   path: "/puna-jone",
 });
 
@@ -21,7 +21,7 @@ const videos = [
   {
     src: "/videos/puna-jone-para-pastrimit.mp4",
     poster: "/images/puna-jone-para-pastrimit.jpg",
-    caption: "Apartament — para fillimit të pastrimit",
+    caption: "Apartament, para fillimit të pastrimit",
     name: "Vizitë e apartamentit para fillimit të pastrimit",
     description: "Pamje reale nga celulari i ekipit, në apartamentin ku po nisim punën.",
     uploadDate: "2026-09-10",
@@ -30,9 +30,9 @@ const videos = [
   {
     src: "/videos/puna-jone-vizite-apartamenti-1.mp4",
     poster: "/images/puna-jone-vizite-apartamenti-1.jpg",
-    caption: "Apartament — pas pastrimit të plotë",
+    caption: "Apartament pas pastrimit",
     name: "Vizitë e apartamentit pas pastrimit",
-    description: "Pamje reale nga celulari i ekipit, në apartamentin e pastruar plotësisht.",
+    description: "Pamje reale nga celulari i ekipit, në apartamentin pas pastrimit.",
     uploadDate: "2026-09-11",
     durationSeconds: 25.97,
   },
@@ -46,6 +46,8 @@ const videos = [
     durationSeconds: 34.57,
   },
 ];
+
+const gallery = [photos.kitchen, photos.bedroom, photos.livingRoomClean, photos.hallwayClean];
 
 export default function PunaJonePage() {
   return (
@@ -64,71 +66,49 @@ export default function PunaJonePage() {
           })}
         />
       ))}
-      <Section className="pt-14">
+      <Section className="pt-6 sm:pt-10">
         <Breadcrumbs items={breadcrumbItems} />
-        <h1 className="font-display text-4xl font-semibold tracking-tight text-text sm:text-5xl">Puna jonë</h1>
-        <p className="mt-3 max-w-2xl text-lg text-text-muted">
-          Një pastrim i mirë shihet në detaje, jo vetëm përshkruhet. Lëviz rrëshqitësin për të parë
-          ndryshimin, dhe shiko video dhe foto reale nga punët tona më poshtë.
+        <h1 className="text-3xl leading-tight font-extrabold tracking-tight sm:text-5xl">
+          Puna jonë: para dhe pas pastrimit
+        </h1>
+        <p className="mt-4 max-w-2xl text-xl text-text-muted">
+          Foto dhe video reale nga celulari i ekipit. Lëvizni vijën mbi foto për të parë dhomën para
+          dhe pas pastrimit.
         </p>
-      </Section>
-
-      <Section>
-        <BeforeAfterSlider
-          beforeSrc="/images/pastrim-apartamenti-para.jpg"
-          afterSrc="/images/pastrim-apartamenti-mbas.jpg"
-          beforeAlt="Dhomë ndenjeje para pastrimit, me rrëmujë dhe mbeturina"
-          afterAlt="E njëjta dhomë ndenjeje pas pastrimit nga Limoni Cleaning, e rregullt dhe e pastër"
-          caption="Dhomë ndenjeje — para dhe mbas pastrimit"
-          aspect="aspect-[4/3]"
-          className="mx-auto max-w-2xl"
-          priority
-        />
+        <BeforeAfterSlider {...beforeAfter} className="mt-10 max-w-3xl" />
       </Section>
 
       <Section tone="muted">
-        <div className="mb-10 flex flex-col gap-2">
-          <h2 className="font-display text-2xl font-semibold text-text sm:text-3xl">Video nga puna jonë</h2>
-          <p className="max-w-md text-text-muted">
-            Pamje reale, të papërpunuara — direkt nga celulari i ekipit, jo material i xhiruar
-            posaçërisht.
-          </p>
+        <SectionHeading title="Foto nga pastrimet" />
+        <div className="grid gap-6 sm:grid-cols-2">
+          {gallery.map((photo) => (
+            <Photo
+              key={photo.src}
+              src={photo.src}
+              alt={photo.alt}
+              caption={photo.caption}
+              aspect="aspect-[4/3]"
+              sizes="(min-width: 640px) 50vw, 100vw"
+            />
+          ))}
         </div>
+      </Section>
+
+      <Section>
+        <SectionHeading
+          title="Video nga puna jonë"
+          intro="Pamje të papërpunuara, direkt nga celulari i ekipit. Videot ngarkohen vetëm kur i hapni."
+        />
         <div className="grid gap-6 sm:grid-cols-3">
           {videos.map((v) => (
             <PortfolioVideo key={v.src} src={v.src} poster={v.poster} caption={v.caption} />
           ))}
         </div>
-
-        <div className="mt-16 border-t border-border pt-16">
-          <h2 className="font-display text-2xl font-semibold text-text sm:text-3xl">Foto nga punët tona</h2>
-          <div className="mt-8">
-            <PortfolioGrid />
-          </div>
-        </div>
       </Section>
 
       <Section tone="warm">
-        <div className="flex flex-col items-center gap-4 text-center">
-          <h2 className="font-display text-3xl font-semibold text-text sm:text-4xl">
-            Ju pëlqeu puna jonë?
-          </h2>
-          <p className="max-w-xl text-text-muted">
-            Na shkruani në WhatsApp për një ofertë, ose rezervoni pastrimin direkt nga faqja.
-          </p>
-          <div className="flex flex-col gap-3 sm:flex-row">
-            <WhatsAppLink
-              message={waMessages.offer}
-              source="puna_jone_final_cta"
-              className="inline-flex items-center justify-center gap-2 rounded-full bg-primary px-6 py-3 text-sm font-semibold text-white transition-colors hover:bg-primary-hover"
-            >
-              Na shkruaj në WhatsApp
-            </WhatsAppLink>
-            <Button href="/rezervo" variant="outline">
-              Rezervo pastrimin
-            </Button>
-          </div>
-        </div>
+        <SectionHeading title="Ju pëlqen si punojmë?" intro="Na tregoni për pronën tuaj dhe ju japim ofertën." />
+        <LeadActions placement="puna_jone_footer" />
       </Section>
     </>
   );

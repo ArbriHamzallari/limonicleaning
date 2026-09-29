@@ -1,45 +1,36 @@
 import type { MetadataRoute } from "next";
 import { siteUrl } from "@/lib/seo";
-import { services } from "@/lib/content";
+import { services } from "@/lib/services";
 import { blogPosts } from "@/lib/blog";
 
-const staticRoutes = [
-  "",
-  "/sherbime",
-  "/pronare-airbnb",
-  "/cmimet",
-  "/rezervo",
-  "/puna-jone",
-  "/rreth-nesh",
-  "/faq",
-  "/kontakt",
-  "/blog",
-  "/privatesia",
-  "/kushtet",
+// Fixed dates, bumped by hand when a page's content really changes. Stamping every URL
+// with the build time tells search engines nothing.
+const CONTENT_UPDATED = "2026-09-29";
+const LEGAL_UPDATED = "2026-09-29";
+
+const staticRoutes: { path: string; lastModified: string }[] = [
+  { path: "", lastModified: CONTENT_UPDATED },
+  { path: "/sherbime", lastModified: CONTENT_UPDATED },
+  { path: "/kerko-oferte", lastModified: CONTENT_UPDATED },
+  { path: "/puna-jone", lastModified: CONTENT_UPDATED },
+  { path: "/rreth-nesh", lastModified: CONTENT_UPDATED },
+  { path: "/faq", lastModified: CONTENT_UPDATED },
+  { path: "/kontakt", lastModified: CONTENT_UPDATED },
+  { path: "/privatesia", lastModified: LEGAL_UPDATED },
+  { path: "/kushtet", lastModified: LEGAL_UPDATED },
 ];
 
 export default function sitemap(): MetadataRoute.Sitemap {
-  const now = new Date();
+  const routes = staticRoutes.map((r) => ({ url: `${siteUrl}${r.path}`, lastModified: r.lastModified }));
+  const serviceRoutes = services.map((s) => ({ url: `${siteUrl}${s.path}`, lastModified: CONTENT_UPDATED }));
 
-  const routes = staticRoutes.map((path) => ({
-    url: `${siteUrl}${path}`,
-    lastModified: now,
-  }));
+  // /blog joins the sitemap with its first real post.
+  const blogRoutes = blogPosts.length
+    ? [
+        { url: `${siteUrl}/blog`, lastModified: blogPosts[0].publishedAt },
+        ...blogPosts.map((p) => ({ url: `${siteUrl}/blog/${p.slug}`, lastModified: p.publishedAt })),
+      ]
+    : [];
 
-  const serviceRoutes = services.map((s) => ({
-    url: `${siteUrl}${s.path}`,
-    lastModified: now,
-  }));
-
-  const extraRoutes = ["/pastrim-me-themel-tirane"].map((path) => ({
-    url: `${siteUrl}${path}`,
-    lastModified: now,
-  }));
-
-  const blogRoutes = blogPosts.map((p) => ({
-    url: `${siteUrl}/blog/${p.slug}`,
-    lastModified: p.publishedAt,
-  }));
-
-  return [...routes, ...serviceRoutes, ...extraRoutes, ...blogRoutes];
+  return [...routes, ...serviceRoutes, ...blogRoutes];
 }

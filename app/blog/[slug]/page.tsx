@@ -3,10 +3,9 @@ import type { Metadata } from "next";
 import Link from "next/link";
 import { Section } from "@/components/Section";
 import { Breadcrumbs } from "@/components/Breadcrumbs";
-import { WhatsAppLink } from "@/components/WhatsAppLink";
+import { LeadActions } from "@/components/LeadActions";
 import { JsonLd, breadcrumbJsonLd, pageMetadata } from "@/lib/seo";
 import { blogPosts, getBlogPostBySlug } from "@/lib/blog";
-import { waMessages } from "@/lib/whatsapp-messages";
 
 export function generateStaticParams() {
   return blogPosts.map((p) => ({ slug: p.slug }));
@@ -47,13 +46,13 @@ export default async function BlogPostPage({
   return (
     <>
       <JsonLd data={breadcrumbJsonLd(breadcrumbItems)} />
-      <Section className="pt-14">
+      <Section className="pt-6 sm:pt-10">
         <article className="mx-auto max-w-3xl">
           <Breadcrumbs items={breadcrumbItems} />
-          <p className="font-display text-sm italic text-text-muted">
+          <p className="text-text-muted">
             <time dateTime={post.publishedAt}>{publishedDate}</time>
           </p>
-          <h1 className="mt-2 font-display text-4xl font-semibold tracking-tight text-text sm:text-5xl">
+          <h1 className="mt-2 text-3xl leading-tight font-extrabold tracking-tight sm:text-5xl">
             {post.title}
           </h1>
           <div className="mt-8">
@@ -64,17 +63,11 @@ export default async function BlogPostPage({
             ))}
           </div>
 
-          <div className="mt-12 flex flex-wrap items-center justify-between gap-4 border-t border-border pt-8">
-            <Link href="/blog" className="text-sm font-medium text-primary hover:underline">
-              ← Të gjithë artikujt
+          <div className="mt-12 border-t border-border pt-8">
+            <LeadActions placement="blog_post" />
+            <Link href="/blog" className="mt-6 inline-flex min-h-12 items-center font-medium text-primary underline underline-offset-4">
+              Të gjithë artikujt
             </Link>
-            <WhatsAppLink
-              message={waMessages.contact}
-              source="blog_post_footer"
-              className="inline-flex items-center justify-center gap-2 rounded-full border border-primary/30 px-5 py-2.5 text-sm font-semibold text-primary transition-colors hover:border-primary hover:bg-primary hover:text-white"
-            >
-              Na shkruaj në WhatsApp
-            </WhatsAppLink>
           </div>
         </article>
       </Section>

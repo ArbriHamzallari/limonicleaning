@@ -15,55 +15,56 @@ export default function PrivatesiaPage() {
   return (
     <>
       <JsonLd data={breadcrumbJsonLd(breadcrumbItems)} />
-      <Section className="pt-14">
+      <Section className="pt-6 sm:pt-10">
         <div className="mx-auto max-w-3xl">
           <Breadcrumbs items={breadcrumbItems} />
         </div>
         <article className="mx-auto mt-6 max-w-3xl">
-          <h1 className="font-display text-4xl font-semibold tracking-tight text-text sm:text-5xl">Politika e Privatësisë</h1>
-          <p className="mt-3 text-sm text-text-muted">Përditësuar së fundmi: 2026.</p>
+          <h1 className="text-3xl leading-tight font-extrabold tracking-tight sm:text-5xl">Politika e Privatësisë</h1>
+          <p className="mt-3 text-sm text-text-muted">Përditësuar së fundmi: shtator 2026.</p>
 
-          <p className="mt-8 leading-relaxed text-text-muted">
-            Kjo faqe shpjegon çfarë të dhënash mbledh {business.name} kur përdor faqen tonë, si i
-            përdorim ato dhe si mund të na kontaktosh për t&apos;i menaxhuar.
+          <p className="mt-8 text-text-muted">
+            Kjo faqe shpjegon çfarë të dhënash mbledh {business.name} kur përdorni faqen tonë, si i
+            përdorim dhe si mund të na kontaktoni për to.
           </p>
 
-          <h2 className="mt-10 font-display text-2xl font-semibold text-text">Çfarë të dhënash mbledhim</h2>
-          <p className="mt-3 leading-relaxed text-text-muted">
-            Kur plotëson formularin e rezervimit ose të kontaktit, mbledhim vetëm të dhënat që na jep
-            direkt: emër, numër telefoni, email (opsional), adresë (opsionale), dhe detajet e
-            rezervimit (lloji i pronës, data, ora, shërbimet e zgjedhura, shënime).
+          <h2 className="mt-10 text-2xl font-bold">Çfarë të dhënash mbledhim</h2>
+          <p className="mt-3 text-text-muted">
+            Kur plotësoni formularin e kërkesës për ofertë, ruajmë vetëm atë që na jepni: emrin,
+            numrin e telefonit, llojin e pastrimit, mënyrën si preferoni t&apos;ju kontaktojmë, dhe
+            nëse i shkruani, zonën dhe mesazhin. Ruajmë gjithashtu faqen nga u dërgua kërkesa dhe,
+            kur ekziston, burimin e reklamës (UTM), që të kuptojmë si na gjetët.
           </p>
 
-          <h2 className="mt-10 font-display text-2xl font-semibold text-text">Si i përdorim</h2>
-          <p className="mt-3 leading-relaxed text-text-muted">
-            Përdorim këto të dhëna vetëm për të konfirmuar dhe organizuar shërbimin e kërkuar —
-            përfshirë kontaktimin tënd në telefon ose WhatsApp. Nuk i shesim dhe nuk i ndajmë të
-            dhënat tuaja me palë të treta për qëllime marketingu.
+          <h2 className="mt-10 text-2xl font-bold">Si i përdorim</h2>
+          <p className="mt-3 text-text-muted">
+            Numrin e përdorim vetëm për t&apos;ju kontaktuar për këtë kërkesë, në telefon ose në
+            WhatsApp, dhe për të organizuar pastrimin nëse bini dakord. Nuk i shesim dhe nuk i ndajmë
+            të dhënat tuaja me palë të treta për qëllime marketingu.
           </p>
 
-          <h2 className="mt-10 font-display text-2xl font-semibold text-text">Ku ruhen të dhënat</h2>
-          <p className="mt-3 leading-relaxed text-text-muted">
-            Të dhënat e rezervimeve dhe mesazheve ruhen në një bazë të dhënash të sigurt. Njoftimet
-            për rezervime dhe mesazhe të reja dërgohen përmes një shërbimi email (Resend). Këta
-            ofrues përpunojnë të dhënat vetëm në emrin tonë, sipas kushteve të tyre të shërbimit.
+          <h2 className="mt-10 text-2xl font-bold">Ku ruhen të dhënat</h2>
+          <p className="mt-3 text-text-muted">
+            Kërkesat ruhen në një bazë të dhënash të sigurt. Njoftimi për çdo kërkesë të re na vjen
+            me email (përmes Resend) dhe, kur është aktiv, në WhatsApp (përmes WhatsApp Business të
+            Meta-s). Këta ofrues i përpunojnë të dhënat vetëm në emrin tonë, sipas kushteve të tyre.
           </p>
 
-          <h2 className="mt-10 font-display text-2xl font-semibold text-text">Të drejtat e tua</h2>
-          <p className="mt-3 leading-relaxed text-text-muted">
-            Mund të kërkosh në çdo kohë të shohësh, korrigjosh ose fshish të dhënat që na ke dhënë,
-            duke na kontaktuar në {business.phoneDisplay} ose në WhatsApp.
+          <h2 className="mt-10 text-2xl font-bold">Të drejtat e tua</h2>
+          <p className="mt-3 text-text-muted">
+            Mund të kërkoni në çdo kohë të shihni, të korrigjoni ose të fshini të dhënat që na keni
+            dhënë, duke na kontaktuar në {business.phoneDisplay} ose në WhatsApp.
           </p>
 
-          <h2 className="mt-10 font-display text-2xl font-semibold text-text">Cookies</h2>
-          <p className="mt-3 leading-relaxed text-text-muted">
-            Kjo faqe nuk përdor cookies gjurmimi apo reklamimi. Mund të përdoren cookie thjesht
-            teknike të domosdoshme për funksionimin e faqes.
+          <h2 className="mt-10 text-2xl font-bold">Cookies</h2>
+          <p className="mt-3 text-text-muted">
+            Kjo faqe nuk përdor cookies reklamimi. Mund të përdoren cookies teknike të domosdoshme
+            për funksionimin e faqes, dhe, nëse aktivizohet, Google Analytics për të matur vizitat.
           </p>
 
-          <h2 className="mt-10 font-display text-2xl font-semibold text-text">Kontakt</h2>
-          <p className="mt-3 leading-relaxed text-text-muted">
-            Për çdo pyetje rreth kësaj politike, na kontakto në {business.phoneDisplay}.
+          <h2 className="mt-10 text-2xl font-bold">Kontakt</h2>
+          <p className="mt-3 text-text-muted">
+            Për çdo pyetje rreth kësaj politike, na kontaktoni në {business.phoneDisplay}.
           </p>
         </article>
       </Section>

@@ -16,11 +16,11 @@ export function PortfolioVideo({ src, poster, caption, className = "" }: Portfol
         preload="none"
         poster={poster}
         playsInline
-        className="aspect-[9/16] w-full rounded-md border border-border bg-bg-ink object-cover"
+        className="aspect-[9/16] w-full rounded-lg border border-border bg-text object-cover"
       >
         <source src={src} type="video/mp4" />
       </video>
-      <p className="mt-3 text-sm text-text-muted">{caption}</p>
+      <p className="mt-3 text-sm text-(--fg-muted)">{caption}</p>
     </div>
   );
 }

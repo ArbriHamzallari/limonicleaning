@@ -90,7 +90,7 @@ Phase 2 (not now, don't build yet): `/tirana/[neighborhood]` pages (Blloku, Komu
 
 ## Design rules (from prompt 03, keep them)
 
-- Inter only; hierarchy from size and weight. No italic serif kickers, no "01/02/03" numerals, no "→" arrow links, no `✓` characters (use `components/CheckIcon.tsx`).
+- Inter only; hierarchy from size and weight. No italic serif kickers, no "01/02/03" numerals, no "→" arrow links, no `✓` characters (use `components/icons.tsx` (`CheckIcon`, `CheckList`)).
 - No em dashes in visible copy, `alt` or meta text.
 - No empty image slots on public pages. No "Foto — …" placeholder labels.
 - Body copy 18px on mobile; `text-sm` only for captions and legal text. Every tap target ≥ 48px. Never yellow text on white. Labels always above inputs.

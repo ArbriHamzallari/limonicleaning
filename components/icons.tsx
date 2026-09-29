@@ -33,12 +33,21 @@ export function PhoneIcon({ className = "h-5 w-5" }: IconProps) {
   );
 }
 
-export function CheckList({ items, className = "" }: { items: string[]; className?: string }) {
+export function CheckList({
+  items,
+  className = "",
+  iconClassName = "text-primary",
+}: {
+  items: string[];
+  className?: string;
+  /** Use "text-accent" on dark sections. */
+  iconClassName?: string;
+}) {
   return (
     <ul className={`space-y-3 ${className}`}>
       {items.map((item) => (
         <li key={item} className="flex gap-3">
-          <CheckIcon className="mt-1 h-5 w-5 shrink-0 text-primary" />
+          <CheckIcon className={`mt-1 h-5 w-5 shrink-0 ${iconClassName}`} />
           <span>{item}</span>
         </li>
       ))}

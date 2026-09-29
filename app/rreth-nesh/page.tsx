@@ -1,16 +1,22 @@
 import { Section } from "@/components/Section";
-import { Card } from "@/components/Card";
+import { SectionHeading } from "@/components/SectionHeading";
 import { Breadcrumbs } from "@/components/Breadcrumbs";
-import { MediaFrame } from "@/components/MediaFrame";
+import { LeadActions } from "@/components/LeadActions";
+import { Photo } from "@/components/Photo";
 import { JsonLd, breadcrumbJsonLd, pageMetadata } from "@/lib/seo";
 import { aboutValues } from "@/lib/content";
+import { photos } from "@/lib/photos";
+import { prago } from "@/lib/business";
 
-const breadcrumbItems = [{ name: "Kryefaqja", path: "/" }, { name: "Rreth nesh", path: "/rreth-nesh" }];
+const breadcrumbItems = [
+  { name: "Kryefaqja", path: "/" },
+  { name: "Rreth nesh", path: "/rreth-nesh" },
+];
 
 export const metadata = pageMetadata({
   title: "Rreth Nesh",
   description:
-    "Limoni Cleaning është kompani pastrimi në Tiranë, me bazë në Komuna e Parisit. Ekip me mbi 10 vjet eksperiencë të kombinuar, i specializuar në pastrim Airbnb.",
+    "Limoni Cleaning është kompani pastrimi në Tiranë, me bazë në Komunën e Parisit. Ekip me mbi 10 vjet eksperiencë. Na lini numrin ose na shkruani në WhatsApp.",
   path: "/rreth-nesh",
 });
 
@@ -19,50 +25,50 @@ export default function RrethNeshPage() {
     <>
       <JsonLd data={breadcrumbJsonLd(breadcrumbItems)} />
 
-      <Section className="pt-14">
+      <Section className="pt-6 sm:pt-10">
         <Breadcrumbs items={breadcrumbItems} />
-        <div className="grid items-center gap-12 lg:grid-cols-2">
+        <div className="grid items-center gap-10 lg:grid-cols-2 lg:gap-14">
           <div>
-            <p className="text-lg font-semibold text-primary">
-              &ldquo;Ju kujdeseni për pronën. Ne kujdesemi për pastërtinë.&rdquo;
-            </p>
-            <h1 className="mt-4 font-display text-4xl font-semibold tracking-tight text-text sm:text-5xl">Rreth nesh</h1>
-            <p className="mt-4 text-lg text-text-muted">
-              Limoni Cleaning është kompani pastrimi në Tiranë, me bazë në Komuna e Parisit.
-              Punojmë me apartamente, prona Airbnb dhe biznese, me fokus praktik te ekzekutimi —
-              jo premtime.
+            <h1 className="text-3xl leading-tight font-extrabold tracking-tight sm:text-5xl">Rreth nesh</h1>
+            <p className="mt-4 text-xl text-text-muted">
+              Limoni Cleaning është kompani pastrimi në Tiranë, me bazë në Komunën e Parisit. Pastrojmë
+              apartamente, shtëpi, prona Airbnb dhe ambiente biznesi.
             </p>
             <p className="mt-4 text-text-muted">
-              Ekipi ynë sjell mbi 10 vjet eksperiencë të kombinuar në pastrim dhe mirëmbajtje
-              ambientesh. Limoni Cleaning si kompani është e re, por njerëzit që e përbëjnë kanë
-              punuar në pastrim profesional shumë kohë përpara saj.
+              Kompania është e re, por njerëzit që e përbëjnë kanë mbi 10 vjet eksperiencë në pastrim
+              profesional. Deri tani kemi pastruar mbi 50 prona.
             </p>
             <p className="mt-4 text-text-muted">
-              Pjesa më e madhe e punës sonë sot vjen nga pastrimi Airbnb — një shërbim që kërkon
-              qëndrueshmëri dhe organizim rreth kalendarit të pronës, jo vetëm një pastrim të
-              rastësishëm.
+              Pjesa më e madhe e punës sonë sot vjen nga pastrimi Airbnb, një shërbim që kërkon
+              rregull dhe organizim sipas kalendarit të pronës. Jemi partner zyrtar i {prago.name}, një
+              kompani e veçantë që merret me menaxhimin e pronave me qira ditore.
             </p>
           </div>
-          <MediaFrame
-            label="Foto e ekipit"
-            src="/images/ekipi-pastrim-kuzhine-tirane.jpg"
-            alt="Punonjëse e Limoni Cleaning duke pastruar kuzhinën e një apartamenti në Tiranë"
-            aspect="aspect-[5/4]"
-            priority
+          <Photo
+            src={photos.kitchen.src}
+            alt={photos.kitchen.alt}
+            aspect="aspect-[4/5]"
+            className="mx-auto w-full max-w-md lg:max-w-none"
+            preload
           />
         </div>
       </Section>
 
       <Section tone="muted">
-        <h2 className="font-display text-2xl font-semibold text-text sm:text-3xl">Si punojmë</h2>
-        <div className="mt-6 grid gap-6 sm:grid-cols-2 lg:grid-cols-4">
+        <SectionHeading title="Si punojmë" />
+        <div className="grid gap-6 sm:grid-cols-2 lg:grid-cols-4">
           {aboutValues.map((value) => (
-            <Card key={value.title}>
-              <h3 className="font-semibold text-text">{value.title}</h3>
-              <p className="mt-2 text-sm text-text-muted">{value.description}</p>
-            </Card>
+            <div key={value.title} className="rounded-lg border border-border bg-bg p-6">
+              <h3 className="text-xl font-bold">{value.title}</h3>
+              <p className="mt-2 text-text-muted">{value.description}</p>
+            </div>
           ))}
         </div>
+      </Section>
+
+      <Section>
+        <SectionHeading title="Flisni me ne" intro="Na tregoni për pronën dhe ju japim ofertën." />
+        <LeadActions placement="rreth_nesh_footer" />
       </Section>
     </>
   );

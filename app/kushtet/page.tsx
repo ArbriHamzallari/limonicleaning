@@ -15,42 +15,42 @@ export default function KushtetPage() {
   return (
     <>
       <JsonLd data={breadcrumbJsonLd(breadcrumbItems)} />
-      <Section className="pt-14">
+      <Section className="pt-6 sm:pt-10">
         <div className="mx-auto max-w-3xl">
           <Breadcrumbs items={breadcrumbItems} />
         </div>
         <article className="mx-auto mt-6 max-w-3xl">
-          <h1 className="font-display text-4xl font-semibold tracking-tight text-text sm:text-5xl">Kushtet e Shërbimit</h1>
-          <p className="mt-3 text-sm text-text-muted">Përditësuar së fundmi: 2026.</p>
+          <h1 className="text-3xl leading-tight font-extrabold tracking-tight sm:text-5xl">Kushtet e Shërbimit</h1>
+          <p className="mt-3 text-sm text-text-muted">Përditësuar së fundmi: shtator 2026.</p>
 
-          <h2 className="mt-10 font-display text-2xl font-semibold text-text">Rezervimet</h2>
-          <p className="mt-3 leading-relaxed text-text-muted">
-            Një rezervim e bërë përmes faqes konsiderohet kërkesë fillestare. Ekipi ynë e konfirmon
-            çdo rezervim përmes telefonit ose WhatsApp përpara ditës së shërbimit.
+          <h2 className="mt-10 text-2xl font-bold">Kërkesat për ofertë</h2>
+          <p className="mt-3 text-text-muted">
+            Një kërkesë e dërguar nga faqja nuk është rezervim. Pasi e marrim, ju kontaktojmë në
+            telefon ose në WhatsApp, pyesim për pronën dhe ju japim ofertën. Pastrimi caktohet vetëm
+            kur bini dakord për ofertën, ditën dhe orën.
           </p>
 
-          <h2 className="mt-10 font-display text-2xl font-semibold text-text">Çmimet</h2>
-          <p className="mt-3 leading-relaxed text-text-muted">
-            Çmimet e listuara në faqen /cmimet janë orientuese sipas tipologjisë së pronës. Çmimi
-            final mund të ndryshojë në varësi të madhësisë, gjendjes së pronës dhe shërbimeve
-            shtesë të kërkuara, dhe konfirmohet përpara kryerjes së shërbimit.
+          <h2 className="mt-10 text-2xl font-bold">Oferta</h2>
+          <p className="mt-3 text-text-muted">
+            Faqja nuk publikon çmime. Oferta varet nga madhësia dhe gjendja e pronës, lloji i
+            pastrimit dhe shërbimet shtesë të kërkuara, dhe konfirmohet me ju para pastrimit.
           </p>
 
-          <h2 className="mt-10 font-display text-2xl font-semibold text-text">Anulimi dhe ndryshimi</h2>
-          <p className="mt-3 leading-relaxed text-text-muted">
-            Për anulim ose ndryshim të një rezervimi, na kontakto sa më shpejt të jetë e mundur në
-            telefon ose WhatsApp.
+          <h2 className="mt-10 text-2xl font-bold">Shtyrja dhe anulimi</h2>
+          <p className="mt-3 text-text-muted">
+            Nëse duhet ta shtyni ose ta anuloni pastrimin, na njoftoni sa më shpejt në telefon ose
+            në WhatsApp.
           </p>
 
-          <h2 className="mt-10 font-display text-2xl font-semibold text-text">Përgjegjësia</h2>
-          <p className="mt-3 leading-relaxed text-text-muted">
-            Ekipi ynë trajton çdo pronë me kujdes maksimal. Nëse ka ndonjë shqetësim rreth punës së
-            kryer, na njofto brenda 24 orëve nga përfundimi i shërbimit, në mënyrë që ta adresojmë.
+          <h2 className="mt-10 text-2xl font-bold">Përgjegjësia</h2>
+          <p className="mt-3 text-text-muted">
+            Ekipi ynë trajton çdo pronë me kujdes. Nëse keni ndonjë shqetësim për punën e kryer, na
+            njoftoni brenda 24 orëve nga përfundimi i shërbimit, që ta zgjidhim.
           </p>
 
-          <h2 className="mt-10 font-display text-2xl font-semibold text-text">Kontakt</h2>
-          <p className="mt-3 leading-relaxed text-text-muted">
-            Për çdo pyetje rreth këtyre kushteve, na kontakto në {business.phoneDisplay}.
+          <h2 className="mt-10 text-2xl font-bold">Kontakt</h2>
+          <p className="mt-3 text-text-muted">
+            Për çdo pyetje rreth këtyre kushteve, na kontaktoni në {business.phoneDisplay}.
           </p>
         </article>
       </Section>
