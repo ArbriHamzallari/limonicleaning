@@ -1,46 +1,64 @@
 import { z } from "zod";
+import { normalizePhone } from "./phone";
+import { leadServiceValues } from "./service-index";
 
-export const propertyTypeValues = [
-  "APARTAMENT",
-  "AIRBNB",
-  "VILE",
-  "ZYRE",
-  "BIZNES",
-  "TJETER",
-] as const;
-
-export const cleaningTypeValues = ["STANDARD", "THEMEL"] as const;
-
-export const bookingSchema = z.object({
-  propertyType: z.enum(propertyTypeValues),
-  typology: z.string().min(1, "Zgjidh madhësinë e pronës."),
-  cleaningType: z.enum(cleaningTypeValues),
-  date: z
-    .string()
-    .min(1, "Zgjidh një datë.")
-    .refine((val) => !Number.isNaN(Date.parse(val)), "Data nuk është e vlefshme."),
-  time: z.string().min(1, "Zgjidh një orar."),
-  extras: z.array(z.string()).default([]),
-  estimatedPriceAll: z.number().int().positive().optional(),
-  name: z.string().trim().min(2, "Shkruaj emrin tënd."),
-  phone: z
+const optionalText = (max: number) =>
+  z
     .string()
     .trim()
-    .min(6, "Shkruaj një numër telefoni të vlefshëm.")
-    .max(20, "Numri i telefonit është shumë i gjatë."),
-  email: z.union([z.literal(""), z.string().trim().email("Email nuk është i vlefshëm.")]).optional(),
-  address: z.string().trim().max(300).optional(),
-  notes: z.string().trim().max(1000).optional(),
+    .max(max, "Teksti është shumë i gjatë.")
+    .optional()
+    .transform((v) => (v ? v : undefined));
+
+const optionalCount = z
+  .string()
+  .trim()
+  .regex(/^\d{0,5}$/, "Shkruani vetëm një numër.")
+  .optional()
+  .transform((v) => (v ? v : undefined));
+
+export const leadSchema = z.object({
+  service: z.enum(leadServiceValues, "Zgjidhni llojin e pastrimit."),
+  name: z
+    .string("Shkruani emrin.")
+    .trim()
+    .min(2, "Shkruani emrin (të paktën 2 shkronja).")
+    .max(80, "Emri është shumë i gjatë."),
+  phone: z.string("Shkruani numrin e telefonit.").transform((value, ctx) => {
+    const normalized = normalizePhone(value);
+    if (!normalized) {
+      ctx.addIssue({ code: "custom", message: "Numri nuk duket i saktë. Shembull: 068 123 4567." });
+      return z.NEVER;
+    }
+    return normalized;
+  }),
+  channel: z.enum(["WHATSAPP", "TELEFON"]).default("WHATSAPP"),
+  area: optionalText(120),
+  message: optionalText(1000),
+  // Only sent when service is "airbnb"; folded into the message on save.
+  airbnbProperties: optionalCount,
+  airbnbSize: optionalCount,
+  airbnbTurnovers: optionalCount,
+  pagePath: z.string().trim().max(200).startsWith("/").catch("/"),
+  utmSource: optionalText(100),
+  utmCampaign: optionalText(100),
+  /** Milliseconds timestamp from when the form was rendered (spam timing check). */
+  startedAt: z.number().int().positive(),
 });
 
-export type BookingInput = z.infer<typeof bookingSchema>;
+export type LeadInput = z.infer<typeof leadSchema>;
 
-export const contactSchema = z.object({
-  name: z.string().trim().min(2, "Shkruaj emrin tënd."),
-  phone: z.string().trim().max(20).optional(),
-  email: z.union([z.literal(""), z.string().trim().email("Email nuk është i vlefshëm.")]).optional(),
-  subject: z.string().trim().max(200).optional(),
-  message: z.string().trim().min(5, "Shkruaj një mesazh më të gjatë."),
-});
-
-export type ContactInput = z.infer<typeof contactSchema>;
+/** Builds the stored message, adding the optional Airbnb details as one plain sentence. */
+export function composeLeadMessage(input: LeadInput): string | undefined {
+  const parts: string[] = [];
+  if (input.service === "airbnb") {
+    const details = [
+      input.airbnbProperties && `${input.airbnbProperties} prona`,
+      input.airbnbSize && `rreth ${input.airbnbSize} m² secila`,
+      input.airbnbTurnovers && `${input.airbnbTurnovers} pastrime në muaj për pronë`,
+    ].filter(Boolean);
+    if (details.length) parts.push(`Airbnb: ${details.join(", ")}.`);
+  }
+  if (input.message) parts.push(input.message);
+  return parts.length ? parts.join("\n\n") : undefined;
+}

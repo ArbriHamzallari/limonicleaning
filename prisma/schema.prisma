@@ -67,3 +67,37 @@ model ContactMessage {
   @@index([createdAt])
   @@map("contact_messages")
 }
+
+// Prompt 03: one model for every enquiry (form on any page). The two tables above are kept
+// for history only; nothing writes to them any more. Don't drop them.
+
+enum LeadStatus {
+  E_RE
+  KONTAKTUAR
+  OFERTE_DERGUAR
+  FITUAR
+  HUMBUR
+}
+
+enum ContactChannel {
+  WHATSAPP
+  TELEFON
+}
+
+model Lead {
+  id          String         @id @default(cuid())
+  service     String // slug from lib/service-index.ts, or "tjeter"
+  name        String
+  phone       String // E.164, e.g. +355689007252
+  area        String? // zona në Tiranë, free text
+  message     String?
+  channel     ContactChannel @default(WHATSAPP)
+  pagePath    String // where the form was submitted
+  utmSource   String?
+  utmCampaign String?
+  status      LeadStatus     @default(E_RE)
+  createdAt   DateTime       @default(now())
+
+  @@index([createdAt])
+  @@map("leads")
+}
