@@ -1,26 +1,28 @@
-// Header is a conversion tool, kept short: the five links that matter for a visitor
-// deciding what Limoni does and whether it fits their property. FAQ, Kontakt, Rreth nesh
-// and Blog stay reachable from the footer and contextual in-page links instead of
-// competing for header space.
+import { serviceIndex, serviceSlugs } from "./service-index";
+
+// Header nav: five links, the lead button and the phone number sit beside it.
 export const mainNav = [
   { label: "Shërbimet", href: "/sherbime" },
   { label: "Airbnb", href: "/pastrim-airbnb-tirane" },
   { label: "Puna jonë", href: "/puna-jone" },
-  { label: "Çmimet", href: "/cmimet" },
-  { label: "Për pronarët", href: "/pronare-airbnb" },
+  { label: "Rreth nesh", href: "/rreth-nesh" },
+  { label: "Kontakt", href: "/kontakt" },
 ] as const;
 
-export const footerServiceLinks = [
-  { label: "Pastrim Airbnb", href: "/pastrim-airbnb-tirane" },
-  { label: "Pastrim Apartamentesh", href: "/pastrim-apartamentesh-tirane" },
-  { label: "Pastrim Zyrash", href: "/pastrim-zyrash-tirane" },
-  { label: "Pastrim Vilash", href: "/pastrim-vilash-tirane" },
-  { label: "Pastrim Hotelesh", href: "/pastrim-hotelesh-tirane" },
-  { label: "Pastrim Pas Ndërtimit", href: "/pastrim-pas-ndertimit-tirane" },
-  { label: "Për Pronarë Airbnb", href: "/pronare-airbnb" },
+export const footerServiceLinks = serviceSlugs.map((slug) => ({
+  label: serviceIndex[slug].navLabel,
+  href: serviceIndex[slug].path,
+}));
+
+export const footerCompanyLinks = [
+  { label: "Rreth nesh", href: "/rreth-nesh" },
+  { label: "Puna jonë", href: "/puna-jone" },
+  { label: "Pyetje të shpeshta", href: "/faq" },
+  { label: "Kontakt", href: "/kontakt" },
+  { label: "Kërko ofertë", href: "/kerko-oferte" },
 ] as const;
 
 export const footerLegalLinks = [
-  { label: "Politika e Privatësisë", href: "/privatesia" },
-  { label: "Kushtet e Shërbimit", href: "/kushtet" },
+  { label: "Politika e privatësisë", href: "/privatesia" },
+  { label: "Kushtet e shërbimit", href: "/kushtet" },
 ] as const;

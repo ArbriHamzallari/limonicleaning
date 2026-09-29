@@ -6,13 +6,7 @@ declare global {
   }
 }
 
-export type AnalyticsEvent =
-  | "cta_book_click"
-  | "whatsapp_click"
-  | "phone_click"
-  | "booking_started"
-  | "booking_completed"
-  | "contact_submitted";
+export type AnalyticsEvent = "lead_submitted" | "whatsapp_click" | "phone_click" | "quote_cta_click";
 
 export function trackEvent(event: AnalyticsEvent, params?: Record<string, string>) {
   if (typeof window === "undefined" || typeof window.gtag !== "function") return;

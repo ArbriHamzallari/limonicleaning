@@ -1,23 +1,31 @@
 import Link from "next/link";
 import type { AnchorHTMLAttributes, ButtonHTMLAttributes } from "react";
 
-type Variant = "primary" | "secondary" | "outline" | "link";
+type Variant = "primary" | "secondary" | "outline" | "whatsapp" | "link";
+type Size = "md" | "lg";
 
+// Colours are checked for contrast: white on primary (10.6:1) and on the WhatsApp green
+// #157A3E (5.4:1); the yellow button always carries dark text (9.9:1), never white.
 const variantClasses: Record<Variant, string> = {
-  primary:
-    "bg-primary text-white shadow-[0_1px_0_rgba(0,0,0,0.08)] hover:bg-primary-hover hover:-translate-y-px active:translate-y-0",
-  secondary:
-    "bg-accent text-bg-ink hover:bg-accent-hover hover:-translate-y-px active:translate-y-0",
+  primary: "rounded-full bg-primary text-white hover:bg-primary-hover",
+  secondary: "rounded-full bg-accent text-text hover:bg-accent-hover",
   outline:
-    "bg-transparent text-primary border border-primary/30 hover:border-primary hover:bg-primary hover:text-white",
-  link: "rounded-none px-0 py-0 gap-1.5 text-primary underline decoration-primary/30 decoration-2 underline-offset-4 hover:decoration-primary",
+    "rounded-full border-2 border-primary/30 bg-bg text-primary hover:border-primary hover:bg-primary hover:text-white",
+  whatsapp: "rounded-full bg-whatsapp text-white hover:bg-whatsapp-hover",
+  link: "text-primary underline decoration-primary/40 decoration-2 underline-offset-4 hover:decoration-primary",
+};
+
+const sizeClasses: Record<Size, string> = {
+  md: "min-h-12 px-6 text-base",
+  lg: "min-h-14 px-7 text-lg",
 };
 
 const baseClasses =
-  "inline-flex items-center justify-center gap-2 rounded-full px-6 py-3 text-sm font-semibold transition-[background-color,color,transform,border-color] duration-150 ease-[cubic-bezier(0.16,1,0.3,1)] focus-visible:outline focus-visible:outline-2 focus-visible:outline-offset-2 disabled:opacity-50 disabled:pointer-events-none";
+  "inline-flex items-center justify-center gap-2 font-semibold transition-colors duration-150 disabled:pointer-events-none disabled:opacity-50";
 
 interface CommonProps {
   variant?: Variant;
+  size?: Size;
   className?: string;
 }
 
@@ -33,22 +41,31 @@ type ButtonAsButton = CommonProps &
 
 export type ButtonProps = ButtonAsLink | ButtonAsButton;
 
-export function Button({ variant = "primary", className = "", ...props }: ButtonProps) {
-  const classes = `${baseClasses} ${variantClasses[variant]} ${className}`;
+export function buttonClasses({ variant = "primary", size = "md", className = "" }: CommonProps = {}) {
+  // Text links keep the 48px tap height but no horizontal padding.
+  const sizing = variant === "link" ? `min-h-12 ${size === "lg" ? "text-lg" : "text-base"}` : sizeClasses[size];
+  return `${baseClasses} ${sizing} ${variantClasses[variant]} ${className}`;
+}
+
+export function Button({ variant = "primary", size = "md", className = "", ...props }: ButtonProps) {
+  const classes = buttonClasses({ variant, size, className });
 
   if ("href" in props && props.href) {
     const { href, ...rest } = props;
-    return (
-      <Link href={href} className={classes} {...rest}>
-        {props.children}
-      </Link>
-    );
+    // tel:, https://wa.me and other external targets are plain anchors; internal routes use Link.
+    if (!href.startsWith("/") && !href.startsWith("#")) {
+      const external = href.startsWith("http");
+      return (
+        <a
+          href={href}
+          className={classes}
+          {...(external ? { target: "_blank", rel: "noopener noreferrer" } : {})}
+          {...rest}
+        />
+      );
+    }
+    return <Link href={href} className={classes} {...rest} />;
   }
 
-  const { ...rest } = props as ButtonAsButton;
-  return (
-    <button className={classes} {...rest}>
-      {props.children}
-    </button>
-  );
+  return <button className={classes} {...(props as ButtonAsButton)} />;
 }
