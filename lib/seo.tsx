@@ -14,8 +14,13 @@ interface PageMetadataInput {
   ogImage?: string;
 }
 
+// app/opengraph-image.tsx only applies to the root route by itself; any page that sets its
+// own `openGraph` loses it. So every page gets it explicitly unless it passes a real photo.
+const defaultOgImage = { url: "/opengraph-image", width: 1200, height: 630, alt: "Limoni Cleaning, pastrim në Tiranë" };
+
 export function pageMetadata({ title, absoluteTitle, noindex, description, path, ogImage }: PageMetadataInput): Metadata {
   const url = `${siteUrl}${path}`;
+  const image = ogImage ? { url: ogImage } : defaultOgImage;
 
   return {
     title: absoluteTitle ? { absolute: title } : title,
@@ -29,15 +34,13 @@ export function pageMetadata({ title, absoluteTitle, noindex, description, path,
       siteName: business.name,
       locale: "sq_AL",
       type: "website",
-      // No `images` override here — falls back to the site-wide app/opengraph-image.tsx
-      // (generated from brand colors) unless a page passes its own via `ogImage`.
-      ...(ogImage ? { images: [{ url: ogImage }] } : {}),
+      images: [image],
     },
     twitter: {
       card: "summary_large_image",
       title,
       description,
-      ...(ogImage ? { images: [ogImage] } : {}),
+      images: [image.url],
     },
   };
 }

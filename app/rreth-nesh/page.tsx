@@ -13,7 +13,7 @@ const breadcrumbItems = [
 ];
 
 export const metadata = pageMetadata({
-  title: "Rreth Nesh",
+  title: "Rreth Nesh: Ekipi i Pastrimit në Tiranë",
   description:
     "Njihuni me Limoni Cleaning, kompani pastrimi në Tiranë me bazë në Komunën e Parisit dhe ekip me mbi 10 vjet përvojë. Na shkruani në WhatsApp.",
   path: "/rreth-nesh",

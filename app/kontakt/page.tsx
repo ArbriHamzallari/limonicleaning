@@ -12,7 +12,7 @@ const breadcrumbItems = [
 ];
 
 export const metadata = pageMetadata({
-  title: "Kontakt",
+  title: "Kontakt: Kompani Pastrimi në Tiranë",
   description:
     "Kontaktoni Limoni Cleaning në Tiranë: telefon dhe WhatsApp +355 68 900 7252, ose na lini numrin te formulari dhe ju kontaktojmë ne për ofertën.",
   path: "/kontakt",

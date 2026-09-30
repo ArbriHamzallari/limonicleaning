@@ -25,7 +25,10 @@ for (const page of pages) {
     const url = new URL(m[1].replace(/&amp;/g, "&"), "https://x");
     return url.searchParams.get("url") ?? url.pathname;
   });
-  const posters = [...html.matchAll(/poster="([^"]+)"/g)].map((m) => m[1]);
+  const posters = [...html.matchAll(/poster="([^"]+)"/g)].map((m) => {
+    const url = new URL(m[1].replace(/&amp;/g, "&"), "https://x");
+    return url.searchParams.get("url") ?? url.pathname;
+  });
   const all = [...srcs, ...posters].filter((s) => !s.includes("logo"));
   const dupes = [...new Set(all.filter((s, i) => all.indexOf(s) !== i))];
   if (dupes.length) {

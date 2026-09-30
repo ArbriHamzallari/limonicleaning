@@ -6,15 +6,16 @@ interface PortfolioVideoProps {
 }
 
 // Real handheld walkthrough footage, not a hero loop: native controls, no autoplay, and
-// preload="none" so the clip only downloads once someone actually taps play — the poster
-// frame (and its next/image-optimized JPEG sibling) is what everyone else sees.
+// preload="none" so the clip only downloads once someone actually taps play. The poster goes
+// through the image optimizer (WebP/AVIF, 640px) instead of shipping the raw JPEG.
 export function PortfolioVideo({ src, poster, caption, className = "" }: PortfolioVideoProps) {
+  const optimizedPoster = `/_next/image?url=${encodeURIComponent(poster)}&w=640&q=75`;
   return (
     <div className={className}>
       <video
         controls
         preload="none"
-        poster={poster}
+        poster={optimizedPoster}
         playsInline
         className="aspect-[9/16] w-full rounded-lg border border-border bg-text object-cover"
       >

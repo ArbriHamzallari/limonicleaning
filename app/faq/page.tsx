@@ -12,7 +12,7 @@ const breadcrumbItems = [
 ];
 
 export const metadata = pageMetadata({
-  title: "Pyetje të Shpeshta",
+  title: "Pyetje të Shpeshta për Pastrimin në Tiranë",
   description:
     "Përgjigje për pyetjet më të shpeshta rreth pastrimit në Tiranë: çfarë përfshin, si kërkohet oferta dhe ku punojmë. Për të tjera, na shkruani në WhatsApp.",
   path: "/faq",
