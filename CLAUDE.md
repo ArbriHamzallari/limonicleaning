@@ -34,7 +34,7 @@ Production marketing and **lead-capture** website for **Limoni Cleaning**, a cle
 - Phone / WhatsApp: **+355 68 900 7252** — `https://wa.me/355689007252`
 - Domain: **limonicleaning.com** (bought at Hostinger, Sep 2026). Hosted on Vercel; DNS and business email stay at Hostinger. Deployment steps are in `DEPLOY.md`.
 - Email: **info@limonicleaning.com** (Hostinger mailbox). Lead notifications are *sent* via Resend from `kerkesa@limonicleaning.com` and delivered to info@. DNS is managed in Vercel (nameservers moved there), so all mail records live in Vercel DNS.
-- Google Maps listing: https://share.google/3oNsn9iygdcwmc4Gt (`business.googleMapsUrl`).
+- Google Maps listing: https://maps.app.goo.gl/5eHU2M2ihKJaPWyi6 (`business.googleMapsUrl`).
 - Social media: none yet.
 - Hours: not defined — do not display specific opening hours until Arbri provides them.
 - **Team experience: confirmed real, ~10+ years.** This describes the team's individual/combined backgrounds (staff hand-picked from other cleaning companies), NOT how long Limoni Cleaning itself has existed, Limoni is a new company. Always phrase this as the team's experience ("ekip me mbi 10 vjet përvojë"; always "përvojë", never "eksperiencë"), never as the company's age or years in operation.

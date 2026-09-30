@@ -9,9 +9,9 @@ export const business = {
   phoneDisplay: "+355 68 900 7252",
   phoneE164: "+355689007252",
   whatsappUrl: "https://wa.me/355689007252",
-  // Google Maps listing (share link from Arbri, 29 Sep 2026). Used for the "Google Maps" link
-  // and as sameAs in the JSON-LD. Swap for the full maps.google.com/?cid=… URL if available.
-  googleMapsUrl: "https://share.google/3oNsn9iygdcwmc4Gt",
+  // Google Maps listing (link from Arbri, 30 Sep 2026). Used for the "Google Maps" link and as
+  // sameAs / hasMap in the JSON-LD.
+  googleMapsUrl: "https://maps.app.goo.gl/5eHU2M2ihKJaPWyi6",
   // Hostinger mailbox, confirmed 29 Sep 2026. Shown on /kontakt and in the JSON-LD.
   // No social links, street address or hours confirmed yet.
   email: "info@limonicleaning.com" as string | null,
