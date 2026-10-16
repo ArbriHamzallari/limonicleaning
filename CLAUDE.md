@@ -75,11 +75,20 @@ Permanent redirects (`next.config.ts`): `/rezervo` and `/cmimet` → `/kerko-ofe
 
 Phase 2 (not now, don't build yet): `/tirana/[neighborhood]` pages (Blloku, Komuna e Parisit, Don Bosko, etc.), English-language version.
 
+## Confirmed by Arbri on 17 Oct 2026 (for the business-first redesign)
+
+- Staff in the October clips (IMG_3360, IMG_3362) and the owner of the house in IMG_3296 agreed to publication.
+- Limoni can commit to regular (weekly/monthly) cleaning for offices and buildings.
+- **The assessment visit before a quote is free** ("vizitë vlerësimi pa pagesë"). Use it where a visit makes sense (larger jobs, businesses, buildings); don't promise a visit for every small job.
+- **Service area: all of Tirana and the surrounding areas.** Keep "bazë në Komunën e Parisit" as the base.
+- Upholstery: all types (divane, kënde, kolltuqe, karrige me pëlhurë, dyshekë).
+- Main CTA wording chosen by Arbri: **"Merr ofertën tënde"** (replaces "Kërko ofertë"). Final Albanian copy for the redesign comes from `prompts/05-rishikim-teksti-shqip.md` after review by an Albanian-language reviewer.
+
 ## Open decisions (defaults in force until Arbri says otherwise)
 
 - **Response time**: no "brenda X orësh" promise. Use "së shpejti".
 - **Guarantee**: no re-clean guarantee on the site.
-- **Hours, email, social, street address, Google Business Profile**: none yet, show nothing.
+- **Hours, social, street address**: none yet, show nothing. (Email and Google Maps listing exist, see facts above.)
 
 ## Non-negotiable rules
 

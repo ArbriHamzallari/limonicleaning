@@ -261,7 +261,13 @@ Rules unchanged: no prices, "përvojë" not "eksperiencë", no em dashes, Prago 
 | Keep the slider, fix touch | Only real before/after in the market that is aligned; measured touch problems |
 | "Preventiv" wording | Used by B2B-oriented competitors (Alfa) |
 
-## 13. Needs Arbri's confirmation before or during implementation
+## 13. Answers from Arbri (17 Oct 2026)
+
+All yes: staff and owner permissions; regular business work; **free assessment visit**;
+**all of Tirana and surroundings**; **all upholstery types**; main CTA **"Merr ofertën tënde"**.
+Copy is being reviewed by an Albanian-language agent via `prompts/05-rishikim-teksti-shqip.md`.
+
+## 13a. Original questions
 
 1. **Permissions:** staff in IMG_3360 / IMG_3362 (faces visible), owner of the house in IMG_3296.
 2. **Recurring business work:** can Limoni commit to regular weekly/monthly visits for offices
