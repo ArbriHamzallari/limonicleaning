@@ -31,21 +31,22 @@ export default function RrethNeshPage() {
             <h1 className="text-3xl leading-tight font-extrabold tracking-tight sm:text-5xl">Rreth nesh</h1>
             <p className="mt-4 text-xl text-text-muted">
               Limoni Cleaning është kompani pastrimi në Tiranë, me bazë në Komunën e Parisit. Pastrojmë
-              apartamente, shtëpi, prona Airbnb dhe ambiente biznesi.
+              zyra, dyqane, hotele dhe ambientet e përbashkëta të pallateve, si dhe apartamente, shtëpi
+              dhe vila.
             </p>
             <p className="mt-4 text-text-muted">
-              Kompania është e re, por njerëzit që e përbëjnë kanë mbi 10 vjet përvojë në pastrim, të
-              fituar në kompani të tjera pastrimi. Deri tani kemi pastruar mbi 50 prona.
+              Kompania është e re, por anëtarët e ekipit kanë mbi 10 vjet përvojë në pastrim, të fituar
+              në kompani të tjera pastrimi. Deri tani kemi pastruar mbi 50 prona.
             </p>
             <p className="mt-4 text-text-muted">
-              Pjesa më e madhe e punës sonë sot është pastrimi Airbnb, ku gjithçka varet nga kalendari
-              i pronës: vijmë pas check-out-it dhe e lëmë pronën gati për mysafirin tjetër.
+              Punojmë në të gjithë Tiranën dhe në zonat përreth, një herë ose rregullisht. Për punët më
+              të mëdha, vijmë fillimisht për të parë ambientin. Vizita është pa pagesë.
             </p>
           </div>
           <Photo
-            src={photos.kitchen.src}
-            alt={photos.kitchen.alt}
-            aspect={naturalAspect(photos.kitchen)}
+            src={photos.stairsTeam.src}
+            alt={photos.stairsTeam.alt}
+            aspect={naturalAspect(photos.stairsTeam)}
             className="mx-auto w-full max-w-sm lg:max-w-none"
             priority
           />
