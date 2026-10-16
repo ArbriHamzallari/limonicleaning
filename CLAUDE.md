@@ -46,7 +46,7 @@ Production marketing and **lead-capture** website for **Limoni Cleaning**, a cle
 
 **No prices are shown anywhere on the site.** Every service page ends in the two lead actions (`LeadActions` + inline `LeadForm`). FAQ answers about price say: "Çmimi varet nga madhësia dhe gjendja e pronës. Na lini numrin dhe ju japim ofertën." Internal pricing stays out of the repo entirely (no rate tables, no formulas, not even in comments).
 
-Services offered (all confirmed by Arbri, including hotels and post-construction on 29 Sep 2026): apartamente dhe shtëpi, Airbnb, zyra, vila, pastrim me themel, pastrim pas ndërtimit, hotele. Service data lives in `lib/services.ts`; every service page renders through `components/ServicePage.tsx`.
+Services offered (all confirmed by Arbri, including hotels and post-construction on 29 Sep 2026; common areas of residential buildings/complexes and sofa/mattress/upholstery cleaning confirmed 16 Oct 2026): apartamente dhe shtëpi, Airbnb, zyra, vila, pastrim me themel, pastrim pas ndërtimit, hotele, ambiente të përbashkëta (shkallë, holle, hyrje pallatesh/kompleksesh), larje divanesh/dyshekësh/kolltuqesh. Media for the last two exists in `media-source/2026-10/` (see `docs/limoni-asset-audit.md`). Research and redesign plan from 16 Oct 2026: `docs/limoni-competitive-research.md`, `docs/limoni-redesign-strategy.md`. Service data lives in `lib/services.ts`; every service page renders through `components/ServicePage.tsx`.
 
 WhatsApp messages come from one function, `waMessageFor(service?)` in `lib/whatsapp-messages.ts`. Don't add other presets.
 
