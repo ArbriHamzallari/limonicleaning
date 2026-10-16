@@ -1,6 +1,6 @@
 import { Resend } from "resend";
 import type { Lead } from "@prisma/client";
-import { leadServiceLabel } from "./service-index";
+import { frequencies, leadServiceLabel, optionLabel, propertyTypes, timings } from "./service-index";
 
 // Every saved lead is announced on two independent channels. Either one failing (or not
 // being configured) never affects the other, and never affects the lead itself: by the time
@@ -43,13 +43,21 @@ export async function sendLeadEmail(lead: Lead): Promise<void> {
   const waUrl = `https://wa.me/${lead.phone.replace(/^\+/, "")}`;
   const telUrl = `tel:${lead.phone}`;
 
+  const optional: [string, string | null | undefined][] = [
+    ["Lloji i ambientit", optionLabel(propertyTypes, lead.propertyType)],
+    ["Biznesi / administrata", lead.businessName],
+    ["Sipërfaqja", lead.sizeM2 != null ? `${lead.sizeM2} m²` : null],
+    ["Një herë apo rregullisht", optionLabel(frequencies, lead.frequency)],
+    ["Kur", optionLabel(timings, lead.timing)],
+    ["Zona", lead.area],
+    ["Mesazhi", lead.message],
+  ];
   const rows: [string, string][] = [
     ["Shërbimi", service],
     ["Emri", lead.name],
     ["Telefoni", lead.phone],
     ["Preferon", channelLabel[lead.channel]],
-    ...(lead.area ? ([["Zona", lead.area]] as [string, string][]) : []),
-    ...(lead.message ? ([["Mesazhi", lead.message]] as [string, string][]) : []),
+    ...optional.filter((row): row is [string, string] => !!row[1]),
     ["Faqja", lead.pagePath],
     ...(lead.utmSource ? ([["UTM source", lead.utmSource]] as [string, string][]) : []),
     ...(lead.utmCampaign ? ([["UTM campaign", lead.utmCampaign]] as [string, string][]) : []),

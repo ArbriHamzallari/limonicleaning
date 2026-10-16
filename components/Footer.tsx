@@ -2,6 +2,7 @@ import Link from "next/link";
 import { Logo } from "./Logo";
 import { PhoneButton } from "./PhoneButton";
 import { business } from "@/lib/business";
+import { serviceAreaLine } from "@/lib/content";
 import { footerServiceLinks, footerCompanyLinks, footerLegalLinks } from "@/lib/nav";
 
 const linkClasses = "inline-flex min-h-12 min-w-12 items-center text-text-muted hover:text-primary";
@@ -15,7 +16,7 @@ export function Footer() {
         <div className="grid gap-10 sm:grid-cols-2 lg:grid-cols-4">
           <div>
             <Logo />
-            <p className="mt-4 text-text-muted">Pastrim profesional në {business.city}.</p>
+            <p className="mt-4 text-text-muted">Pastrim profesional për shtëpi dhe biznese në Tiranë.</p>
           </div>
 
           <div>
@@ -57,7 +58,7 @@ export function Footer() {
                   </a>
                 </li>
               )}
-              <li className="pt-2 text-text-muted">{business.areaServed}</li>
+              <li className="pt-2 text-text-muted">{serviceAreaLine}</li>
               <li>
                 <a href={business.googleMapsUrl} target="_blank" rel="noopener noreferrer" className={linkClasses}>
                   Google Maps

@@ -10,7 +10,7 @@ const FAILED = "Kërkesa nuk u dërgua. Provoni përsëri ose na shkruani në Wh
 export async function POST(request: Request) {
   if (!allowRequest(clientIp(request))) {
     return NextResponse.json(
-      { error: "Keni dërguar disa kërkesa radhazi. Provoni përsëri pas pak minutash ose na shkruani në WhatsApp." },
+      { error: "Keni dërguar disa kërkesa radhazi. Provoni përsëri pas disa minutash ose na shkruani në WhatsApp." },
       { status: 429 },
     );
   }
@@ -56,6 +56,11 @@ export async function POST(request: Request) {
         area: input.area,
         message: input.message,
         pagePath: input.pagePath,
+        propertyType: input.propertyType,
+        sizeM2: input.sizeM2,
+        frequency: input.frequency,
+        timing: input.timing,
+        businessName: input.businessName,
         utmSource: input.utmSource,
         utmCampaign: input.utmCampaign,
       },

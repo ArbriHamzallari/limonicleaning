@@ -2,37 +2,43 @@ import { Section } from "./Section";
 import { Breadcrumbs } from "./Breadcrumbs";
 import { LeadActions } from "./LeadActions";
 import { Photo } from "./Photo";
+import { PortfolioVideo } from "./PortfolioVideo";
 import { Closer } from "./Closer";
 import { TextLink } from "./TextLink";
 import { Checklist } from "./Checklist";
-import { getService, type ServiceSection, type ServiceSlug } from "@/lib/services";
+import { getService, pageLink, type ServicePageContent, type ServiceSection, type ServiceSlug } from "@/lib/services";
 import { naturalAspect } from "@/lib/photos";
 import { JsonLd, breadcrumbJsonLd, serviceJsonLd } from "@/lib/seo";
 
-// Fixed parts: breadcrumbs, hero, the service's own sections in its own order, a one-line
-// "Mund t'ju interesojë edhe" row, and the closer (with FAQ only when there are 3+).
 export function ServicePage({ slug }: { slug: ServiceSlug }) {
-  const service = getService(slug);
+  return <ServicePageView page={getService(slug)} />;
+}
+
+// Fixed parts: breadcrumbs, hero, the page's own sections in its own order, a one-line
+// "Mund t'ju interesojë edhe" row, and the closer (with FAQ only when there are 3+).
+// Used by every service page and by /per-biznese (which sits outside "Shërbimet").
+export function ServicePageView({ page }: { page: ServicePageContent }) {
   const breadcrumbItems = [
     { name: "Kryefaqja", path: "/" },
-    { name: "Shërbimet", path: "/sherbime" },
-    { name: service.navLabel, path: service.path },
+    ...(page.key === "biznese" ? [] : [{ name: "Shërbimet", path: "/sherbime" }]),
+    { name: page.navLabel, path: page.path },
   ];
-  const related = service.related.map(getService);
-  const hero = service.hero;
+  const related = page.related.map(pageLink);
+  const { hero, heroVideo } = page;
+  const hasMedia = !!(hero || heroVideo);
 
   return (
     <>
-      <JsonLd data={serviceJsonLd(service.h1, service.intro, service.path)} />
+      <JsonLd data={serviceJsonLd(page.h1, page.intro, page.path)} />
       <JsonLd data={breadcrumbJsonLd(breadcrumbItems)} />
 
       <Section className="pt-6 sm:pt-10">
         <Breadcrumbs items={breadcrumbItems} />
-        <div className={hero ? "grid items-center gap-10 lg:grid-cols-12 lg:gap-14" : "max-w-3xl"}>
-          <div className={hero ? "lg:col-span-7" : ""}>
-            <h1 className="text-3xl leading-tight font-extrabold tracking-tight sm:text-5xl">{service.h1}</h1>
-            <p className="mt-5 max-w-xl text-xl text-text-muted">{service.intro}</p>
-            <LeadActions service={slug} placement={`service_${slug}_hero`} className="mt-8" />
+        <div className={hasMedia ? "grid items-center gap-10 lg:grid-cols-12 lg:gap-14" : "max-w-3xl"}>
+          <div className={hasMedia ? "lg:col-span-7" : ""}>
+            <h1 className="text-3xl leading-tight font-extrabold tracking-tight sm:text-5xl">{page.h1}</h1>
+            <p className="mt-5 max-w-xl text-xl text-text-muted">{page.intro}</p>
+            <LeadActions service={page.key} label={page.ctaLabel} placement={`service_${page.key}_hero`} className="mt-8" />
           </div>
           {hero && (
             <Photo
@@ -45,19 +51,28 @@ export function ServicePage({ slug }: { slug: ServiceSlug }) {
               priority
             />
           )}
+          {!hero && heroVideo && (
+            <PortfolioVideo
+              src={heroVideo.src}
+              poster={heroVideo.poster}
+              caption={heroVideo.caption}
+              label={heroVideo.label}
+              className="mx-auto w-full max-w-xs lg:col-span-5"
+            />
+          )}
         </div>
       </Section>
 
-      {service.sections.map((section, i) => (
+      {page.sections.map((section, i) => (
         <SectionBlock key={`${section.kind}-${i}`} section={section} />
       ))}
 
       <Section className="py-8! sm:py-10!">
         <p className="flex flex-wrap items-center gap-x-6 text-lg">
           <span className="text-text-muted">Mund t&apos;ju interesojë edhe:</span>
-          {related.map((s) => (
-            <TextLink key={s.slug} href={s.path} className="text-primary">
-              {s.navLabel}
+          {related.map((link) => (
+            <TextLink key={link.href} href={link.href} className="text-primary">
+              {link.label}
             </TextLink>
           ))}
           <TextLink href="/puna-jone" className="text-primary">
@@ -67,9 +82,11 @@ export function ServicePage({ slug }: { slug: ServiceSlug }) {
       </Section>
 
       <Closer
-        service={slug}
-        placement={`service_${slug}`}
-        faq={service.faq.length >= 3 ? service.faq : undefined}
+        service={page.key}
+        placement={`service_${page.key}`}
+        title={page.closer?.title}
+        text={page.closer?.text}
+        faq={page.faq.length >= 3 ? page.faq : undefined}
         faqTitle="Pyetje për këtë shërbim"
       />
     </>
@@ -99,6 +116,7 @@ function SectionBlock({ section }: { section: ServiceSection }) {
       return (
         <Section id={section.id}>
           <SectionTitle>{section.title}</SectionTitle>
+          {section.intro && <p className="mt-4 max-w-2xl text-text-muted">{section.intro}</p>}
           <ol className="mt-8 grid gap-x-10 sm:grid-cols-2 lg:grid-cols-4">
             {section.steps.map((step, i) => (
               <li key={step.title} className="border-t-2 border-primary py-5">
@@ -196,8 +214,48 @@ function SectionBlock({ section }: { section: ServiceSection }) {
     case "note":
       return (
         <Section id={section.id} className="py-6! sm:py-8!">
-          <p className="max-w-3xl border-l-4 border-accent pl-5 text-xl font-semibold">{section.text}</p>
+          <div className="max-w-3xl border-l-4 border-accent pl-5">
+            <p className="text-xl font-semibold">{section.text}</p>
+            {section.link && (
+              <TextLink href={section.link.href} className="text-lg text-primary">
+                {section.link.label}
+              </TextLink>
+            )}
+          </div>
         </Section>
       );
+
+    case "media": {
+      const photos = section.photos ?? [];
+      const clips = section.videos ?? [];
+      return (
+        <Section id={section.id} className={section.title ? "" : "pt-0! sm:pt-0!"}>
+          {section.title && <SectionTitle>{section.title}</SectionTitle>}
+          <div className={`grid items-start gap-6 sm:grid-cols-2 lg:grid-cols-3 ${section.title ? "mt-8" : ""}`}>
+            {photos.map((photo) => (
+              <Photo
+                key={photo.src}
+                src={photo.src}
+                alt={photo.alt}
+                caption={photo.caption}
+                aspect={naturalAspect(photo)}
+                sizes="(min-width: 1024px) 33vw, (min-width: 640px) 50vw, 100vw"
+                className={photo.ratio === "9/16" ? "max-w-xs" : ""}
+              />
+            ))}
+            {clips.map((clip) => (
+              <PortfolioVideo
+                key={clip.src}
+                src={clip.src}
+                poster={clip.poster}
+                caption={clip.caption}
+                label={clip.label}
+                className="max-w-xs"
+              />
+            ))}
+          </div>
+        </Section>
+      );
+    }
   }
 }

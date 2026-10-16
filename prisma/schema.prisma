@@ -88,18 +88,24 @@ enum ContactChannel {
 }
 
 model Lead {
-  id          String         @id @default(cuid())
-  service     String // slug from lib/service-index.ts, or "tjeter"
-  name        String
-  phone       String // E.164, e.g. +355689007252
-  area        String? // zona në Tiranë, free text
-  message     String?
-  channel     ContactChannel @default(WHATSAPP)
-  pagePath    String // where the form was submitted
-  utmSource   String?
-  utmCampaign String?
-  status      LeadStatus     @default(E_RE)
-  createdAt   DateTime       @default(now())
+  id           String         @id @default(cuid())
+  service      String // slug from lib/service-index.ts, or "tjeter"
+  name         String
+  phone        String // E.164, e.g. +355689007252
+  area         String? // zona në Tiranë, free text
+  message      String?
+  channel      ContactChannel @default(WHATSAPP)
+  pagePath     String // where the form was submitted
+  // Optional quote details (Oct 2026 redesign). Values from lib/service-index.ts.
+  propertyType String? // apartament | vile | zyre | pallat | tjeter
+  sizeM2       Int?
+  frequency    String? // njehere | rregullisht
+  timing       String? // sa-me-shpejt | kete-jave | kete-muaj | pa-date
+  businessName String?
+  utmSource    String?
+  utmCampaign  String?
+  status       LeadStatus     @default(E_RE)
+  createdAt    DateTime       @default(now())
 
   @@index([createdAt])
   @@map("leads")

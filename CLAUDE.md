@@ -48,7 +48,9 @@ Production marketing and **lead-capture** website for **Limoni Cleaning**, a cle
 
 Services offered (all confirmed by Arbri, including hotels and post-construction on 29 Sep 2026; common areas of residential buildings/complexes and sofa/mattress/upholstery cleaning confirmed 16 Oct 2026): apartamente dhe shtëpi, Airbnb, zyra, vila, pastrim me themel, pastrim pas ndërtimit, hotele, ambiente të përbashkëta (shkallë, holle, hyrje pallatesh/kompleksesh), larje divanesh/dyshekësh/kolltuqesh. Media for the last two exists in `media-source/2026-10/` (see `docs/limoni-asset-audit.md`). Research and redesign plan from 16 Oct 2026: `docs/limoni-competitive-research.md`, `docs/limoni-redesign-strategy.md`. Service data lives in `lib/services.ts`; every service page renders through `components/ServicePage.tsx`.
 
-WhatsApp messages come from one function, `waMessageFor(service?)` in `lib/whatsapp-messages.ts`. Don't add other presets.
+WhatsApp messages come from one function, `waMessageFor(page?)` in `lib/whatsapp-messages.ts` (one message per service plus `biznese`). Don't add other presets.
+
+`/per-biznese` is not a service slug: its copy is `businessPage` in `lib/services.ts`, rendered by the same template (`ServicePageView`). Pages are keyed by `PageKey` (`ServiceSlug | "biznese"`, `lib/service-index.ts`), which drives the WhatsApp message and the form preset (`formPreset`).
 
 ## Site architecture (final — use these exact routes)
 
@@ -62,6 +64,9 @@ WhatsApp messages come from one function, `waMessageFor(service?)` in `lib/whats
 /pastrim-me-themel-tirane          Pastrim me themel (deep clean)
 /pastrim-pas-ndertimit-tirane      Pas ndërtimit / rinovimit
 /pastrim-hotelesh-tirane           Hotele dhe apart-hotele
+/pastrim-ambientesh-te-perbashketa-tirane   Shkallë, holle, hyrje pallatesh (slug "ambiente")
+/larje-divanesh-dyshekesh-tirane   Larje divanesh dhe dyshekësh (slug "divane")
+/per-biznese                       Business door: zyra, dyqane, hotele, pallate
 /puna-jone                         Photos, before/after, videos
 /rreth-nesh
 /faq
@@ -82,7 +87,15 @@ Phase 2 (not now, don't build yet): `/tirana/[neighborhood]` pages (Blloku, Komu
 - **The assessment visit before a quote is free** ("vizitë vlerësimi pa pagesë"). Use it where a visit makes sense (larger jobs, businesses, buildings); don't promise a visit for every small job.
 - **Service area: all of Tirana and the surrounding areas.** Keep "bazë në Komunën e Parisit" as the base.
 - Upholstery: all types (divane, kënde, kolltuqe, karrige me pëlhurë, dyshekë).
-- Main CTA wording chosen by Arbri: **"Merr ofertën tënde"** (replaces "Kërko ofertë"). Final Albanian copy for the redesign comes from `prompts/05-rishikim-teksti-shqip.md` after review by an Albanian-language reviewer.
+- Main CTA: the Albanian reviewer recommended the polite form **"Merrni ofertën tuaj"** (matches the "ju" used everywhere else); business CTA **"Merrni ofertë për biznesin tuaj"**. Final copy and decisions: `docs/limoni-copy-final.md`.
+
+## Confirmed by Arbri on 17 Oct 2026 (after the copy review)
+
+- Regular business cleaning is under a **kontratë** (use that word, not "marrëveshje me shkrim").
+- Limoni works **every day of the week**, weekends included. Hotels: **extra staff according to demand**.
+- **No laundry, no ironing, no restocking of consumables** (rrobat, çarçafët, produktet e konsumit). Sheets are changed only when clean ones are in the property. Never offer these as extras.
+- **Lift cleaning**: only inside offices, villas and apartments; **not** apartment-block lifts. The common-areas page does not list the lift.
+- Upholstery process and drying wording, the privacy line on the form, and "mbi 10 vjet përvojë" for team members are all confirmed as written.
 
 ## Open decisions (defaults in force until Arbri says otherwise)
 
@@ -105,13 +118,16 @@ Phase 2 (not now, don't build yet): `/tirana/[neighborhood]` pages (Blloku, Komu
 - No em dashes in visible copy, `alt` or meta text.
 - No empty image slots on public pages. No "Foto — …" placeholder labels.
 - Body copy 18px on mobile; `text-sm` only for captions and legal text. Every tap target ≥ 48px. Never yellow text on white. Labels always above inputs.
-- No carousels, autoplay, arrival popups, or fake chat widgets.
+- No carousels, autoplay, arrival popups, or fake chat widgets. One exception, approved in the redesign strategy: the homepage "Ekipi në punë" clip (`components/WorkLoop.tsx`), silent (no audio track), plays only while on screen, never with reduced motion or Save-Data, with a visible pause button.
+- Header nav: Shërbimet · Për biznese · Puna jonë · Rreth nesh, then the phone and the main button "Merrni ofertën tuaj" (`mainCtaLabel` in `lib/nav.ts`).
 
 ## Prompts
 
 1. `prompts/01-initial-build.md` — initial build (done).
 2. `prompts/02-optimization-audit.md` — polish/SEO audit (done).
 3. `prompts/03-lead-first-refactor.md` — lead-first refactor (done 29 Sep 2026). Supersedes earlier pricing, `/rezervo` and `/cmimet` instructions.
+4. `prompts/04-editorial-redesign.md` — editorial redesign (done).
+5. `prompts/05-rishikim-teksti-shqip.md` — Albanian copy review for the business-first redesign; reply and decisions in `docs/limoni-copy-final.md`; implemented 17 Oct 2026 per `docs/limoni-redesign-strategy.md`.
 
 <!-- BEGIN:nextjs-agent-rules -->
 

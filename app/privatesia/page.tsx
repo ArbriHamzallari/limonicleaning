@@ -6,7 +6,7 @@ import { business } from "@/lib/business";
 const breadcrumbItems = [{ name: "Kryefaqja", path: "/" }, { name: "Politika e Privatësisë", path: "/privatesia" }];
 
 export const metadata = pageMetadata({
-  title: "Politika e Privatësisë",
+  title: "Politika e privatësisë",
   description: "Si i mbledh, i përdor dhe i ruan Limoni Cleaning të dhënat që na jepni kur kërkoni ofertë për pastrim, dhe si mund të kërkoni t'i shihni ose t'i fshini.",
   path: "/privatesia",
 });

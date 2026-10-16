@@ -11,6 +11,11 @@ const pages = [
   "pastrim-me-themel-tirane",
   "pastrim-pas-ndertimit-tirane",
   "pastrim-hotelesh-tirane",
+  "pastrim-ambientesh-te-perbashketa-tirane",
+  "larje-divanesh-dyshekesh-tirane",
+  "per-biznese",
+  "sherbime",
+  "puna-jone",
 ];
 
 let failed = false;

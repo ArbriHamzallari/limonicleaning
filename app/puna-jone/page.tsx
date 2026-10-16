@@ -17,7 +17,7 @@ const breadcrumbItems = [
 ];
 
 export const metadata = pageMetadata({
-  title: "Puna Jonë: Foto Para dhe Pas Pastrimit",
+  title: "Puna jonë: foto para dhe pas pastrimit",
   description:
     "Foto dhe video reale nga pastrimet e Limoni Cleaning në Tiranë: apartamente, pas ndërtimit, zyra dhe dhoma për mysafirë. Na lini numrin për ofertë.",
   path: "/puna-jone",

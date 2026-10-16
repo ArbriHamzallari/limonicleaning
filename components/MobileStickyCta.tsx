@@ -4,7 +4,7 @@ import { useEffect, useState } from "react";
 import { usePathname } from "next/navigation";
 import { WhatsAppIcon, PhoneIcon } from "./icons";
 import { business, whatsappLink } from "@/lib/business";
-import { serviceForPath } from "@/lib/service-index";
+import { pageKeyForPath } from "@/lib/service-index";
 import { waMessageFor } from "@/lib/whatsapp-messages";
 import { trackEvent } from "@/lib/analytics";
 
@@ -33,7 +33,7 @@ export function MobileStickyCta() {
 
   if (pathname === "/kerko-oferte" || typing) return null;
 
-  const service = serviceForPath(pathname);
+  const service = pageKeyForPath(pathname);
 
   return (
     <div
@@ -56,7 +56,7 @@ export function MobileStickyCta() {
         className={`${itemClasses} border-2 border-primary/30 text-primary`}
       >
         <PhoneIcon className="h-5 w-5" />
-        Telefono
+        Telefononi
       </a>
     </div>
   );

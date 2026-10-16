@@ -51,7 +51,8 @@ export const portfolioProjects: PortfolioProject[] = [
     text: "Një apartament me shishe, sende të shpërndara dhe qese mbeturinash në dhomën e ndenjes. Lëvizni vijën mbi foto për të parë të njëjtën dhomë para dhe pas pastrimit. Më poshtë: kuzhina gjatë pastrimit dhe disa video nga i njëjti lloj pune.",
     service: "apartamente",
     beforeAfter: true,
-    photos: [photos.kitchen, photos.hallwayClean],
+    // hallwayClean is the poster of the "pas pastrimit" clip below, so it isn't repeated as a photo.
+    photos: [photos.kitchen],
     videos: [
       {
         src: "/videos/puna-jone-para-pastrimit.mp4",

@@ -6,7 +6,7 @@ import { business } from "@/lib/business";
 const breadcrumbItems = [{ name: "Kryefaqja", path: "/" }, { name: "Kushtet e Shërbimit", path: "/kushtet" }];
 
 export const metadata = pageMetadata({
-  title: "Kushtet e Shërbimit",
+  title: "Kushtet e shërbimit",
   description: "Kushtet e shërbimit të Limoni Cleaning: si funksionojnë kërkesat për ofertë, oferta, shtyrja ose anulimi i pastrimit dhe si trajtohen shqetësimet tuaja.",
   path: "/kushtet",
 });

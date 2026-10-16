@@ -5,12 +5,13 @@ import { blogPosts } from "@/lib/blog";
 
 // Fixed dates, bumped by hand when a page's content really changes. Stamping every URL
 // with the build time tells search engines nothing.
-const CONTENT_UPDATED = "2026-09-30";
+const CONTENT_UPDATED = "2026-10-17";
 const LEGAL_UPDATED = "2026-09-29";
 
 const staticRoutes: { path: string; lastModified: string }[] = [
   { path: "", lastModified: CONTENT_UPDATED },
   { path: "/sherbime", lastModified: CONTENT_UPDATED },
+  { path: "/per-biznese", lastModified: CONTENT_UPDATED },
   { path: "/kerko-oferte", lastModified: CONTENT_UPDATED },
   { path: "/puna-jone", lastModified: CONTENT_UPDATED },
   { path: "/rreth-nesh", lastModified: CONTENT_UPDATED },

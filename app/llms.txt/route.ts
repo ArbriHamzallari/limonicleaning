@@ -1,5 +1,6 @@
 import { business } from "@/lib/business";
-import { services } from "@/lib/services";
+import { businessPage, services } from "@/lib/services";
+import { serviceAreaLine } from "@/lib/content";
 import { siteUrl } from "@/lib/seo";
 
 // /llms.txt: a plain summary for AI search engines, built from the same data as the site so it
@@ -10,12 +11,15 @@ export function GET() {
   const lines = [
     `# ${business.name}`,
     "",
-    `> Kompani pastrimi në Tiranë, Shqipëri, me bazë në Komunën e Parisit. Ekip me mbi 10 vjet përvojë në pastrim (përvoja e ekipit; kompania është e re). Mbi 50 prona të pastruara. Ofertat jepen pasi flasim për pronën; faqja nuk publikon çmime.`,
+    `> Kompani pastrimi në Tiranë, Shqipëri, me bazë në Komunën e Parisit. Ekip me mbi 10 vjet përvojë në pastrim (përvoja e ekipit; kompania është e re). Mbi 50 prona të pastruara. Pastrim për biznese dhe shtëpi: pastrim me themel, pastrim gjeneral dhe mirëmbajtje e rregullt. ${serviceAreaLine} Ofertat jepen pasi flasim për ambientin (për punët më të mëdha, vizita për vlerësim është pa pagesë); faqja nuk publikon çmime.`,
     "",
     `Kontakt: telefon dhe WhatsApp ${business.phoneDisplay} (${business.whatsappUrl})${business.email ? `, email ${business.email}` : ""}.`,
     "",
     "## Shërbimet",
     ...services.map((s) => `- [${s.navLabel}](${siteUrl}${s.path}): ${s.summary}`),
+    "",
+    "## Për biznese",
+    `- [${businessPage.navLabel}](${siteUrl}${businessPage.path}): ${businessPage.summary}`,
     "",
     "## Faqe të tjera",
     `- [Puna jonë](${siteUrl}/puna-jone): foto dhe video reale nga pastrimet`,

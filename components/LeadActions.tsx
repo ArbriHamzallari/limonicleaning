@@ -1,26 +1,29 @@
 import { Button } from "./Button";
 import { WhatsAppButton } from "./WhatsAppButton";
-import type { ServiceSlug } from "@/lib/service-index";
+import { mainCtaLabel } from "@/lib/nav";
+import type { PageKey } from "@/lib/service-index";
 
-// Hero only. "Kërko ofertë" appears in exactly two places site-wide: the header and heroes.
-// Everywhere else the action is WhatsApp or the phone (ContactActions / Closer).
+// Hero (and the home business block) only. The main button appears in the header and heroes;
+// everywhere else the action is WhatsApp or the phone (ContactActions / Closer).
 export function LeadActions({
   service,
   placement,
+  label = mainCtaLabel,
   className = "",
 }: {
-  service?: ServiceSlug;
+  service?: PageKey;
   placement: string;
+  label?: string;
   className?: string;
 }) {
   const quoteHref = service ? `/kerko-oferte?sherbimi=${service}` : "/kerko-oferte";
 
   return (
-    <div className={`flex flex-col gap-3 sm:flex-row ${className}`}>
-      <Button href={quoteHref} variant="secondary" size="lg">
-        Kërko ofertë
+    <div className={`flex flex-col gap-3 sm:flex-row sm:flex-wrap ${className}`}>
+      <Button href={quoteHref} variant="secondary" size="lg" className="sm:whitespace-nowrap">
+        {label}
       </Button>
-      <WhatsAppButton service={service} placement={placement} variant="outline" size="lg">
+      <WhatsAppButton service={service} placement={placement} variant="outline" size="lg" className="sm:whitespace-nowrap">
         WhatsApp
       </WhatsAppButton>
     </div>

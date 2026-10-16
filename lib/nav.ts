@@ -1,10 +1,15 @@
-import { serviceIndex, serviceSlugs } from "./service-index";
+import { businessPath, serviceIndex, serviceSlugs } from "./service-index";
 
-// Header nav: four links; the phone number and the "Kërko ofertë" button sit beside them.
+/** The site-wide main button (header, heroes). Polite "ju" form, as everywhere else. */
+export const mainCtaLabel = "Merrni ofertën tuaj";
+export const businessCtaLabel = "Merrni ofertë për biznesin tuaj";
+
+// Header nav: four links; the phone number and the main button sit beside them.
 // Kontakt lives in the footer and the mobile menu (the phone is already in the header).
+// Two doors: Shërbimet (mostly homes) and Për biznese. Airbnb is reached through Shërbimet.
 export const mainNav = [
   { label: "Shërbimet", href: "/sherbime" },
-  { label: "Airbnb", href: "/pastrim-airbnb-tirane" },
+  { label: "Për biznese", href: businessPath },
   { label: "Puna jonë", href: "/puna-jone" },
   { label: "Rreth nesh", href: "/rreth-nesh" },
 ] as const;
@@ -15,6 +20,7 @@ export const footerServiceLinks = serviceSlugs.map((slug) => ({
 }));
 
 export const footerCompanyLinks = [
+  { label: "Për biznese", href: businessPath },
   { label: "Rreth nesh", href: "/rreth-nesh" },
   { label: "Puna jonë", href: "/puna-jone" },
   { label: "Pyetje të shpeshta", href: "/faq" },

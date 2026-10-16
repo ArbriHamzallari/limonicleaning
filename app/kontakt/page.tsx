@@ -5,6 +5,7 @@ import { PhoneButton } from "@/components/PhoneButton";
 import { LeadForm } from "@/components/LeadForm";
 import { JsonLd, breadcrumbJsonLd, pageMetadata } from "@/lib/seo";
 import { business } from "@/lib/business";
+import { serviceAreaLine } from "@/lib/content";
 
 const breadcrumbItems = [
   { name: "Kryefaqja", path: "/" },
@@ -12,7 +13,7 @@ const breadcrumbItems = [
 ];
 
 export const metadata = pageMetadata({
-  title: "Kontakt: Kompani Pastrimi në Tiranë",
+  title: "Kontakt: kompani pastrimi në Tiranë",
   description:
     "Kontaktoni Limoni Cleaning në Tiranë: telefon dhe WhatsApp +355 68 900 7252, ose na lini numrin te formulari dhe ju kontaktojmë ne për ofertën.",
   path: "/kontakt",
@@ -39,7 +40,8 @@ export default function KontaktPage() {
               </div>
               <div className="py-4">
                 <dt className="text-text-muted">Zona</dt>
-                <dd className="mt-1 text-xl font-bold">{business.areaServed}</dd>
+                <dd className="mt-1 text-xl font-bold">{serviceAreaLine}</dd>
+                <dd className="mt-1 text-text-muted">Baza jonë është në Komunën e Parisit.</dd>
                 <dd>
                   <a
                     href={business.googleMapsUrl}

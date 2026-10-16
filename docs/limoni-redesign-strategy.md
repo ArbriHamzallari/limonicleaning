@@ -1,8 +1,9 @@
 # Limoni Cleaning: redesign strategy
 
 Date: 16 October 2026. Based on `docs/limoni-competitive-research.md` (market) and
-`docs/limoni-asset-audit.md` (media). **Status: proposal for Arbri's review. Nothing in this
-document has been implemented yet.**
+`docs/limoni-asset-audit.md` (media). **Status: implemented 17 Oct 2026** with the reviewed copy
+(`docs/limoni-copy-final.md`). Wording in §9–§10 below is the pre-review draft: the site uses
+"Merrni ofertën tuaj" / "Merrni ofertë për biznesin tuaj", not "Kërko preventiv".
 
 ## 1. Audit of the current site (live, 16 Oct 2026)
 

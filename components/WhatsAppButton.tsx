@@ -6,10 +6,11 @@ import { WhatsAppIcon } from "./icons";
 import { whatsappLink } from "@/lib/business";
 import { waMessageFor } from "@/lib/whatsapp-messages";
 import { trackEvent } from "@/lib/analytics";
-import type { ServiceSlug } from "@/lib/service-index";
+import type { PageKey } from "@/lib/service-index";
 
 interface WhatsAppButtonProps {
-  service?: ServiceSlug;
+  /** The page whose prefilled message to use. */
+  service?: PageKey;
   /** Overrides the service message (e.g. the homepage fill-in template). */
   message?: string;
   /** Where on the page the button sits, for the whatsapp_click event. */

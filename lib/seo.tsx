@@ -1,6 +1,6 @@
 import type { Metadata } from "next";
 import { business } from "@/lib/business";
-import { services } from "@/lib/services";
+import { businessPage, services } from "@/lib/services";
 
 export const siteUrl = process.env.NEXT_PUBLIC_SITE_URL ?? "https://limonicleaning.com";
 
@@ -71,7 +71,7 @@ export function siteGraphJsonLd() {
         hasOfferCatalog: {
           "@type": "OfferCatalog",
           name: "Shërbime pastrimi",
-          itemListElement: services.map((s) => ({
+          itemListElement: [...services, businessPage].map((s) => ({
             "@type": "Offer",
             itemOffered: { "@type": "Service", name: s.h1, url: `${siteUrl}${s.path}` },
           })),

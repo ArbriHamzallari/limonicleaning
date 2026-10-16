@@ -7,13 +7,13 @@ import { Logo } from "./Logo";
 import { Button } from "./Button";
 import { WhatsAppButton } from "./WhatsAppButton";
 import { PhoneButton } from "./PhoneButton";
-import { mainNav } from "@/lib/nav";
-import { serviceForPath } from "@/lib/service-index";
+import { mainNav, mainCtaLabel } from "@/lib/nav";
+import { pageKeyForPath } from "@/lib/service-index";
 
 export function Header() {
   const [open, setOpen] = useState(false);
   const pathname = usePathname();
-  const service = serviceForPath(pathname);
+  const service = pageKeyForPath(pathname);
 
   // Full-screen sheet on mobile: lock page scroll behind it and let Escape close it.
   useEffect(() => {
@@ -37,7 +37,7 @@ export function Header() {
           <Logo />
         </Link>
 
-        <nav className="hidden items-center gap-6 lg:flex" aria-label="Kryesore">
+        <nav className="hidden items-center gap-5 lg:flex xl:gap-7" aria-label="Kryesore">
           {mainNav.map((item) => {
             const active = pathname === item.href;
             return (
@@ -45,7 +45,7 @@ export function Header() {
                 key={item.href}
                 href={item.href}
                 aria-current={active ? "page" : undefined}
-                className={`inline-flex min-h-12 items-center text-base font-medium hover:text-primary ${
+                className={`inline-flex min-h-12 items-center whitespace-nowrap text-base font-medium hover:text-primary ${
                   active ? "text-primary underline decoration-2 underline-offset-8" : "text-text"
                 }`}
               >
@@ -56,9 +56,10 @@ export function Header() {
         </nav>
 
         <div className="hidden items-center gap-4 lg:flex">
-          <PhoneButton placement="header" variant="link" className="no-underline! text-text hover:text-primary" />
-          <Button href="/kerko-oferte" variant="secondary">
-            Kërko ofertë
+          <PhoneButton placement="header" variant="link" className="whitespace-nowrap no-underline! text-text hover:text-primary max-xl:hidden!" />
+          <PhoneButton placement="header" iconOnly className="xl:hidden!" />
+          <Button href="/kerko-oferte" variant="secondary" className="whitespace-nowrap">
+            {mainCtaLabel}
           </Button>
         </div>
 
@@ -123,7 +124,7 @@ export function Header() {
           </nav>
 
           <Button href="/kerko-oferte" variant="secondary" size="lg" className="mt-6 w-full" onClick={close}>
-            Kërko ofertë
+            {mainCtaLabel}
           </Button>
         </div>
       )}

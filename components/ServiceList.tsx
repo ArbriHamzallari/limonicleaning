@@ -5,7 +5,7 @@ import { naturalAspect } from "@/lib/photos";
 
 // /sherbime: an editorial list with hairline dividers instead of a grid of cards. Rows with a
 // real photo alternate sides; rows without one stay text only.
-export function ServiceList({ services }: { services: Service[] }) {
+export function ServiceList({ services, heading: Heading = "h2" }: { services: Service[]; heading?: "h2" | "h3" }) {
   const withPhoto = services.filter((s) => cardImage(s)).map((s) => s.slug);
   return (
     <ul className="border-t border-border">
@@ -16,10 +16,10 @@ export function ServiceList({ services }: { services: Service[] }) {
           <li key={s.slug} className="border-b border-border py-10">
             <div className={img ? "grid items-center gap-8 lg:grid-cols-12 lg:gap-14" : "max-w-2xl"}>
               <div className={img ? `lg:col-span-6 ${flip ? "lg:order-2" : ""}` : ""}>
-                <h2 className="text-2xl font-bold tracking-tight sm:text-3xl">{s.navLabel}</h2>
+                <Heading className="text-2xl font-bold tracking-tight sm:text-3xl">{s.navLabel}</Heading>
                 <p className="mt-3 text-text-muted">{s.summary}</p>
                 <TextLink href={s.path} className="mt-2 text-primary">
-                  Shiko shërbimin
+                  Shikoni shërbimin
                 </TextLink>
               </div>
               {img && (
