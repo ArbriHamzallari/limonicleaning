@@ -1,6 +1,6 @@
 import { photos, type PhotoAsset } from "./photos";
 import { latestApartmentPhotos, latestApartmentVideos, latestKitchenVideos } from "./latest-project-media";
-import type { ServiceSlug } from "./service-index";
+import type { PageKey } from "./service-index";
 
 // /puna-jone content, grouped by job. Text only describes what the photos and videos show;
 // no invented outcomes, client names or addresses.
@@ -9,6 +9,8 @@ export interface PortfolioVideoAsset {
   src: string;
   poster: string;
   caption: string;
+  /** Accessible name: what the clip shows. Falls back to the caption. */
+  label?: string;
   /** For VideoObject structured data. */
   name: string;
   description: string;
@@ -20,7 +22,8 @@ export interface PortfolioProject {
   id: string;
   title: string;
   text: string;
-  service: ServiceSlug;
+  /** The page the project links to (a service, or /per-biznese). */
+  service: PageKey;
   photos: PhotoAsset[];
   videos: PortfolioVideoAsset[];
   /** Show the before/after slider in this project. */
@@ -112,7 +115,6 @@ export const portfolioProjects: PortfolioProject[] = [
   },
 ];
 
- 
 // October 24 projects: these appear only after processed images/video files have been
 // committed to public/. The commercial kitchen is kept separate from residential cleaning.
 if (latestApartmentPhotos.length || latestApartmentVideos.length) {
@@ -130,8 +132,8 @@ if (latestKitchenVideos.length) {
   portfolioProjects.push({
     id: "kuzhine-profesionale-tetor-2026",
     title: "Punë pastrimi në një kuzhinë profesionale",
-    text: "Pamje nga një ambient kuzhine me pajisje inox, gjatë pastrimit të detajuar të sipërfaqeve. Ky projekt është ambient komercial, jo apartament banimi.",
-    service: "pas-ndertimit",
+    text: "Pastrimi i një kuzhine profesionale: muret, aspiratorët dhe pajisjet inox. Pamjet janë marrë gjatë punës, jo pas përfundimit të saj.",
+    service: "biznese",
     photos: [],
     videos: latestKitchenVideos,
   });

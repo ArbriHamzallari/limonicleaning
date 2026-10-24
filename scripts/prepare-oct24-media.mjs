@@ -7,7 +7,7 @@
  *   npm run media:oct24 -- "/path/to/raw/source/folder"
  *
  * Requires ffmpeg (including libx264) on PATH. Reads original IMG files from anywhere
- * under media-source/, strips metadata/audio and writes browser-ready files in public/.
+ * under media-source/ (iPhone HEIC photos: export an upright IMG_xxxx.jpg next to them first), strips metadata/audio and writes browser-ready files in public/.
  * Originals stay in media-source/ and must not be committed (GPS and personal metadata).
  */
 import { existsSync, mkdirSync, readdirSync } from "node:fs";
@@ -23,11 +23,11 @@ const jobs = [
   { input: "IMG_3463.jpg", output: "images/ekipi-pastrim-dysheme-apartament-i-ri.jpg", kind: "photo" },
   { input: "IMG_3464.MOV", output: "pastrim-pllakash-apartament-i-ri", kind: "video" },
   { input: "IMG_3466.MOV", output: "pamje-banjo-apartament-i-ri", kind: "video" },
-  { input: "IMG_3467.MOV", output: "pamje-apartament-pas-punimeve", kind: "video" },
+  { input: "IMG_3467.MOV", output: "pamje-apartament-pas-punimeve", kind: "video", posterAt: 2.6 },
   { input: "IMG_3440.MOV", output: "kuzhine-profesionale-gjendja-fillestare", kind: "video" },
   { input: "IMG_3441.MOV", output: "ekipi-pastrim-kuzhine-profesionale", kind: "video" },
   { input: "IMG_3442.MOV", output: "pastrim-siperfaqe-inox-1", kind: "video" },
-  { input: "IMG_3443.MOV", output: "pastrim-siperfaqe-inox-2", kind: "video" },
+  { input: "IMG_3443.MOV", output: "pastrim-siperfaqe-inox-2", kind: "video", posterAt: 4.6 },
 ];
 
 function run(args) {
@@ -88,7 +88,8 @@ for (const job of jobs) {
         "-c:v", "libx264", "-preset", "veryfast", "-crf", "27",
         "-pix_fmt", "yuv420p", "-an", "-movflags", "+faststart", video,
       ]);
-      run(["-ss", "1", "-i", video, "-map_metadata", "-1", "-frames:v", "1", "-q:v", "4", poster]);
+      // Poster frames were picked by eye (1 s unless a clearer moment is set per job).
+      run(["-ss", String(job.posterAt ?? 1), "-i", video, "-map_metadata", "-1", "-frames:v", "1", "-q:v", "4", poster]);
       console.log(`Video: ${job.input} -> public/videos/${job.output}.mp4 + poster`);
     }
     converted++;
