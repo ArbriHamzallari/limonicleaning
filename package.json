@@ -9,7 +9,8 @@
     "postinstall": "prisma generate",
     "start": "next start",
     "lint": "eslint",
-    "check:images": "node scripts/check-duplicate-images.mjs"
+    "check:images": "node scripts/check-duplicate-images.mjs",
+    "media:oct24": "node scripts/prepare-oct24-media.mjs"
   },
   "dependencies": {
     "@prisma/client": "6.19.3",
