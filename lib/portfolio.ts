@@ -1,4 +1,5 @@
 import { photos, type PhotoAsset } from "./photos";
+import { latestApartmentPhotos, latestApartmentVideos, latestKitchenVideos } from "./latest-project-media";
 import type { ServiceSlug } from "./service-index";
 
 // /puna-jone content, grouped by job. Text only describes what the photos and videos show;
@@ -110,3 +111,28 @@ export const portfolioProjects: PortfolioProject[] = [
     ],
   },
 ];
+
+ 
+// October 24 projects: these appear only after processed images/video files have been
+// committed to public/. The commercial kitchen is kept separate from residential cleaning.
+if (latestApartmentPhotos.length || latestApartmentVideos.length) {
+  portfolioProjects.unshift({
+    id: "apartament-tetor-2026",
+    title: "Apartament i ri, pastrim pas punimeve",
+    text: "Pastrimi në një apartament të ri në Tiranë: puna në pjesët e larta, në dysheme, te pllakat dhe në banjë. Pamjet tregojnë procesin gjatë punës, jo një rezultat para/pas.",
+    service: "pas-ndertimit",
+    photos: latestApartmentPhotos,
+    videos: latestApartmentVideos,
+  });
+}
+
+if (latestKitchenVideos.length) {
+  portfolioProjects.push({
+    id: "kuzhine-profesionale-tetor-2026",
+    title: "Punë pastrimi në një kuzhinë profesionale",
+    text: "Pamje nga një ambient kuzhine me pajisje inox, gjatë pastrimit të detajuar të sipërfaqeve. Ky projekt është ambient komercial, jo apartament banimi.",
+    service: "pas-ndertimit",
+    photos: [],
+    videos: latestKitchenVideos,
+  });
+}
