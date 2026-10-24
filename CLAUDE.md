@@ -83,6 +83,7 @@ Phase 2 (not now, don't build yet): `/tirana/[neighborhood]` pages (Blloku, Komu
 ## Confirmed by Arbri on 17 Oct 2026 (for the business-first redesign)
 
 - Staff in the October clips (IMG_3360, IMG_3362) and the owner of the house in IMG_3296 agreed to publication.
+- Staff in the 24 October apartment and commercial-kitchen footage (IMG_3440–3443, IMG_3463–3468) agreed to publication (Arbri, 24 Oct 2026).
 - Limoni can commit to regular (weekly/monthly) cleaning for offices and buildings.
 - **The assessment visit before a quote is free** ("vizitë vlerësimi pa pagesë"). Use it where a visit makes sense (larger jobs, businesses, buildings); don't promise a visit for every small job.
 - **Service area: all of Tirana and the surrounding areas.** Keep "bazë në Komunën e Parisit" as the base.

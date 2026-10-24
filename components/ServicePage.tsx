@@ -71,8 +71,7 @@ export function ServicePageView({ page }: { page: ServicePageContent }) {
       {page.key === "pas-ndertimit" && (latestApartmentPhotos.length > 0 || latestApartmentVideos.length > 0) && (
         <Section tone="muted" id="apartament-i-ri-tetor-2026">
           <div className="max-w-3xl">
-            <p className="text-base font-bold uppercase tracking-wider text-primary">Punë reale nga ekipi</p>
-            <h2 className="mt-3 text-3xl font-extrabold tracking-tight sm:text-4xl">
+            <h2 className="text-3xl font-extrabold tracking-tight sm:text-4xl">
               Pastrimi i një apartamenti të ri në Tiranë
             </h2>
             <p className="mt-4 text-text-muted">
