@@ -71,9 +71,6 @@ export function ResidentialDeepCleaningLanding() {
         <Breadcrumbs items={breadcrumbs} />
         <div className="mt-6 grid items-center gap-10 lg:grid-cols-12 lg:gap-14">
           <div className="lg:col-span-6">
-            <p className="mb-4 text-base font-bold uppercase tracking-wider text-primary">
-              Pastrim profesional në Tiranë
-            </p>
             <h1 className="max-w-2xl text-4xl leading-[1.14] font-extrabold tracking-tight sm:text-5xl">
               Pastrim me themel, deri në detaj.
             </h1>
@@ -127,8 +124,7 @@ export function ResidentialDeepCleaningLanding() {
       <Section id="cfare-perfshin">
         <div className="grid gap-10 lg:grid-cols-12 lg:gap-14">
           <div className="lg:col-span-5">
-            <p className="text-base font-bold uppercase tracking-wider text-primary">Çfarë pastrojmë</p>
-            <h2 className="mt-3 text-3xl font-extrabold tracking-tight sm:text-4xl">
+            <h2 className="text-3xl font-extrabold tracking-tight sm:text-4xl">
               Më shumë se një pastrim i zakonshëm
             </h2>
             <p className="mt-5 text-text-muted">
@@ -160,8 +156,7 @@ export function ResidentialDeepCleaningLanding() {
 
       <Section tone="muted" id="puna-jone">
         <div className="max-w-3xl">
-          <p className="text-base font-bold uppercase tracking-wider text-primary">Puna jonë</p>
-          <h2 className="mt-3 text-3xl font-extrabold tracking-tight sm:text-4xl">
+          <h2 className="text-3xl font-extrabold tracking-tight sm:text-4xl">
             Shikoni ekipin në punë
           </h2>
           <p className="mt-4 text-text-muted">
@@ -216,8 +211,7 @@ export function ResidentialDeepCleaningLanding() {
       <Section id="merrni-oferten" tone="warm" className="scroll-mt-20">
         <div className="grid gap-9 lg:grid-cols-12 lg:gap-14">
           <div className="lg:col-span-5">
-            <p className="text-base font-bold uppercase tracking-wider text-primary">Merrni ofertën tuaj</p>
-            <h2 className="mt-3 text-3xl font-extrabold tracking-tight sm:text-4xl">
+            <h2 className="text-3xl font-extrabold tracking-tight sm:text-4xl">
               Sa kohë ka që shtëpia juaj nuk është pastruar me themel?
             </h2>
             <p className="mt-5 text-text-muted">
