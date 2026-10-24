@@ -31,6 +31,7 @@ git push
 
 ## Ku shfaqen
 
+- `/pastrim-me-themel-tirane`: kur skedarët janë publikuar, fotoja e pastrimit të pjesëve të larta shfaqet në fillim, fotoja e dyshemesë dhe videoja e pllakave te seksioni “Puna jonë”; fotografitë/videot e vjetra ruhen si alternativë kur nuk ka skedarë të rinj. Këto pamje identifikohen si pastrim pas punimeve, jo si foto rezultati përfundimtar.
 - `/pastrim-pas-ndertimit-tirane`: foto të pastrimit të pjesëve të sipërme dhe dyshemesë së apartamentit (`IMG_3468`, `IMG_3463`) dhe video të pllakave, banjës dhe ambientit (`IMG_3464`, `IMG_3466`, `IMG_3467`).
 - `/puna-jone#apartament-tetor-2026`: të njëjtat pamje, të organizuara si projekt i ri rezidencial.
 - `/puna-jone#kuzhine-profesionale-tetor-2026`: pamje të kuzhinës profesionale dhe pastrimit të pajisjeve inox (`IMG_3440`–`IMG_3443`).
