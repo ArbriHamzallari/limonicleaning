@@ -6,7 +6,7 @@ import { join } from "node:path";
 import type { PhotoAsset } from "./photos";
 
 function published(publicPath: string) {
-  return existsSync(join(process.cwd(), "public", publicPath.replace(/^\\//, "")));
+  return existsSync(join(process.cwd(), "public", publicPath.startsWith("/") ? publicPath.slice(1) : publicPath));
 }
 
 const residentialPhotos: PhotoAsset[] = [
