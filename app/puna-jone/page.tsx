@@ -9,7 +9,7 @@ import { Photo } from "@/components/Photo";
 import { JsonLd, breadcrumbJsonLd, videoJsonLd, pageMetadata } from "@/lib/seo";
 import { beforeAfter, naturalAspect } from "@/lib/photos";
 import { portfolioProjects } from "@/lib/portfolio";
-import { serviceIndex } from "@/lib/service-index";
+import { pageLink } from "@/lib/services";
 
 const breadcrumbItems = [
   { name: "Kryefaqja", path: "/" },
@@ -83,13 +83,13 @@ export default function PunaJonePage() {
                 />
               ))}
               {project.videos.map((v) => (
-                <PortfolioVideo key={v.src} src={v.src} poster={v.poster} caption={v.caption} className="max-w-xs" />
+                <PortfolioVideo key={v.src} src={v.src} poster={v.poster} caption={v.caption} label={v.label} className="max-w-xs" />
               ))}
             </div>
           )}
 
-          <TextLink href={serviceIndex[project.service].path} className="mt-6 text-primary">
-            {`Më shumë për shërbimin: ${serviceIndex[project.service].navLabel}`}
+          <TextLink href={pageLink(project.service).href} className="mt-6 text-primary">
+            {`Më shumë për shërbimin: ${pageLink(project.service).label}`}
           </TextLink>
         </Section>
       ))}
