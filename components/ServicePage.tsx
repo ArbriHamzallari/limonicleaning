@@ -8,6 +8,7 @@ import { TextLink } from "./TextLink";
 import { Checklist } from "./Checklist";
 import { getService, pageLink, type ServicePageContent, type ServiceSection, type ServiceSlug } from "@/lib/services";
 import { naturalAspect } from "@/lib/photos";
+import { latestApartmentPhotos, latestApartmentVideos } from "@/lib/latest-project-media";
 import { JsonLd, breadcrumbJsonLd, serviceJsonLd } from "@/lib/seo";
 
 export function ServicePage({ slug }: { slug: ServiceSlug }) {
@@ -66,6 +67,43 @@ export function ServicePageView({ page }: { page: ServicePageContent }) {
       {page.sections.map((section, i) => (
         <SectionBlock key={`${section.kind}-${i}`} section={section} />
       ))}
+
+      {page.key === "pas-ndertimit" && (latestApartmentPhotos.length > 0 || latestApartmentVideos.length > 0) && (
+        <Section tone="muted" id="apartament-i-ri-tetor-2026">
+          <div className="max-w-3xl">
+            <p className="text-base font-bold uppercase tracking-wider text-primary">Punë reale nga ekipi</p>
+            <h2 className="mt-3 text-3xl font-extrabold tracking-tight sm:text-4xl">
+              Pastrimi i një apartamenti të ri në Tiranë
+            </h2>
+            <p className="mt-4 text-text-muted">
+              Në fotot dhe videot e tetorit shikoni ekipin gjatë pastrimit të pjesëve të larta,
+              pllakave dhe detajeve të banjës. Pamjet janë gjatë punës, jo foto të rezultatit final.
+            </p>
+          </div>
+          <div className="mt-9 grid items-start gap-7 sm:grid-cols-2 lg:grid-cols-3">
+            {latestApartmentPhotos.map((photo) => (
+              <Photo
+                key={photo.src}
+                src={photo.src}
+                alt={photo.alt}
+                caption={photo.caption}
+                aspect={naturalAspect(photo)}
+                sizes="(min-width: 1024px) 33vw, (min-width: 640px) 50vw, 100vw"
+              />
+            ))}
+            {latestApartmentVideos.map((video) => (
+              <PortfolioVideo
+                key={video.src}
+                src={video.src}
+                poster={video.poster}
+                caption={video.caption}
+                label={video.label}
+                className="max-w-xs"
+              />
+            ))}
+          </div>
+        </Section>
+      )}
 
       <Section className="py-8! sm:py-10!">
         <p className="flex flex-wrap items-center gap-x-6 text-lg">
