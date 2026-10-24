@@ -9,10 +9,17 @@ import { Section } from "@/components/Section";
 import { TextLink } from "@/components/TextLink";
 import { WhatsAppButton } from "@/components/WhatsAppButton";
 import { photos, videos, naturalAspect } from "@/lib/photos";
+import { latestApartmentPhotos, latestApartmentVideos } from "@/lib/latest-project-media";
 import { getService } from "@/lib/services";
 import { JsonLd, breadcrumbJsonLd, serviceJsonLd } from "@/lib/seo";
 
 const deepCleaning = getService("me-themel");
+
+// Keep the current photography in place until the new phone files are converted and
+// committed. The new images depict post-construction cleaning, and are captioned as such.
+const heroPhoto = latestApartmentPhotos[0] ?? photos.windowsTeam;
+const detailPhoto = latestApartmentPhotos[1] ?? photos.kitchen;
+const detailVideo = latestApartmentVideos[0] ?? videos.teamBedroom;
 
 const breadcrumbs = [
   { name: "Kryefaqja", path: "/" },
@@ -88,10 +95,10 @@ export function ResidentialDeepCleaningLanding() {
             </p>
           </div>
           <Photo
-            src={photos.windowsTeam.src}
-            alt={photos.windowsTeam.alt}
-            caption={photos.windowsTeam.caption}
-            aspect={naturalAspect(photos.windowsTeam)}
+            src={heroPhoto.src}
+            alt={heroPhoto.alt}
+            caption={heroPhoto.caption}
+            aspect={naturalAspect(heroPhoto)}
             sizes="(min-width: 1024px) 44vw, 100vw"
             className="lg:col-span-6"
             priority
@@ -158,16 +165,17 @@ export function ResidentialDeepCleaningLanding() {
             Shikoni ekipin në punë
           </h2>
           <p className="mt-4 text-text-muted">
-            Pamje reale nga pastrime të kryera nga ekipi Limoni Cleaning.
-            Fotot dhe videoja më poshtë janë nga ambiente të ndryshme.
+            Pamje reale nga pastrime me themel dhe pas punimeve të kryera nga
+            ekipi Limoni Cleaning. Materialet vijnë nga ambiente të ndryshme
+            dhe tregojnë punën në proces, jo domosdoshmërisht rezultatin përfundimtar.
           </p>
         </div>
         <div className="mt-9 grid items-start gap-8 sm:grid-cols-2 lg:grid-cols-3">
           <Photo
-            src={photos.kitchen.src}
-            alt={photos.kitchen.alt}
-            caption={photos.kitchen.caption}
-            aspect={naturalAspect(photos.kitchen)}
+            src={detailPhoto.src}
+            alt={detailPhoto.alt}
+            caption={detailPhoto.caption}
+            aspect={naturalAspect(detailPhoto)}
             sizes="(min-width: 1024px) 28vw, (min-width: 640px) 50vw, 100vw"
           />
           <Photo
@@ -178,10 +186,10 @@ export function ResidentialDeepCleaningLanding() {
             sizes="(min-width: 1024px) 28vw, (min-width: 640px) 50vw, 100vw"
           />
           <PortfolioVideo
-            src={videos.teamBedroom.src}
-            poster={videos.teamBedroom.poster}
-            caption={videos.teamBedroom.caption}
-            label={videos.teamBedroom.label}
+            src={detailVideo.src}
+            poster={detailVideo.poster}
+            caption={detailVideo.caption}
+            label={detailVideo.label}
             className="max-w-sm"
           />
         </div>
