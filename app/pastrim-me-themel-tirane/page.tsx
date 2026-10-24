@@ -1,8 +1,8 @@
-import { ServicePage } from "@/components/ServicePage";
+import { ResidentialDeepCleaningLanding } from "@/components/ResidentialDeepCleaningLanding";
 import { serviceMetadata } from "@/lib/services";
 
 export const metadata = serviceMetadata("me-themel");
 
 export default function Page() {
-  return <ServicePage slug="me-themel" />;
+  return <ResidentialDeepCleaningLanding />;
 }
