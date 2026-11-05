@@ -30,8 +30,21 @@ region Frankfurt (closest to Tirana), and connect it to the project. It adds `DA
 (Supabase also works: set `DATABASE_URL` to the pooled connection string and
 `DATABASE_URL_UNPOOLED` to the direct one.)
 
-The tables are created automatically on each deploy (`prisma migrate deploy` runs in the build,
-see `vercel.json`).
+The tables are created and updated by the build itself: `vercel.json` sets the build command
+to `npm run vercel-build`, which is `prisma generate && prisma migrate deploy && next build`.
+This runs on **every** Vercel build, Production **and Preview**, against whatever
+`DATABASE_URL_UNPOOLED` that environment has.
+
+> **Warning: migrations and Preview deployments.** If Preview uses the same database as
+> Production (the default when the same Neon variables are added to both, as in step 3),
+> pushing a branch that contains a new migration applies it to the **production database**
+> before the branch is merged. Before pushing such a branch, either give Preview its own
+> database (Neon branch per preview, or a separate `DATABASE_URL`/`DATABASE_URL_UNPOOLED` for
+> Preview) or accept that the migration lands early. Migrations in this repo are written to be
+> additive so the code already in production keeps working, but check each one.
+>
+> To see what a deploy would apply, without changing anything:
+> `DATABASE_URL=… DATABASE_URL_UNPOOLED=… npx prisma migrate status` (read-only).
 
 ## 3. Vercel
 

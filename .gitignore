@@ -47,3 +47,6 @@ next-env.d.ts
 /media-source/
 /Claude outputs/
 /internal/
+
+# local-only private uploads (development media driver)
+/.data/

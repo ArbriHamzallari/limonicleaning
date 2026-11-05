@@ -1,6 +1,7 @@
 import Link from "next/link";
 import { Logo } from "./Logo";
 import { PhoneButton } from "./PhoneButton";
+import { InstallShortcut } from "./InstallShortcut";
 import { business } from "@/lib/business";
 import { serviceAreaLine } from "@/lib/content";
 import { footerServiceLinks, footerCompanyLinks, footerLegalLinks } from "@/lib/nav";
@@ -11,7 +12,7 @@ export function Footer() {
   const year = new Date().getFullYear();
 
   return (
-    <footer className="border-t border-border bg-bg">
+    <footer className="border-t border-border bg-bg print:hidden">
       <div className="mx-auto max-w-6xl px-4 py-12 sm:px-6 lg:px-8">
         <div className="grid gap-10 sm:grid-cols-2 lg:grid-cols-4">
           <div>
@@ -65,6 +66,7 @@ export function Footer() {
                 </a>
               </li>
             </ul>
+            <InstallShortcut placement="footer" className="mt-4 lg:hidden" />
           </div>
         </div>
 

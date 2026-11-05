@@ -67,5 +67,6 @@ WhatsApp Cloud API (optional owner alerts) · Zod.
 
 Full step-by-step (GitHub, Vercel, Hostinger DNS, Resend) is in `DEPLOY.md`.
 
-Target is Vercel. Migrations run automatically during the Vercel build (`vercel.json` →
-`npm run vercel-build`).
+Target is Vercel. `vercel.json` sets the build command to `npm run vercel-build`, which runs
+`prisma migrate deploy` before `next build` on every Vercel build (Production and Preview; see
+the warning in `DEPLOY.md`). `npm test` runs the unit and API tests.

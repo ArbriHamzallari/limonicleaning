@@ -10,9 +10,14 @@
     "start": "next start",
     "lint": "eslint",
     "check:images": "node scripts/check-duplicate-images.mjs",
-    "media:oct24": "node scripts/prepare-oct24-media.mjs"
+    "media:oct24": "node scripts/prepare-oct24-media.mjs",
+    "test": "vitest run",
+    "admin:hash": "node scripts/admin-hash.mjs",
+    "test:integration": "vitest run tests/integration"
   },
   "dependencies": {
+    "@aws-sdk/client-s3": "^3.1162.0",
+    "@aws-sdk/s3-request-presigner": "^3.1162.0",
     "@prisma/client": "6.19.3",
     "next": "16.3.4",
     "prisma": "6.19.3",
@@ -29,6 +34,7 @@
     "eslint": "^9",
     "eslint-config-next": "16.3.4",
     "tailwindcss": "^4",
-    "typescript": "^5"
+    "typescript": "^5",
+    "vitest": "^4.1.12"
   }
 }

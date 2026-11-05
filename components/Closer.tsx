@@ -5,6 +5,7 @@ import { LeadForm } from "./LeadForm";
 import { FaqItem } from "./FaqItem";
 import { TextLink } from "./TextLink";
 import { closerSteps, photosHint, type FaqEntry } from "@/lib/content";
+import { assessmentBenefit } from "@/lib/assessment";
 import type { PageKey } from "@/lib/service-index";
 
 interface CloserProps {
@@ -27,7 +28,7 @@ export function Closer({
   whatsappMessage,
   placement,
   title = "Keni një pronë apo ambient pune për të pastruar?",
-  text = "Na shkruani në WhatsApp dhe na tregoni zonën, sipërfaqen e ambientit dhe llojin e pastrimit. Ju kthejmë një ofertë.",
+  text = "Na shkruani në WhatsApp dhe na tregoni zonën, sipërfaqen e ambientit dhe llojin e pastrimit. Pas vlerësimit ju dërgojmë planin dhe ofertën me shkrim.",
   showSteps = true,
   faq,
   faqTitle = "Pyetjet që na bëni më shpesh",
@@ -38,6 +39,7 @@ export function Closer({
         <div className="lg:col-span-7">
           <h2 className="text-3xl leading-tight font-extrabold tracking-tight sm:text-4xl">{title}</h2>
           <p className="mt-4 max-w-xl text-xl text-text-muted">{text}</p>
+          <p className="mt-4 max-w-xl text-lg font-semibold">{assessmentBenefit}</p>
           <WhatsAppButton
             service={service}
             message={whatsappMessage}
@@ -77,7 +79,9 @@ export function Closer({
       </div>
 
       <div className="mt-16 max-w-3xl">
-        <p className="mb-4 text-lg font-semibold">Ose na lini numrin dhe ju telefonojmë ne:</p>
+        <h3 data-lead-form-anchor tabIndex={-1} className="mb-4 scroll-mt-20 text-lg font-semibold">
+          Ose plotësoni formularin dhe ju kontaktojmë ne:
+        </h3>
         <LeadForm page={service} placement={`${placement}_form`} />
       </div>
 

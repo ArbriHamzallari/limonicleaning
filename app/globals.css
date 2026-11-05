@@ -57,6 +57,9 @@
 /* Body copy is 18px at every width: most visitors are on phones and many are older.
    text-sm is reserved for captions and legal text. */
 body {
+  /* viewport-fit=cover (layout.tsx): keep content clear of the notch in landscape. */
+  padding-left: env(safe-area-inset-left);
+  padding-right: env(safe-area-inset-right);
   background: var(--color-bg);
   color: var(--color-text);
   font-family: var(--font-sans), Arial, Helvetica, sans-serif;
