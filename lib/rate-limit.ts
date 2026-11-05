@@ -5,9 +5,9 @@ const MAX_REQUESTS = 5;
 
 const hits = new Map<string, number[]>();
 
-export function allowRequest(key: string, now = Date.now()): boolean {
+export function allowRequest(key: string, now = Date.now(), max = MAX_REQUESTS): boolean {
   const recent = (hits.get(key) ?? []).filter((t) => now - t < WINDOW_MS);
-  if (recent.length >= MAX_REQUESTS) {
+  if (recent.length >= max) {
     hits.set(key, recent);
     return false;
   }

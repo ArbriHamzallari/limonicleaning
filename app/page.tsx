@@ -12,6 +12,9 @@ import { businessPath, serviceIndex } from "@/lib/service-index";
 import { businessCtaLabel } from "@/lib/nav";
 import { photos, videos, beforeAfter, naturalAspect } from "@/lib/photos";
 import { waQuoteTemplate } from "@/lib/whatsapp-messages";
+import { FounderVideo } from "@/components/FounderVideo";
+import { assessmentBenefit, assessmentBenefitText } from "@/lib/assessment";
+import { DEEP_CLEAN_RATE_LEK, deepCleanExampleLine } from "@/lib/quote";
 import { pageMetadata } from "@/lib/seo";
 
 export const metadata = pageMetadata({
@@ -27,6 +30,7 @@ const h2 = "text-3xl leading-tight font-extrabold tracking-tight sm:text-4xl";
 // The two doors: homes and businesses. Labels are the reviewed short names, not navLabels.
 const doors = [
   {
+    id: "shtepi",
     title: "Për shtëpinë",
     text: "Apartamente, shtëpi dhe vila, një herë ose rregullisht.",
     links: [
@@ -39,6 +43,7 @@ const doors = [
     ],
   },
   {
+    id: "biznes",
     title: "Për biznesin",
     text: "Zyra, dyqane, hotele dhe pallate, me plan sipas orarit tuaj.",
     links: [
@@ -67,13 +72,27 @@ export default function Home() {
               Pastrim profesional për biznese dhe shtëpi në Tiranë
             </h1>
             <p className="mt-6 max-w-xl text-xl text-text-muted">
-              Pastrim me themel, pastrim gjeneral dhe mirëmbajtje e rregullt. Anëtarët e ekipit kanë mbi 10
-              vjet përvojë në pastrim.
+              Pastrim me themel, pastrim gjeneral dhe mirëmbajtje e rregullt, në Tiranë dhe zonat përreth.
+              Anëtarët e ekipit kanë mbi 10 vjet përvojë në pastrim.
             </p>
             <LeadActions placement="home_hero" className="mt-8" />
-            <TextLink href="/puna-jone" className="mt-3 text-primary">
-              Shikoni punën tonë
-            </TextLink>
+            <nav aria-label="Zgjidhni rrugën" className="mt-4 flex flex-wrap gap-x-6">
+              <a
+                href="#shtepi"
+                className="inline-flex min-h-12 items-center text-lg font-semibold text-primary underline decoration-primary/40 decoration-2 underline-offset-8 hover:decoration-primary"
+              >
+                Për shtëpinë
+              </a>
+              <a
+                href="#biznes"
+                className="inline-flex min-h-12 items-center text-lg font-semibold text-primary underline decoration-primary/40 decoration-2 underline-offset-8 hover:decoration-primary"
+              >
+                Për biznesin
+              </a>
+              <TextLink href="/puna-jone" className="text-primary">
+                Shikoni punën tonë
+              </TextLink>
+            </nav>
           </div>
           <Photo
             src={photos.windowsTeam.src}
@@ -102,7 +121,7 @@ export default function Home() {
       <Section>
         <div className="grid gap-12 md:grid-cols-2 md:gap-14">
           {doors.map((door) => (
-            <div key={door.title}>
+            <div key={door.title} id={door.id} className="scroll-mt-24">
               <h2 className={h2}>{door.title}</h2>
               <p className="mt-3 text-lg text-text-muted">{door.text}</p>
               <ul className="mt-6 border-t border-border">
@@ -117,6 +136,23 @@ export default function Home() {
                   </li>
                 ))}
               </ul>
+              {door.id === "shtepi" && (
+                <Link
+                  href={serviceIndex["me-themel"].path}
+                  className="mt-6 block rounded-lg border-l-4 border-accent bg-bg-warm p-5 hover:bg-bg-warm-strong"
+                >
+                  <span className="block text-xl font-bold">
+                    Pastrim me themel apartamenti: nga {DEEP_CLEAN_RATE_LEK} lekë të reja/m²
+                  </span>
+                  <span className="mt-1 block text-text-muted">
+                    Me larjen e divanit dhe të të gjithë dyshekëve. Për shembull, {deepCleanExampleLine}; totali
+                    konfirmohet pas vlerësimit. Shtëpitë dhe vilat marrin ofertë pas vlerësimit.
+                  </span>
+                  <span className="mt-2 block font-semibold text-primary underline decoration-primary/40 decoration-2 underline-offset-4">
+                    Shikoni çfarë përfshihet
+                  </span>
+                </Link>
+              )}
             </div>
           ))}
         </div>
@@ -138,8 +174,8 @@ export default function Home() {
           <div className="lg:col-span-7">
             <h2 className={h2}>Zyra, dyqane dhe pallate: pastrim sipas orarit tuaj</h2>
             <p className="mt-5 text-xl">
-              Vijmë para hapjes, pas mbylljes ose në ditët që zgjidhni. Për ambientet më të mëdha, vijmë
-              fillimisht për një vizitë pa pagesë dhe ju dërgojmë ofertën me shkrim.
+              Vijmë para hapjes, pas mbylljes ose në ditët që zgjidhni. Për ambientet më të mëdha, fillimisht
+              e shohim ambientin dhe ju dërgojmë planin dhe ofertën me shkrim, pa pagesë.
             </p>
             <CheckList
               items={[
@@ -209,9 +245,13 @@ export default function Home() {
         </div>
       </Section>
 
-      {/* Si përgatitet oferta: no prices, but nothing hidden either */}
+      {/* Si përgatitet oferta, with the named assessment benefit */}
       <Section>
         <h2 className={h2}>Si përgatitet oferta</h2>
+        <div className="mt-5 max-w-3xl border-l-4 border-accent pl-5">
+          <p className="text-xl font-bold">{assessmentBenefit}</p>
+          <p className="mt-1 text-text-muted">{assessmentBenefitText}</p>
+        </div>
         <ol className="mt-8 grid gap-x-10 sm:grid-cols-2 lg:grid-cols-4">
           {quoteSteps.map((step, i) => (
             <li key={step.title} className="border-t-2 border-primary py-5">
@@ -228,8 +268,15 @@ export default function Home() {
         <div className="mt-10 max-w-3xl">
           <h3 className="text-2xl font-bold tracking-tight">Nga çfarë varet çmimi</h3>
           <CheckList items={priceFactors} className="mt-5 text-lg" />
+          <p className="mt-5 text-text-muted">
+            Për pastrimin me themel të apartamenteve publikojmë një çmim orientues: nga {DEEP_CLEAN_RATE_LEK} lekë të
+            reja/m². Për shtëpitë, vilat dhe shërbimet e tjera, ju japim ofertën pas vlerësimit.
+          </p>
         </div>
       </Section>
+
+      {/* Founder video: renders nothing until a real, captioned file is configured. */}
+      <FounderVideo placement="home" className="mx-auto max-w-4xl px-4 pb-14 sm:px-6 sm:pb-20 lg:px-8" />
 
       {/* Closer: WhatsApp, phone, form, FAQ */}
       <Closer whatsappMessage={waQuoteTemplate} placement="home" showSteps={false} faq={homeFaq} />

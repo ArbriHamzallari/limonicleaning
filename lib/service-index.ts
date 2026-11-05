@@ -100,8 +100,11 @@ export function pageKeyForPath(pathname: string): PageKey | undefined {
 // ---------------------------------------------------------------------------------------
 // Optional form fields (Lead.propertyType / frequency / timing). Values are stored as-is.
 // ---------------------------------------------------------------------------------------
+// "apartament" meant "apartment or house" before 5 Nov 2026; since then houses are "shtepi"
+// (only apartments get the deep-cleaning reference price).
 export const propertyTypes = [
-  { value: "apartament", label: "Apartament ose shtëpi" },
+  { value: "apartament", label: "Apartament" },
+  { value: "shtepi", label: "Shtëpi" },
   { value: "vile", label: "Vilë" },
   { value: "zyre", label: "Zyrë ose dyqan" },
   { value: "pallat", label: "Pallat ose kompleks" },
@@ -114,11 +117,13 @@ export const frequencies = [
   { value: "rregullisht", label: "Rregullisht" },
 ] as const;
 
+/** Preferred timing. "date" reveals a date picker; every choice is a preference, never a slot. */
 export const timings = [
   { value: "sa-me-shpejt", label: "Sa më shpejt" },
   { value: "kete-jave", label: "Këtë javë" },
   { value: "kete-muaj", label: "Këtë muaj" },
-  { value: "pa-date", label: "Nuk kam datë të caktuar" },
+  { value: "date", label: "Kam një datë" },
+  { value: "pa-date", label: "Jam fleksibël" },
 ] as const;
 
 /** The business-name field only makes sense for these property types. */

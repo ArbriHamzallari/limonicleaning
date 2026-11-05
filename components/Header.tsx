@@ -7,6 +7,8 @@ import { Logo } from "./Logo";
 import { Button } from "./Button";
 import { WhatsAppButton } from "./WhatsAppButton";
 import { PhoneButton } from "./PhoneButton";
+import { InstallShortcut } from "./InstallShortcut";
+import { trackEvent } from "@/lib/analytics";
 import { mainNav, mainCtaLabel } from "@/lib/nav";
 import { pageKeyForPath } from "@/lib/service-index";
 
@@ -31,8 +33,8 @@ export function Header() {
   const close = () => setOpen(false);
 
   return (
-    <header className="sticky top-0 z-50 border-b border-border bg-bg">
-      <div className="mx-auto flex h-16 max-w-6xl items-center justify-between gap-4 px-4 sm:px-6 lg:h-20 lg:px-8">
+    <header className="sticky top-0 z-50 border-b border-border bg-bg print:hidden">
+      <div className="mx-auto flex h-16 max-w-6xl items-center justify-between gap-2 px-4 sm:gap-4 sm:px-6 lg:h-20 lg:px-8">
         <Link href="/" onClick={close} className="inline-flex min-h-12 items-center" aria-label="Limoni Cleaning, kryefaqja">
           <Logo />
         </Link>
@@ -58,7 +60,12 @@ export function Header() {
         <div className="hidden items-center gap-4 lg:flex">
           <PhoneButton placement="header" variant="link" className="whitespace-nowrap no-underline! text-text hover:text-primary max-xl:hidden!" />
           <PhoneButton placement="header" iconOnly className="xl:hidden!" />
-          <Button href="/kerko-oferte" variant="secondary" className="whitespace-nowrap">
+          <Button
+            href="/kerko-oferte"
+            variant="secondary"
+            className="whitespace-nowrap"
+            onClick={() => trackEvent("quote_cta_click", { service: service ?? "pergjithshem", placement: "header" })}
+          >
             {mainCtaLabel}
           </Button>
         </div>
@@ -123,9 +130,20 @@ export function Header() {
             </ul>
           </nav>
 
-          <Button href="/kerko-oferte" variant="secondary" size="lg" className="mt-6 w-full" onClick={close}>
+          <Button
+            href={service ? `/kerko-oferte?sherbimi=${service}` : "/kerko-oferte"}
+            variant="secondary"
+            size="lg"
+            className="mt-6 w-full"
+            onClick={() => {
+              trackEvent("quote_cta_click", { service: service ?? "pergjithshem", placement: "mobile_menu" });
+              close();
+            }}
+          >
             {mainCtaLabel}
           </Button>
+
+          <InstallShortcut placement="mobile_menu" className="mt-6 border-t border-border pt-4" />
         </div>
       )}
     </header>

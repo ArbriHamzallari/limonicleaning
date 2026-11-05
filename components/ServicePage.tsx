@@ -6,6 +6,8 @@ import { PortfolioVideo } from "./PortfolioVideo";
 import { Closer } from "./Closer";
 import { TextLink } from "./TextLink";
 import { Checklist } from "./Checklist";
+import { PracticalInfo } from "./PracticalInfo";
+import { TrackView } from "./TrackView";
 import { getService, pageLink, type ServicePageContent, type ServiceSection, type ServiceSlug } from "@/lib/services";
 import { naturalAspect } from "@/lib/photos";
 import { latestApartmentPhotos, latestApartmentVideos } from "@/lib/latest-project-media";
@@ -32,6 +34,7 @@ export function ServicePageView({ page }: { page: ServicePageContent }) {
     <>
       <JsonLd data={serviceJsonLd(page.h1, page.intro, page.path)} />
       <JsonLd data={breadcrumbJsonLd(breadcrumbItems)} />
+      <TrackView service={page.key} />
 
       <Section className="pt-6 sm:pt-10">
         <Breadcrumbs items={breadcrumbItems} />
@@ -103,6 +106,8 @@ export function ServicePageView({ page }: { page: ServicePageContent }) {
           </div>
         </Section>
       )}
+
+      {page.practical && <PracticalInfo info={page.practical} />}
 
       <Section className="py-8! sm:py-10!">
         <p className="flex flex-wrap items-center gap-x-6 text-lg">

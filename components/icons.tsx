@@ -13,6 +13,15 @@ export function CheckIcon({ className = "h-5 w-5" }: IconProps) {
   );
 }
 
+/** For "Çfarë nuk përfshihet" lists: a check mark there would read as "included". */
+export function MinusIcon({ className = "h-5 w-5" }: IconProps) {
+  return (
+    <svg viewBox="0 0 20 20" className={className} fill="none" stroke="currentColor" strokeWidth={2.2} aria-hidden>
+      <path strokeLinecap="round" d="M5 10h10" />
+    </svg>
+  );
+}
+
 export function WhatsAppIcon({ className = "h-5 w-5" }: IconProps) {
   return (
     <svg viewBox="0 0 24 24" className={className} fill="currentColor" aria-hidden>

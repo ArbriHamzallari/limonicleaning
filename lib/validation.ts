@@ -1,6 +1,7 @@
 import { z } from "zod";
 import { normalizePhone } from "./phone";
 import { frequencies, leadServiceValues, propertyTypes, timings } from "./service-index";
+import { assessmentMethods, conditions, isValidPreferredDate, priorityValues } from "./lead-form";
 
 const optionalText = (max: number) =>
   z
@@ -16,6 +17,12 @@ const optionalChoice = <T extends readonly { value: string }[]>(options: T) =>
     .string()
     .optional()
     .transform((v) => (options.some((o) => o.value === v) ? (v as T[number]["value"]) : undefined));
+
+const campaignTag = z
+  .string()
+  .trim()
+  .optional()
+  .transform((v) => (v && v.length <= 60 && /^[A-Za-z0-9._-]+$/.test(v) && !/^\+?\d{6,}$/.test(v) ? v : undefined));
 
 export const SIZE_ERROR = "Shkruani vetëm një numër, për shembull, 80.";
 
@@ -47,16 +54,37 @@ export const leadSchema = z.object({
       }
       return Number(value);
     }),
+  sizeUnknown: z.boolean().optional().default(false),
   frequency: optionalChoice(frequencies),
   timing: optionalChoice(timings),
+  /** Only kept when it is a real day from today to a year ahead; otherwise dropped. */
+  preferredDate: z
+    .string()
+    .optional()
+    .transform((v) => (v && isValidPreferredDate(v) ? v : undefined)),
+  condition: optionalChoice(conditions),
+  assessmentMethod: optionalChoice(assessmentMethods),
+  priorities: z
+    .array(z.string())
+    .max(12)
+    .optional()
+    .transform((list) => Array.from(new Set((list ?? []).filter((v) => priorityValues.includes(v))))),
   businessName: optionalText(120),
-  // The form no longer asks for these (prompt 04); the columns keep their defaults.
-  channel: z.enum(["WHATSAPP", "TELEFON"]).default("WHATSAPP"),
+  /** How the visitor wants to be contacted (form chips, Nov 2026). */
+  channel: z.enum(["WHATSAPP", "TELEFON"]).catch("WHATSAPP").default("WHATSAPP"),
+  /** Zona ose qyteti, free text. */
   area: optionalText(120),
+  /** Random id per form instance: a double or retried submit returns the first saved row. */
+  clientRequestId: z
+    .string()
+    .regex(/^[A-Za-z0-9-]{8,64}$/)
+    .optional()
+    .catch(undefined),
   message: optionalText(1000),
   pagePath: z.string().trim().max(200).startsWith("/").catch("/"),
-  utmSource: optionalText(100),
-  utmCampaign: optionalText(100),
+  // Campaign tags only (same rule as lib/attribution.ts): anything else is dropped.
+  utmSource: campaignTag,
+  utmCampaign: campaignTag,
   /** Milliseconds timestamp from when the form was rendered (spam timing check). */
   startedAt: z.number().int().positive(),
 });

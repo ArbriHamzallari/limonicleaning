@@ -8,11 +8,24 @@ export type { ServiceSlug } from "./service-index";
 
 // All service page copy, plus /per-biznese. Every page renders through
 // components/ServicePage.tsx, but each one picks its own sections and headings so the pages
-// don't read as copies. Wording is the Albanian reviewer's final text (docs/limoni-copy-final.md).
-// Rules: no prices, no em dashes, no claims beyond what the business confirmed (CLAUDE.md).
+// don't read as copies. Wording is the Albanian reviewer's final text (docs/limoni-copy-final.md),
+// extended in Nov 2026 (docs/website-audit.md).
+// Rules: the only published price is the deep-cleaning reference for homes (lib/quote.ts); no
+// em dashes, no claims beyond what the business confirmed (CLAUDE.md).
 
 export const priceAnswer =
-  "Çmimi varet nga madhësia dhe gjendja e pronës, lloji i pastrimit dhe sa shpesh ju nevojitet. Na lini numrin ose na dërgoni foto në WhatsApp, që t'ju përgatisim ofertën.";
+  "Çmimi varet nga madhësia dhe gjendja e pronës, lloji i pastrimit dhe sa shpesh ju nevojitet. Na lini numrin ose na shkruani në WhatsApp: pas vlerësimit ju japim planin e pastrimit dhe ofertën me shkrim, pa pagesë.";
+
+export const deepCleanPriceAnswer =
+  "Për apartamente, çmimi orientues nis nga 250 lekë të reja/m². Për shembull, për 80 m² llogaritja bazë është 20.000 lekë të reja. Totalin e konfirmojmë pas vlerësimit, sipas gjendjes së apartamentit dhe punëve që përfshihen. Për shtëpitë dhe vilat ju japim ofertën pas vlerësimit. Pastrimi i rënduar pas punimeve vlerësohet veçmas.";
+
+/** The four practical blocks every service page shows (Nov 2026). Only confirmed facts. */
+export interface PracticalInfo {
+  audience?: string[];
+  excluded?: string[];
+  pricing: string;
+  preparation?: string[];
+}
 
 export type ChecklistItem = string | { label: string; text: string };
 
@@ -64,6 +77,7 @@ export interface ServicePageContent {
   related: PageKey[];
   /** Overrides the closer's heading and line. */
   closer?: { title: string; text: string };
+  practical?: PracticalInfo;
 }
 
 export interface Service extends ServicePageContent {
@@ -105,11 +119,28 @@ const data: Record<ServiceSlug, ServiceData> = {
         title: "Pastrim i rregullt apo me themel?",
         paragraphs: [
           "Pastrimi i rregullt e mban shtëpinë të pastër javë pas jave.",
-          "Kur hyni në një pronë të re ose kur shtëpia nuk është pastruar me themel prej kohësh, zgjidhni pastrimin me themel. Ai mund të përfshijë edhe dollapët, frigoriferin dhe furrën nga brenda.",
+          "Kur hyni në një pronë të re ose kur shtëpia nuk është pastruar me themel prej kohësh, zgjidhni pastrimin me themel. Ai përfshin edhe dollapët, frigoriferin dhe furrën nga brenda. Në apartamente përfshin edhe larjen e divanit dhe të të gjithë dyshekëve, dhe çmimi orientues nis nga 250 lekë të reja/m².",
         ],
         link: { href: "/pastrim-me-themel-tirane", label: "Si bëhet pastrimi me themel" },
       },
     ],
+    practical: {
+      audience: [
+        "Apartamente dhe shtëpi ku jetohet, të çdo madhësie",
+        "Pastrim një herë, ose çdo javë dhe çdo dy javë",
+      ],
+      excluded: [
+        "Larja dhe hekurosja e rrobave",
+        "Brenda dollapëve, frigoriferit dhe furrës: këto janë pjesë e pastrimit me themel",
+        "Larja e divaneve dhe e dyshekëve, që bëhet veçmas ose në paketën e pastrimit me themel",
+      ],
+      pricing:
+        "Çmimi varet nga madhësia dhe gjendja e banesës dhe sa shpesh vijmë. Çmimi për m² i pastrimit me themel nuk vlen automatikisht për pastrimin e rregullt: ju japim ofertën pasi të sqarojmë çfarë ju duhet.",
+      preparation: [
+        "Na tregoni nëse ka sende të brishta ose zona ku nuk duhet të prekim",
+        "Largoni nga sipërfaqet sendet personale që nuk doni t'i lëvizim",
+      ],
+    },
     faq: [
       {
         question: "Çfarë përfshin pastrimi i rregullt?",
@@ -126,13 +157,13 @@ const data: Record<ServiceSlug, ServiceData> = {
   },
 
   "me-themel": {
-    metaTitle: "Pastrim me themel në Tiranë",
+    metaTitle: "Pastrim me themel në Tiranë: apartamente nga 250 lekë/m²",
     metaDescription:
-      "Pastrim me themel në Tiranë, përfshirë dollapët, frigoriferin, furrën, prapa mobilieve dhe kornizat. Na shkruani në WhatsApp për të marrë ofertë.",
+      "Pastrim me themel në Tiranë: apartamente nga 250 lekë të reja/m², me larjen e divanit dhe të dyshekëve. Shtëpi dhe vila me ofertë. Kërkoni vlerësim.",
     h1: "Pastrim me themel në Tiranë",
     intro:
-      "Pastrim i thellë për ambiente që kanë nevojë për më shumë se pastrimi i përditshëm. Hapim dollapët, lëvizim mobiliet dhe pastrojmë kornizat dhe binarët.",
-    summary: "Pastrim i thellë, nga sipërfaqet deri te vendet që zakonisht harrohen.",
+      "Pastrim i thellë për apartamente dhe shtëpi që kanë nevojë për më shumë se pastrimi i përditshëm: kuzhina, banja, xhamat dhe vendet që zakonisht harrohen. Në apartamente, në paketë përfshihet edhe larja e divanit dhe e të gjithë dyshekëve.",
+    summary: "Pastrim i thellë; për apartamente nga 250 lekë të reja/m², me larjen e divanit dhe të dyshekëve të përfshirë.",
     hero: photos.steamFrame,
     sections: [
       {
@@ -170,7 +201,7 @@ const data: Record<ServiceSlug, ServiceData> = {
         answer:
           "Pastrimi i rregullt mban pastër sipërfaqet që përdoren çdo ditë. Pastrimi me themel përfshin edhe vende si brenda dollapëve, frigoriferit e furrës dhe prapa mobilieve.",
       },
-      { question: "Sa kushton pastrimi me themel?", answer: priceAnswer },
+      { question: "Sa kushton pastrimi me themel?", answer: deepCleanPriceAnswer },
     ],
     related: ["apartamente", "pas-ndertimit"],
   },
@@ -189,7 +220,7 @@ const data: Record<ServiceSlug, ServiceData> = {
         kind: "steps",
         title: "Si e organizojmë",
         intro:
-          "Për vilat, vijmë fillimisht për një vizitë pa pagesë, që të përgatisim një plan dhe ofertë të saktë.",
+          "Për vilat, zakonisht fillojmë me një vizitë vlerësimi, që të përgatisim një plan dhe ofertë të saktë. Nëse vizita ka ndonjë kosto, jua themi përpara.",
         steps: [
           {
             title: "Vlerësimi",
@@ -217,6 +248,13 @@ const data: Record<ServiceSlug, ServiceData> = {
       { question: "Sa kushton pastrimi i vilës?", answer: priceAnswer },
     ],
     related: ["apartamente", "me-themel"],
+    practical: {
+      audience: ["Vila dhe shtëpi private me disa kate", "Pronarë që e përgatisin vilën para ose pas sezonit"],
+      excluded: ["Larja dhe hekurosja e rrobave dhe e çarçafëve", "Rimbushja e produkteve të konsumit"],
+      pricing:
+        "Vilat nuk llogariten për m². Pas vlerësimit, zakonisht me një vizitë, ju japim planin dhe ofertën me shkrim pa pagesë. Nëse vizita ka ndonjë kosto, jua themi dhe biem dakord përpara.",
+      preparation: ["Na tregoni numrin e kateve, dhomave dhe banjove", "Na thoni datën kur duhet të jetë gati vila"],
+    },
   },
 
   "pas-ndertimit": {
@@ -262,18 +300,35 @@ const data: Record<ServiceSlug, ServiceData> = {
         question: "Kur duhet t'ju kontaktoj?",
         answer: "Pasi punimet të kenë përfunduar dhe mbetjet e mëdha të jenë larguar.",
       },
-      { question: "Sa kushton pastrimi pas ndërtimit?", answer: priceAnswer },
+      {
+        question: "Sa kushton pastrimi pas ndërtimit?",
+        answer:
+          "Varet nga sasia e pluhurit dhe e mbetjeve. Nuk e llogarisim automatikisht me çmimin orientues të pastrimit me themel: kur ka mbetje të rënda, puna kërkon më shumë kohë dhe tarifa është më e lartë. Totalin ua konfirmojmë me shkrim pas vlerësimit, përpara se të rezervoni.",
+      },
     ],
     related: ["me-themel", "zyra"],
+    practical: {
+      audience: ["Apartamente dhe shtëpi të reja, para se të banohen", "Banesa dhe zyra pas rinovimit"],
+      excluded: [
+        "Largimi i mbetjeve të mëdha të ndërtimit, si inertet, tullat dhe materialet",
+        "Lyerja e mureve ose riparimet",
+      ],
+      pricing:
+        "Pas punimeve çmimi varet nga mbetjet që kanë mbetur, jo vetëm nga sipërfaqja. Kur puna është e rëndë, tarifa është më e lartë se çmimi orientues i pastrimit me themel. Ju japim planin dhe totalin me shkrim pas vlerësimit, pa pagesë.",
+      preparation: [
+        "Punimet të kenë përfunduar",
+        "Mbetjet e mëdha të jenë larguar",
+      ],
+    },
   },
 
   divane: {
     metaTitle: "Larje divanesh dhe dyshekësh në Tiranë",
     metaDescription:
-      "Larje divanesh, këndesh, kolltuqesh dhe dyshekësh me makineri ekstraktimi në shtëpinë ose zyrën tuaj në Tiranë. Na dërgoni 1–3 foto në WhatsApp për ofertë.",
+      "Larje divanesh, këndesh, kolltuqesh dhe dyshekësh me makineri ekstraktimi në shtëpinë ose zyrën tuaj në Tiranë. Na tregoni çfarë keni dhe ju japim ofertën.",
     h1: "Larje divanesh dhe dyshekësh në Tiranë",
     intro:
-      "Lajmë divane, kënde, kolltuqe, karrige me pëlhurë dhe dyshekë me makineri ekstraktimi, në shtëpinë ose zyrën tuaj. Na dërgoni 1–3 foto në WhatsApp dhe ju japim ofertën.",
+      "Lajmë divane, kënde, kolltuqe, karrige me pëlhurë dhe dyshekë me makineri ekstraktimi, në shtëpinë ose zyrën tuaj. Na tregoni çfarë keni për të larë. Fotot ndihmojnë, por nuk janë të detyrueshme.",
     summary: "Larje divanesh, kolltuqesh dhe dyshekësh me makineri ekstraktimi, në shtëpinë tuaj.",
     heroVideo: videos.sofaExtraction,
     sections: [
@@ -302,8 +357,13 @@ const data: Record<ServiceSlug, ServiceData> = {
         kind: "text",
         title: "Çfarë duhet të dini",
         paragraphs: [
-          "Rezultati varet nga lloji i pëlhurës dhe i njollës. Disa njolla të vjetra ose njolla boje mund të mos hiqen plotësisht. Na tregoni për njollat kur na dërgoni fotot. Presim që divani të thahet mirë para se ta përdorni.",
+          "Rezultati varet nga lloji i pëlhurës dhe i njollës. Disa njolla të vjetra ose njolla boje mund të mos hiqen plotësisht. Na tregoni për njollat kur na shkruani. Presim që divani të thahet mirë para se ta përdorni.",
         ],
+      },
+      {
+        kind: "note",
+        text: "Bëni pastrim me themel të një apartamenti? Në atë paketë përfshihet edhe larja e divanit dhe e të gjithë dyshekëve.",
+        link: { href: "/pastrim-me-themel-tirane", label: "Shikoni pastrimin me themel" },
       },
     ],
     faq: [
@@ -318,10 +378,23 @@ const data: Record<ServiceSlug, ServiceData> = {
       {
         question: "Sa kushton?",
         answer:
-          "Varet nga numri, përmasat dhe gjendja e divaneve ose dyshekëve. Na dërgoni 1–3 foto në WhatsApp dhe ju japim ofertën.",
+          "Si shërbim më vete, varet nga numri, përmasat, materiali dhe gjendja e divaneve ose dyshekëve. Mund të na dërgoni 1–3 foto në WhatsApp, por nuk është e detyrueshme: mjafton të na tregoni çfarë keni për të larë.",
       },
     ],
     related: ["me-themel", "apartamente"],
+    practical: {
+      audience: [
+        "Shtëpi dhe zyra që duan vetëm larjen e divaneve, kolltuqeve ose dyshekëve",
+        "Kush bën pastrim me themel të një apartamenti: aty larja e divanit dhe e të gjithë dyshekëve përfshihet",
+      ],
+      excluded: ["Garanci që çdo njollë do të hiqet plotësisht", "Tharje e menjëhershme pas larjes"],
+      pricing:
+        "Si shërbim më vete, çmimi varet nga numri, përmasat, materiali dhe gjendja. Na tregoni çfarë keni dhe ju japim ofertën me shkrim.",
+      preparation: [
+        "Na tregoni për njollat dhe materialin, nëse e dini",
+        "Planifikoni që pëlhura të ajroset dhe të thahet para përdorimit",
+      ],
+    },
   },
 
   airbnb: {
@@ -400,6 +473,16 @@ const data: Record<ServiceSlug, ServiceData> = {
       },
     ],
     related: ["apartamente", "hotele"],
+    practical: {
+      audience: ["Pronarë me një pronë me qira ditore", "Pronarë ose menaxherë me disa prona"],
+      excluded: ["Larja dhe hekurosja e çarçafëve dhe e peshqirëve", "Rimbushja e produkteve të konsumit"],
+      pricing:
+        "Varet nga madhësia e pronës dhe sa shpesh ndërrohen mysafirët. Ju japim ofertën pasi të shohim pronën dhe kalendarin.",
+      preparation: [
+        "Na jepni datat e check-out-it ose kalendarin e rezervimeve",
+        "Lini çarçafë dhe peshqirë të pastër në pronë, nëse doni që t'i ndërrojmë",
+      ],
+    },
   },
 
   zyra: {
@@ -454,12 +537,19 @@ const data: Record<ServiceSlug, ServiceData> = {
       { question: "Sa kushton pastrimi i zyrës?", answer: priceAnswer },
     ],
     related: ["biznese", "ambiente"],
+    practical: {
+      audience: ["Zyra dhe studio", "Biznese që duan pastrim para hapjes ose pas mbylljes"],
+      excluded: ["Larja e rrobave dhe rimbushja e produkteve të konsumit"],
+      pricing:
+        "Çmimi varet nga sipërfaqja, numri i njerëzve dhe sa shpesh vijmë. Pas vlerësimit, me telefon ose me vizitë kur duhet, ju japim planin dhe ofertën me shkrim pa pagesë. Për pastrim të rregullt bëjmë kontratë.",
+      preparation: ["Na tregoni orarin kur mund të punojmë", "Na thoni kush është personi i kontaktit në zyrë"],
+    },
   },
 
   ambiente: {
     metaTitle: "Pastrim shkallësh dhe hollesh pallati",
     metaDescription:
-      "Pastrim shkallësh, hollesh dhe hyrjesh pallatesh në Tiranë, çdo javë ose çdo muaj. Vizita për vlerësim është pa pagesë. Na shkruani në WhatsApp.",
+      "Pastrim shkallësh, hollesh dhe hyrjesh pallatesh në Tiranë, çdo javë ose çdo muaj. Plan dhe ofertë me shkrim pa pagesë. Na shkruani në WhatsApp.",
     h1: "Pastrim shkallësh dhe ambientesh të përbashkëta në Tiranë",
     intro:
       "Shkallët, hollet dhe hyrjet e pallatit, të pastruara rregullisht. Flasim me administratorin ose përfaqësuesit e banorëve dhe caktojmë bashkë ditët.",
@@ -493,7 +583,7 @@ const data: Record<ServiceSlug, ServiceData> = {
         kind: "steps",
         title: "Si e organizojmë",
         steps: [
-          { title: "Vizitë pa pagesë", text: "Shohim katet, shkallët dhe hyrjet." },
+          { title: "Vizita e vlerësimit", text: "Shohim katet, shkallët dhe hyrjet. Nëse vizita ka kosto, jua themi përpara." },
           {
             title: "Plani dhe oferta",
             text: "Përcaktojmë sa shpesh vijmë dhe çfarë pastrojmë në çdo vizitë.",
@@ -515,9 +605,22 @@ const data: Record<ServiceSlug, ServiceData> = {
         question: "Me kë bini dakord?",
         answer: "Me administratorin e pallatit ose me përfaqësuesit e banorëve.",
       },
-      { question: "A paguhet vizita?", answer: "Jo, vizita për vlerësim është pa pagesë." },
+      {
+        question: "A paguhet vizita?",
+        answer:
+          "Nëse vizita ka ndonjë kosto, jua themi përpara dhe vijmë vetëm pasi të bini dakord. Plani dhe oferta me shkrim janë pa pagesë.",
+      },
     ],
     related: ["biznese", "zyra"],
+    practical: {
+      excluded: ["Ashensorët e pallatit", "Pastrimi brenda apartamenteve, që ofrohet si shërbim më vete"],
+      pricing:
+        "Varet nga numri i kateve dhe i hyrjeve dhe sa shpesh vijmë. Pas vizitës ju japim planin dhe ofertën me shkrim; për pastrim të rregullt bëjmë kontratë.",
+      preparation: [
+        "Na lidhni me administratorin ose përfaqësuesin e banorëve",
+        "Na tregoni ditët kur preferoni pastrimin",
+      ],
+    },
   },
 
   hotele: {
@@ -551,6 +654,13 @@ const data: Record<ServiceSlug, ServiceData> = {
       { question: "Sa kushton pastrimi për një hotel?", answer: priceAnswer },
     ],
     related: ["biznese", "airbnb"],
+    practical: {
+      audience: ["Hotele dhe apart-hotele", "Hotele që kanë nevojë për ekip shtesë gjatë sezonit"],
+      excluded: ["Larja dhe hekurosja e çarçafëve dhe e peshqirëve", "Rimbushja e produkteve të konsumit"],
+      pricing:
+        "Varet nga numri i dhomave, oraret e check-in-it dhe check-out-it dhe periudhat me më shumë punë. Ju propozojmë një plan dhe ofertë me shkrim.",
+      preparation: ["Na tregoni numrin e dhomave dhe oraret", "Na thoni periudhat kur ju duhet ekip shtesë"],
+    },
   },
 };
 
@@ -613,8 +723,8 @@ export const businessPage: ServicePageContent = {
       steps: [
         { title: "Na kontaktoni", text: "Na tregoni llojin e ambientit dhe çfarë ju duhet." },
         {
-          title: "Vizitë pa pagesë",
-          text: "Vijmë dhe e shohim ambientin, ose e vlerësojmë nga fotot që na dërgoni.",
+          title: "Vlerësimi",
+          text: "E shohim ambientin me një vizitë, ose e vlerësojmë nga fotot që na dërgoni. Nëse vizita ka kosto, jua themi përpara.",
         },
         { title: "Oferta me shkrim", text: "Ju tregojmë çfarë përfshihet, sa shpesh vijmë dhe sa kushton." },
         { title: "Fillojmë", text: "Caktojmë ditët dhe orarin." },
@@ -643,13 +753,26 @@ export const businessPage: ServicePageContent = {
       answer:
         "Po. Pasi biem dakord për ofertën, bëjmë një kontratë ku përcaktojmë çfarë përfshihet dhe sa shpesh vijmë.",
     },
-    { question: "A paguhet vizita për vlerësim?", answer: "Jo. Vizita para ofertës është pa pagesë." },
+    {
+      question: "A paguhet vizita për vlerësim?",
+      answer:
+        "Nëse vizita ka ndonjë kosto, jua themi përpara dhe vijmë vetëm pasi të bini dakord. Plani dhe oferta me shkrim janë pa pagesë.",
+    },
     { question: "Sa kushton?", answer: priceAnswer },
   ],
   related: ["zyra", "ambiente", "hotele"],
   closer: {
     title: "Keni një ambient pune për të pastruar?",
-    text: "Na tregoni për ambientin dhe ju dërgojmë ofertën.",
+    text: "Na tregoni për ambientin dhe ju dërgojmë planin dhe ofertën me shkrim.",
+  },
+  practical: {
+    excluded: [
+      "Larja e rrobave, e çarçafëve dhe e peshqirëve",
+      "Rimbushja e produkteve të konsumit",
+      "Ashensorët e pallateve",
+    ],
+    pricing:
+      "Çdo ambient vlerësohet veçmas: nuk aplikojmë çmimin për m² të apartamenteve. Ju japim planin dhe ofertën me shkrim, pa pagesë dhe pa detyrim.",
   },
 };
 

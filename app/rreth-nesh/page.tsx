@@ -36,11 +36,13 @@ export default function RrethNeshPage() {
             </p>
             <p className="mt-4 text-text-muted">
               Kompania është e re, por anëtarët e ekipit kanë mbi 10 vjet përvojë në pastrim, të fituar
-              në kompani të tjera pastrimi. Deri tani kemi pastruar mbi 50 prona.
+              në kompani të tjera pastrimi. Deri tani kemi pastruar mbi 50 prona. Punën e drejton
+              themeluesi, Arbri.
             </p>
             <p className="mt-4 text-text-muted">
-              Punojmë në të gjithë Tiranën dhe në zonat përreth, një herë ose rregullisht. Për punët më
-              të mëdha, vijmë fillimisht për të parë ambientin. Vizita është pa pagesë.
+              Punojmë në Tiranë dhe në zonat përreth, si Kamza dhe Durrësi, një herë ose rregullisht.
+              Pas vlerësimit ju japim planin e pastrimit dhe ofertën me shkrim, pa pagesë dhe pa detyrim për
+              të rezervuar.
             </p>
           </div>
           <Photo

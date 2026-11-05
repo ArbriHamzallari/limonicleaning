@@ -21,7 +21,7 @@ export default function KushtetPage() {
         </div>
         <article className="mx-auto mt-6 max-w-3xl">
           <h1 className="text-3xl leading-tight font-extrabold tracking-tight sm:text-5xl">Kushtet e Shërbimit</h1>
-          <p className="mt-3 text-sm text-text-muted">Përditësuar së fundmi: shtator 2026.</p>
+          <p className="mt-3 text-sm text-text-muted">Përditësuar së fundmi: nëntor 2026.</p>
 
           <h2 className="mt-10 text-2xl font-bold">Kërkesat për ofertë</h2>
           <p className="mt-3 text-text-muted">
@@ -30,10 +30,32 @@ export default function KushtetPage() {
             kur bini dakord për ofertën, ditën dhe orën.
           </p>
 
+          <h2 className="mt-10 text-2xl font-bold">Kërkesa, data dhe konfirmimi</h2>
+          <p className="mt-3 text-text-muted">
+            Çmimi dhe lista e punëve që shihni kur dërgoni kërkesën janë paraprake. Nëse faqja ju tregon
+            se një orar është mbajtur, ai mbahet përkohësisht vetëm ndërsa e shqyrtojmë kërkesën; nuk është
+            pastrim i konfirmuar. Nëse zgjidhni një datë të preferuar, ajo nuk mbahet. Kur pas shqyrtimit
+            ndryshojmë çmimin, punët ose datën, ju dërgojmë një ofertë të rishikuar dhe pastrimi
+            konfirmohet vetëm nëse e pranoni. Pastrimi konfirmohet kur biem dakord për vendndodhjen,
+            punët, çmimin dhe datën. Kërkesën mund ta anuloni nga lidhja juaj private ose duke na shkruar.
+          </p>
+
           <h2 className="mt-10 text-2xl font-bold">Oferta</h2>
           <p className="mt-3 text-text-muted">
-            Faqja nuk publikon tarifa. Oferta varet nga madhësia dhe gjendja e pronës, lloji i
-            pastrimit dhe shërbimet shtesë të kërkuara, dhe konfirmohet me ju para pastrimit.
+            Për pastrimin me themel të apartamenteve, faqja tregon një çmim orientues për metër katror
+            në lekë të reja. Ai nuk është ofertë përfundimtare dhe nuk vlen për shtëpi, vila ose
+            shërbime të tjera. Për të gjitha shërbimet, oferta varet nga
+            madhësia dhe gjendja e pronës, lloji i pastrimit dhe punët që përfshihen, dhe totali
+            konfirmohet me shkrim para pastrimit. Për zonat jashtë Tiranës, mundësinë dhe kostot e
+            transportit i sqarojmë paraprakisht.
+          </p>
+
+          <h2 className="mt-10 text-2xl font-bold">Plani i pastrimit dhe oferta me shkrim</h2>
+          <p className="mt-3 text-text-muted">
+            Pas vlerësimit (me telefon, me foto nëse dëshironi, ose me vizitë kur duhet) ju dërgojmë
+            pa pagesë planin e pastrimit dhe ofertën me shkrim. Marrja e ofertës nuk ju detyron të
+            rezervoni pastrimin. Nëse një vizitë vlerësimi ka ndonjë kosto, jua themi përpara dhe vijmë
+            vetëm pasi të bini dakord.
           </p>
 
           <h2 className="mt-10 text-2xl font-bold">Shtyrja dhe anulimi</h2>
@@ -45,7 +67,7 @@ export default function KushtetPage() {
           <h2 className="mt-10 text-2xl font-bold">Përgjegjësia</h2>
           <p className="mt-3 text-text-muted">
             Ekipi ynë trajton çdo pronë me kujdes. Nëse keni ndonjë shqetësim për punën e kryer, na
-            njoftoni brenda 24 orëve nga përfundimi i shërbimit, që ta zgjidhim.
+            njoftoni në telefon ose në WhatsApp dhe e shqyrtojmë bashkë.
           </p>
 
           <h2 className="mt-10 text-2xl font-bold">Kontakt</h2>

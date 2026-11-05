@@ -1,10 +1,12 @@
-import type { Metadata } from "next";
+import type { Metadata, Viewport } from "next";
 import { Inter } from "next/font/google";
 import "./globals.css";
 import { Header } from "@/components/Header";
 import { Footer } from "@/components/Footer";
 import { MobileStickyCta } from "@/components/MobileStickyCta";
 import { Analytics } from "@/components/Analytics";
+import { InstallPromptListener } from "@/components/InstallShortcut";
+import { AttributionCapture } from "@/components/AttributionCapture";
 import { JsonLd, siteGraphJsonLd, siteUrl } from "@/lib/seo";
 
 const inter = Inter({
@@ -21,6 +23,14 @@ export const metadata: Metadata = {
   },
   description:
     "Pastrim profesional për shtëpi, zyra, vila dhe Airbnb në Tiranë. Na lini numrin ose na shkruani në WhatsApp dhe ju japim ofertën.",
+  applicationName: "Limoni Cleaning",
+  appleWebApp: { capable: true, title: "Limoni", statusBarStyle: "default" },
+};
+
+export const viewport: Viewport = {
+  themeColor: "#FFFFFF",
+  // Lets env(safe-area-inset-bottom) work for the mobile action bar on iPhones.
+  viewportFit: "cover",
 };
 
 export default function RootLayout({ children }: LayoutProps<"/">) {
@@ -40,6 +50,8 @@ export default function RootLayout({ children }: LayoutProps<"/">) {
         </main>
         <Footer />
         <MobileStickyCta />
+        <InstallPromptListener />
+        <AttributionCapture />
         <Analytics />
       </body>
     </html>

@@ -22,6 +22,16 @@ const nextConfig: NextConfig = {
           { key: "Permissions-Policy", value: "camera=(), microphone=(), geolocation=()" },
         ],
       },
+      // Private pages (owner panel, customer status links, team job sheets, private media):
+      // never indexed, never cached, and the secret link never leaks in a Referer header.
+      ...["/admin/:path*", "/kerkesa/:path*", "/flete-pune/:path*"].map((source) => ({
+        source,
+        headers: [
+          { key: "X-Robots-Tag", value: "noindex, nofollow" },
+          { key: "Referrer-Policy", value: "no-referrer" },
+          { key: "Cache-Control", value: "private, no-store" },
+        ],
+      })),
       // The *.vercel.app deployment addresses serve the same site: keep them out of search
       // results so only limonicleaning.com is indexed.
       {
