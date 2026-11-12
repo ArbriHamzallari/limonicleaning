@@ -1,5 +1,5 @@
 // The small, client-safe part of the service catalogue: slugs, routes and short labels.
-// Header, sticky bar and LeadForm import this; the full page copy lives in lib/services.ts
+// Header, sticky bar and the booking section import this; the full page copy lives in lib/services.ts
 // so it never ends up in the client bundle.
 
 export const serviceSlugs = [
@@ -46,7 +46,7 @@ export const serviceIndex: Record<ServiceSlug, ServiceIndexEntry> = {
   apartamente: {
     path: "/pastrim-apartamentesh-tirane",
     navLabel: "Apartamente dhe shtëpi",
-    chipLabel: "Pastrim gjeneral",
+    chipLabel: "Pastrim i rregullt",
   },
   "me-themel": {
     path: "/pastrim-me-themel-tirane",

@@ -283,3 +283,27 @@ Screenshots: `Claude outputs/screenshots-2026-11-05-review/` (11 after bar tap, 
 2. **Notification config unknown**: production values for `RESEND_API_KEY` / `EMAIL_FROM` / `EMAIL_TO` and the four WhatsApp variables can't be seen from the repo. Until the controlled test in `docs/lead-notifications.md` is done with Arbri's OK, owner alerts are unverified (leads are still saved).
 3. **Owner sign-off on Terms and Privacy** (factual edits only; no legal review done; retention period not stated).
 4. **Founder video** is not recorded; the slot stays hidden (not a blocker for launch, a blocker for "VSL done").
+
+## 10. Clarity restructure (12 November 2026, branch `feat/clarity-restructure`)
+
+Brief: `prompts/08-clarity-restructure.md`. Audit: `docs/clarity-audit-2026-11.md`. Plan: `docs/phase2-plan-2026-11.md`. Review ledger: `.claude/reviews/phase2.ledger.md`.
+
+### What changed
+
+| Area | Change |
+|---|---|
+| Navigation | Kryefaqja · Shërbimet · Si funksionon · Rreth nesh; booking button "Rezervoni pastrimin" in the header, every service hero and the mobile bar centre. Puna jonë, Për biznese, FAQ and Kontakt move to the mobile menu and footer. |
+| Booking | One `#rezervo` section (`BookingSection`) before the footer on each marketing page, replacing `LeadForm`, `Closer` and `WorkLoop`. Steps: service, preferred date and time, details (name, phone, address, size where relevant, optional notes and email), review. Posts to `POST /api/kerkesa`. Dates are preferences, not holds. Demo slots only outside production with `?orare-demo`, labelled as demo. |
+| Homepage | Opens with `HeroReel`: a silent loop of real work (1.69 MB, no audio stream), no video bytes before the load event, not loaded with reduced motion or Save-Data, pause button. |
+| Services | Each service has an `overview` (what it is, how it differs, which services to compare). `/sherbime` adds a situation picker and a regular versus deep-clean comparison (table on desktop, stacked on phones). |
+| Media | New photos and the reel from the 26 Oct to 9 Nov footage; staff consent recorded 12 Nov 2026 (`docs/media-triage-2026-11.md`). `npm run check:media` fails on a referenced `public/` file that is missing or untracked. |
+| Privacy | Analytics never runs in a document showing a private path (`isPrivatePath`); public pages never client-navigate into `/kerkesa`, `/flete-pune` or `/admin`. |
+| Dates | Albanian month and weekday names are hardcoded (`lib/booking/time.ts`); Chromium has no `sq` locale data and rendered English plus a hydration mismatch. |
+| Database | Migration `20261112120000_request_email_time`: two nullable columns on `service_requests` (`email`, `preferredTime`). Additive; the preview-database caveat in section 9 applies again. |
+
+### Verification (production build, local)
+
+- `npm test`, `tsc --noEmit`, `eslint` and `next build` clean.
+- 17 pages: one H1 each; no em dash, `✓`, `→`, "eksperienc" or "falas" in rendered HTML. No horizontal scroll and no tap target under 48 px at 390 px.
+- Gzipped JS per page within +7.6 KB of the previous commit (`/`, apartments, deep clean); `/kerko-oferte` +0.2 KB.
+- Lighthouse 12.8.2 mobile with applied (devtools) throttling, two runs each, previous commit versus this branch: apartments page LCP 1.92 s versus 1.90 s, score 99 both; homepage LCP 2.03 s versus 1.61 s. The homepage score reads 96 because the playing reel keeps Speed Index at about 5 s (a looping video never settles); with reduced motion (no reel) it is 99 with Speed Index 1.7 s. Lighthouse's simulated throttling shows about +0.3 s LCP on both pages; that estimate is not reproduced with applied throttling.

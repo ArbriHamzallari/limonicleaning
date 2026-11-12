@@ -22,20 +22,6 @@ export const trustFacts = [
 /** Service area, everywhere it's mentioned. */
 export const serviceAreaLine = "Punojmë në Tiranë dhe në zonat përreth, si Kamza dhe Durrësi.";
 
-/** Next to WhatsApp: photos help but are never required (Nov 2026). */
-export const photosHint =
-  "Fotot nuk janë të detyrueshme. Nëse doni, na dërgoni në WhatsApp disa foto vetëm të zonave që duhen pastruar; përndryshe e sqarojmë me një telefonatë.";
-
-/** What happens after someone writes to us (service page closers and /kerko-oferte). */
-export const closerSteps = [
-  { title: "Na kontaktoni", text: "Në WhatsApp, në telefon ose me formularin: sipërfaqja, zona dhe lloji i pastrimit mjaftojnë." },
-  {
-    title: "Merrni planin dhe ofertën",
-    text: "Pas vlerësimit ju dërgojmë me shkrim punët që përfshihen dhe totalin, pa pagesë.",
-  },
-  { title: "Konfirmojmë ditën", text: "Pastrimi rezervohet vetëm pasi të pranoni ofertën dhe të caktojmë bashkë datën." },
-];
-
 /** Homepage "Si përgatitet oferta". */
 export const quoteSteps = [
   {
@@ -107,7 +93,7 @@ const faqHowToAsk: FaqEntry = {
     "Na lini emrin dhe numrin te formulari ose na shkruani drejtpërdrejt në WhatsApp. Ju kontaktojmë për të kuptuar nevojat tuaja dhe për të përgatitur ofertën.",
 };
 
-const faqArea: FaqEntry = {
+export const faqArea: FaqEntry = {
   question: "Në cilat zona punoni?",
   answer:
     "Punojmë në Tiranë dhe në zonat përreth, si Kamza dhe Durrësi. Baza jonë është në Komunën e Parisit. Për zonat jashtë Tiranës, konfirmojmë paraprakisht mundësinë dhe kostot e transportit.",
@@ -125,7 +111,27 @@ const faqSchedule: FaqEntry = {
 };
 
 /** The four shown on the homepage. */
-export const homeFaq: FaqEntry[] = [faqPrice, faqPhotos, faqRequest, faqArea];
+export const homeFaq: FaqEntry[] = [faqPrice, faqPhotos, faqRequest, faqVisit];
+
+/** Homepage "Si funksionon": what happens after a request. Never implies a held date or a free visit. */
+export const howItWorks = [
+  {
+    title: "Zgjidhni shërbimin dhe një datë",
+    text: "Data që zgjidhni është e preferuar. Nuk mbahet derisa ta konfirmojmë bashkë.",
+  },
+  {
+    title: "Ju telefonojmë",
+    text: "Sqarojmë punën. Kur duhet, caktojmë një vizitë; nëse ka kosto, jua themi që më parë.",
+  },
+  {
+    title: "Plan dhe ofertë me shkrim",
+    text: "Pa pagesë dhe pa detyrim. Në ofertë shkruhet çfarë përfshihet dhe totali.",
+  },
+  {
+    title: "Konfirmojmë ditën",
+    text: "Ditën dhe orën e caktojmë vetëm pasi të pranoni ofertën.",
+  },
+];
 
 /** Deep-cleaning page: its own price answer plus the shared practical ones. */
 export const deepCleanFaq: FaqEntry[] = [
@@ -203,7 +209,7 @@ export const faqEntries: FaqEntry[] = [
   {
     question: "A bëni pastrim hotelesh?",
     answer:
-      "Po, ndihmojmë hotelet dhe apart-hotelet me pastrimin e dhomave dhe të ambienteve të përbashkëta.",
+      "Po, bëjmë housekeeping për hotele dhe apart-hotele: pastrojmë dhe rregullojmë dhomat midis mysafirëve, sipas orareve të check-in-it dhe check-out-it.",
   },
   {
     question: "Po nëse duhet ta shtyj ose ta anuloj pastrimin?",

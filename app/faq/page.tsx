@@ -1,8 +1,7 @@
 import { Section } from "@/components/Section";
-import { SectionHeading } from "@/components/SectionHeading";
 import { FaqItem } from "@/components/FaqItem";
 import { Breadcrumbs } from "@/components/Breadcrumbs";
-import { ContactActions } from "@/components/ContactActions";
+import { BookingSection } from "@/components/booking/BookingSection";
 import { JsonLd, breadcrumbJsonLd, faqJsonLd, pageMetadata } from "@/lib/seo";
 import { faqEntries } from "@/lib/content";
 
@@ -37,10 +36,7 @@ export default function FaqPage() {
         </div>
       </Section>
 
-      <Section tone="muted">
-        <SectionHeading title="Keni një pyetje tjetër?" intro="Na shkruani ose na telefononi." />
-        <ContactActions placement="faq_footer" />
-      </Section>
+      <BookingSection intro="Keni një pyetje tjetër? Na shkruani në WhatsApp ose na telefononi. Ose zgjidhni shërbimin dhe datën, dhe ju kontaktojmë ne." />
     </>
   );
 }

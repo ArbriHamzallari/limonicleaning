@@ -3,8 +3,11 @@
 // heading, without opening the phone keyboard. Returns false when the page has no form, so the
 // caller can fall back to its normal link (/kerko-oferte?sherbimi=…).
 export function jumpToLeadForm(): boolean {
+  // The booking section (#rezervo) wins over any older quick form on the same page.
   const target =
-    document.querySelector<HTMLElement>("[data-lead-form-anchor]") ?? document.querySelector<HTMLElement>("[data-lead-form]");
+    document.querySelector<HTMLElement>("#rezervo [data-lead-form-anchor]") ??
+    document.querySelector<HTMLElement>("[data-lead-form-anchor]") ??
+    document.querySelector<HTMLElement>("[data-lead-form]");
   if (!target) return false;
   target.scrollIntoView({ block: "start", behavior: "instant" });
   if (!target.hasAttribute("tabindex")) target.setAttribute("tabindex", "-1");

@@ -181,10 +181,13 @@ model ServiceRequest {
   name              String
   phone             String
   channel           ContactChannel @default(WHATSAPP)
+  /// Optional. Shown only in /admin and the owner email; never on the job sheet, calendar, WhatsApp or analytics.
+  email             String?
   area              String?
   outsideTirana     Boolean        @default(false)
   dateMode          DateMode       @default(NONE)
   preferredDate     String? // YYYY-MM-DD (Europe/Tirane) when dateMode = PREFERRED
+  preferredTime     String? // "paradite" | "pasdite" | "nuk-ka-rendesi" (lib/booking/preferred-time.ts), a preference only
   dateNote          String? // why there is no hold (e.g. calendar unavailable)
   feasibilityOk     Boolean        @default(false) // owner confirmed location + service feasibility
   plannedCrews      Int? // internal planning, not shown to the customer

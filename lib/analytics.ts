@@ -28,7 +28,21 @@ export type AnalyticsEvent =
 
 export type AnalyticsParams = Record<string, string | number>;
 
+// Pages whose URL carries a private token (customer status link, team job sheet) or that only
+// the owner sees. The invariant: gtag never runs in a document that shows a private URL.
+// - Analytics does not load in a document whose first page was private (components/Analytics.tsx).
+// - Public pages enter private ones only by a full page load (window.location.assign, plain <a>
+//   from outside the app), never next/link or router.push; tests/private-navigation.test.ts
+//   fails on a client navigation into a private prefix.
+// So the Back button cannot bring a private URL into a document where gtag is running.
+const PRIVATE_PREFIXES = ["/kerkesa", "/flete-pune", "/admin"];
+
+export function isPrivatePath(pathname: string): boolean {
+  return PRIVATE_PREFIXES.some((p) => pathname === p || pathname.startsWith(`${p}/`));
+}
+
 export function trackEvent(event: AnalyticsEvent, params?: AnalyticsParams) {
   if (typeof window === "undefined" || typeof window.gtag !== "function") return;
+  if (isPrivatePath(window.location.pathname)) return;
   window.gtag("event", event, params);
 }

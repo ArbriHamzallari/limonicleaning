@@ -10,6 +10,7 @@
     "start": "next start",
     "lint": "eslint",
     "check:images": "node scripts/check-duplicate-images.mjs",
+    "check:media": "node scripts/check-media-refs.mjs",
     "media:oct24": "node scripts/prepare-oct24-media.mjs",
     "test": "vitest run",
     "admin:hash": "node scripts/admin-hash.mjs",

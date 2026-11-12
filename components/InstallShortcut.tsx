@@ -168,7 +168,7 @@ export function InstallShortcut({
 
   if (variant === "card") {
     return (
-      <div className={`rounded-lg border border-border bg-bg p-4 ${className}`}>
+      <div className={`rounded-lg border border-border bg-bg p-4 text-text ${className}`}>
         <p className="font-semibold">Për herën tjetër</p>
         <p className="mt-1 text-text-muted">{help}</p>
         <div className="mt-3 flex flex-wrap items-center gap-x-5 gap-y-2">

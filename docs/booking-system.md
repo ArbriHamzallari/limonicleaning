@@ -79,6 +79,10 @@ placeholders, not Limoni's real settings):
 }
 ```
 
+- Crew size and job duration depend on the apartment's area (Arbri, 12 Nov 2026). The current
+  settings take one fixed `durationMinutes` and `crewsNeeded` per service, so before live holds
+  are switched on for apartments, either the durations are set per area band or the settings
+  gain an area-based rule. Live holds stay off until then.
 - Time zone: Europe/Tirane for every wall-clock value; DST is handled (tests cover the March
   and October switches).
 - A slot is offered if: working day, within hours, after the lead time, the job (+ buffer) fits,

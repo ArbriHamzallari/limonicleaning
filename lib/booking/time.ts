@@ -63,18 +63,27 @@ export function addDays(ymd: string, days: number): string {
   return t.toISOString().slice(0, 10);
 }
 
-const longDate = new Intl.DateTimeFormat("sq-AL", { timeZone: TZ, weekday: "long", day: "numeric", month: "long", year: "numeric" });
-const time24 = new Intl.DateTimeFormat("sq-AL", { timeZone: TZ, hour: "2-digit", minute: "2-digit", hourCycle: "h23" });
+// Albanian names are spelled out here rather than taken from Intl: Chromium (Chrome on Android
+// included) ships without "sq" locale data and silently falls back to English, which also makes
+// the server and client render different text.
+export const monthsSq = [
+  "janar", "shkurt", "mars", "prill", "maj", "qershor",
+  "korrik", "gusht", "shtator", "tetor", "nëntor", "dhjetor",
+] as const;
+/** Indexed by JavaScript weekday, 0 = Sunday. */
+const weekdayLongSq = ["e diel", "e hënë", "e martë", "e mërkurë", "e enjte", "e premte", "e shtunë"] as const;
 
 /** "e premte, 6 nëntor 2026" */
 export function formatDateSq(dateOrYmd: Date | string): string {
   const d = typeof dateOrYmd === "string" ? zonedToUtc(dateOrYmd, "12:00") : dateOrYmd;
-  return longDate.format(d);
+  const p = parts(d);
+  return `${weekdayLongSq[p.weekday]}, ${p.day} ${monthsSq[p.month - 1]} ${p.year}`;
 }
 
 /** "08:00" */
 export function formatTimeSq(date: Date): string {
-  return time24.format(date);
+  const p = parts(date);
+  return `${String(p.hour).padStart(2, "0")}:${String(p.minute).padStart(2, "0")}`;
 }
 
 export function isValidYmd(value: string): boolean {

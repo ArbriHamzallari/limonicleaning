@@ -4,7 +4,7 @@ import { SectionHeading } from "@/components/SectionHeading";
 import { Breadcrumbs } from "@/components/Breadcrumbs";
 import { BeforeAfterSlider } from "@/components/BeforeAfterSlider";
 import { PortfolioVideo } from "@/components/PortfolioVideo";
-import { ContactActions } from "@/components/ContactActions";
+import { BookingSection } from "@/components/booking/BookingSection";
 import { Photo } from "@/components/Photo";
 import { JsonLd, breadcrumbJsonLd, videoJsonLd, pageMetadata } from "@/lib/seo";
 import { beforeAfter, naturalAspect } from "@/lib/photos";
@@ -94,10 +94,7 @@ export default function PunaJonePage() {
         </Section>
       ))}
 
-      <Section tone="muted">
-        <SectionHeading title="Ju pëlqen si punojmë?" intro="Na tregoni për pronën tuaj dhe ju japim ofertën." />
-        <ContactActions placement="puna_jone_footer" />
-      </Section>
+      <BookingSection intro="Ju pëlqen si punojmë? Zgjidhni shërbimin dhe datën që ju përshtatet, dhe ju kontaktojmë për ta konfirmuar bashkë." />
     </>
   );
 }

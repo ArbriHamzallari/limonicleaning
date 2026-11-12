@@ -4,6 +4,7 @@
 // States: PENDING_REVIEW → (AWAITING_INFO ↔ PENDING_REVIEW) → CONFIRMED | AWAITING_CUSTOMER →
 // CONFIRMED | DECLINED; CANCELLED from any open state; COMPLETED after the job.
 // A material change (price, scope, date) is a new Proposal that the customer must accept.
+import { isPreferredDateInRange, preferredTimeForClock, preferredTimeLabel } from "./preferred-time";
 import { Prisma } from "@prisma/client";
 import { prisma } from "../prisma";
 import {
@@ -41,6 +42,8 @@ export interface ProposalDate {
   startsAt?: string;
   endsAt?: string;
   preferredDate?: string;
+  /** "paradite" | "pasdite" | "nuk-ka-rendesi": a preference, never a reserved time. */
+  preferredTime?: string;
 }
 
 export interface ProposalSnapshot {
@@ -75,7 +78,10 @@ export function describeDate(d: ProposalDate): string {
     const s = new Date(d.startsAt);
     return `${formatDateSq(s)}, ora ${formatTimeSq(s)}${d.endsAt ? `–${formatTimeSq(new Date(d.endsAt))}` : ""}`;
   }
-  if (d.mode === "preferred" && d.preferredDate) return `${formatDateSq(d.preferredDate)} (datë e preferuar, nuk mbahet)`;
+  if (d.mode === "preferred" && d.preferredDate) {
+    const time = preferredTimeLabel(d.preferredTime);
+    return `${formatDateSq(d.preferredDate)}${time ? `, ${time.toLowerCase()}` : ""} (datë e preferuar, nuk mbahet)`;
+  }
   return "Pa datë të zgjedhur";
 }
 
@@ -97,6 +103,8 @@ export interface SubmitInput {
   name: string;
   phone: string;
   channel: "WHATSAPP" | "TELEFON";
+  email?: string;
+  preferredTime?: string;
   area?: string;
   outsideTirana: boolean;
   draftKey?: string;
@@ -115,7 +123,7 @@ export type SubmitResult =
 
 type DateDecision =
   | { mode: "HELD"; startsAt: Date; jobEndsAt: Date; holdEndsAt: Date; crewsNeeded: number; crewsAvailable: number }
-  | { mode: "PREFERRED"; preferredDate: string; note?: string }
+  | { mode: "PREFERRED"; preferredDate: string; preferredTime?: string; note?: string }
   | { mode: "NONE" };
 
 /** Decide whether the chosen slot can really be held now. Never claims a hold it can't make. */
@@ -123,9 +131,15 @@ async function decideDate(input: SubmitInput, now: Date): Promise<DateDecision |
   const s = getBookingSettings();
   if (input.slot) {
     const { date, time } = input.slot;
+    // A slot that cannot be held is kept as a preferred date: same range rule as a typed date,
+    // and the clock time becomes a time of day so the owner still sees it.
+    const demote = (note: string): DateDecision | { error: SubmitResult } =>
+      isPreferredDateInRange(date, tzDate(now))
+        ? { mode: "PREFERRED", preferredDate: date, preferredTime: preferredTimeForClock(time), note }
+        : { error: { ok: false, code: "slot-invalid", message: "Kjo datë nuk mund të zgjidhet. Zgjidhni një tjetër." } };
     const blocker = holdBlocker(input.service, s);
     if (blocker || !isCalendarConfigured()) {
-      return { mode: "PREFERRED", preferredDate: date, note: "Data e preferuar; nuk u mbajt (rezervimi i drejtpërdrejtë nuk është aktiv)." };
+      return demote("Data e preferuar; nuk u mbajt (rezervimi i drejtpërdrejtë nuk është aktiv).");
     }
     const w = slotWindow(input.service, date, time, s)!;
     const dayEnd = zonedToUtc(date, s.dayEndsAt!);
@@ -142,7 +156,7 @@ async function decideDate(input: SubmitInput, now: Date): Promise<DateDecision |
       busyHits = busy.filter((b) => b.start < w.holdEndsAt && w.startsAt < b.end).length;
     } catch {
       // Google unavailable: no hold, an honest preferred date instead.
-      return { mode: "PREFERRED", preferredDate: date, note: "Kalendari nuk u kontrollua dot; data u ruajt si e preferuar, pa u mbajtur." };
+      return demote("Kalendari nuk u kontrollua dot; data u ruajt si e preferuar, pa u mbajtur.");
     }
     const crewsAvailable = busyHits ? (s.manualBusyBlocks === "all" ? 0 : s.crews! - busyHits) : s.crews!;
     if (crewsAvailable < w.crewsNeeded) return { error: { ok: false, code: "slot-taken", message: "Ky orar sapo u zu. Zgjidhni një orar tjetër." } };
@@ -176,7 +190,7 @@ export async function submitRequest(input: SubmitInput, now = new Date()): Promi
       decision.mode === "HELD"
         ? { mode: "held", startsAt: decision.startsAt.toISOString(), endsAt: decision.jobEndsAt.toISOString() }
         : decision.mode === "PREFERRED"
-          ? { mode: "preferred", preferredDate: decision.preferredDate }
+          ? { mode: "preferred", preferredDate: decision.preferredDate, ...((decision.preferredTime ?? input.preferredTime) ? { preferredTime: decision.preferredTime ?? input.preferredTime } : {}) }
           : { mode: "none" },
   };
 
@@ -198,10 +212,12 @@ export async function submitRequest(input: SubmitInput, now = new Date()): Promi
           name: input.name,
           phone: input.phone,
           channel: input.channel,
+          email: input.email,
           area: input.area,
           outsideTirana: input.outsideTirana,
           dateMode: decision.mode,
           preferredDate: decision.mode === "PREFERRED" ? decision.preferredDate : null,
+          preferredTime: decision.mode === "PREFERRED" ? (decision.preferredTime ?? input.preferredTime ?? null) : null,
           dateNote: decision.mode === "PREFERRED" ? (decision.note ?? null) : null,
           pagePath: input.pagePath,
           utmSource: input.utmSource,

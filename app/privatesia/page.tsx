@@ -39,7 +39,9 @@ export default function PrivatesiaPage() {
           </p>
           <p className="mt-3 text-text-muted">
             Kur dërgoni një kërkesë për vlerësim, ruajmë edhe përgjigjet për pronën, datën ose orën që
-            zgjidhni dhe, nëse i ngarkoni, fotot dhe videot. Fotot dhe videot ruhen privatisht, jo në
+            zgjidhni dhe, nëse i shkruani, email-in dhe lagjen ose adresën e pronës. Email-in e
+            përdorim vetëm për t&apos;ju shkruar për këtë kërkesë. Nëse i ngarkoni, ruajmë edhe fotot
+            dhe videot. Fotot dhe videot ruhen privatisht, jo në
             lidhje publike: i shohim vetëm ne, kur shqyrtojmë kërkesën, dhe nuk analizohen automatikisht.
             Nuk u jepen automatikisht të gjithë punonjësve. Fotot nga telefoni mund të përmbajnë të dhëna
             të vendndodhjes; nëse nuk doni t&apos;i ndani, fotografoni pa to ose vazhdoni pa foto. Skedarët

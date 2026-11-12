@@ -37,6 +37,7 @@ export async function notifyOwnerNewRequest(requestId: string): Promise<void> {
     ["Telefoni", r.phone],
     ["Zona", r.area ?? "-"],
     ["Data", describeDate(snap.date)],
+    ...(r.email ? [["Email", r.email] as [string, string]] : []),
     ["Çmimi", priceText(snap.price)],
     ["Foto/video", String(r.media.length)],
   ];

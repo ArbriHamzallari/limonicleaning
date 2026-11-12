@@ -1,12 +1,14 @@
 "use client";
 
-import { useEffect, useState } from "react";
+import { useEffect, useState, type MouseEvent } from "react";
 import { usePathname } from "next/navigation";
 import { WhatsAppIcon, PhoneIcon } from "./icons";
 import { business, whatsappLink } from "@/lib/business";
 import { pageKeyForPath } from "@/lib/service-index";
 import { waMessageFor } from "@/lib/whatsapp-messages";
 import { trackEvent } from "@/lib/analytics";
+import { jumpToLeadForm } from "@/lib/jump-to-form";
+import { bookingCtaLabel } from "@/lib/nav";
 
 function isTextField(el: EventTarget | null) {
   return el instanceof HTMLElement && el.matches("input, textarea, select, [contenteditable='true']");
@@ -15,12 +17,13 @@ function isTextField(el: EventTarget | null) {
 const side =
   "flex min-h-14 flex-col items-center justify-center gap-0.5 rounded-lg text-base font-semibold leading-tight";
 
-// Phones only. Three labelled actions: WhatsApp, the quote request in the centre (the most
-// prominent), and a call. The quote button scrolls to the page's own form when there is one,
-// otherwise opens /kerko-oferte with the page's service preselected. Hidden while a field has
-// focus (on-screen keyboard). On /kerko-oferte the form is the page, so only WhatsApp and the
-// call remain. Body padding in the layout keeps it from covering content, and the bar steps
-// aside while a form is on screen so it never sits over fields or the submit button.
+// Phones only. Three labelled actions: WhatsApp, the booking button in the centre (the most
+// prominent), and a call. The booking button jumps to the page's booking section (#rezervo) when
+// there is one, otherwise opens /kerko-oferte with the page's service preselected. Hidden while a
+// field has focus (on-screen keyboard). On /kerko-oferte the form is the page, so only WhatsApp
+// and the call remain. Body padding in the layout keeps it from covering content; the bar steps
+// aside while a form ([data-lead-form]) is on screen, and while the homepage hero ([data-hero])
+// is, since the hero carries the same buttons.
 export function MobileStickyCta() {
   const pathname = usePathname();
   const [typing, setTyping] = useState(false);
@@ -35,7 +38,8 @@ export function MobileStickyCta() {
       }
       setFormVisible(visible.size > 0);
     });
-    const observeAll = () => document.querySelectorAll("[data-lead-form]").forEach((el) => observer.observe(el));
+    const observeAll = () =>
+      document.querySelectorAll("[data-lead-form], [data-hero]").forEach((el) => observer.observe(el));
     observeAll();
     // The form swaps for its success message after sending; watch for new form nodes.
     const mutations = new MutationObserver(observeAll);
@@ -65,9 +69,11 @@ export function MobileStickyCta() {
   const onQuotePage = pathname === "/kerko-oferte";
   const quoteHref = service ? `/kerko-oferte?sherbimi=${service}` : "/kerko-oferte";
 
-  // Opens the request flow with the page's service preselected.
-  function onQuote() {
+  // Jumps to the page's booking section when it has one; otherwise opens the request flow with
+  // the page's service preselected.
+  function onQuote(e: MouseEvent<HTMLAnchorElement>) {
     trackEvent("quote_cta_click", { service: service ?? "pergjithshem", placement: "mobile_bar" });
+    if (jumpToLeadForm()) e.preventDefault();
   }
 
   return (
@@ -98,7 +104,7 @@ export function MobileStickyCta() {
           onClick={onQuote}
           className="flex min-h-14 items-center justify-center rounded-full bg-accent px-3 text-center text-lg font-bold leading-tight text-text hover:bg-accent-hover"
         >
-          Kërko ofertë
+          {bookingCtaLabel}
         </a>
       )}
       <a

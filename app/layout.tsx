@@ -1,5 +1,5 @@
 import type { Metadata, Viewport } from "next";
-import { Inter } from "next/font/google";
+import { Barlow_Condensed, Inter } from "next/font/google";
 import "./globals.css";
 import { Header } from "@/components/Header";
 import { Footer } from "@/components/Footer";
@@ -13,6 +13,16 @@ const inter = Inter({
   variable: "--font-inter",
   subsets: ["latin", "latin-ext"],
   weight: ["400", "500", "600", "700", "800"],
+});
+
+// Display headings only (uppercase, condensed). The latin subset (U+0000-00FF) already holds
+// ë and ç. Not preloaded: on most pages it is below the fold, and a preload competes with the
+// hero image; the size-matched fallback shows until it arrives.
+const display = Barlow_Condensed({
+  variable: "--font-barlow",
+  subsets: ["latin"],
+  weight: "800",
+  preload: false,
 });
 
 export const metadata: Metadata = {
@@ -35,7 +45,7 @@ export const viewport: Viewport = {
 
 export default function RootLayout({ children }: LayoutProps<"/">) {
   return (
-    <html lang="sq" className={`${inter.variable} h-full antialiased`}>
+    <html lang="sq" className={`${inter.variable} ${display.variable} h-full antialiased`}>
       <body className="flex min-h-full flex-col pb-[calc(5rem+env(safe-area-inset-bottom))] lg:pb-0">
         <a
           href="#main-content"

@@ -87,4 +87,25 @@ describe("checklists come from templates and answers only", () => {
     expect(c.priorities).toEqual(["Hyrja kryesore"]);
     expect(c.clarify).toContain("Transporti për zonat jashtë Tiranës");
   });
+
+  it("hotels: housekeeping only, never common areas, reception or the hotel kitchen", () => {
+    const c = checklistFor("hotele", {}, ctx);
+    expect(c.excluded).toContain("Ambientet e përbashkëta, recepsioni dhe kuzhina e hotelit");
+    expect(c.included.join(" ")).not.toMatch(/përbashkëta|recepsion/i);
+    expect(services.hotele.questions.map((q) => q.id)).not.toContain("commonAreas");
+  });
+
+  it("carpets: own line, never claimed as extraction, sizes clarified", () => {
+    expect(services.divane.questions.map((q) => q.id)).toContain("carpets");
+    const only = checklistFor("divane", { carpets: 2 }, ctx);
+    expect(only.included).toContain("Larja e qilimave: 2 qilima ose tapete");
+    expect(only.included.join(" ")).not.toMatch(/ekstraktimi/);
+    expect(only.clarify).toContain("Përmasat dhe materiali i qilimave, për t'i shënuar në ofertë");
+    const mixed = checklistFor("divane", { sofas: 1, carpets: 1 }, ctx);
+    expect(mixed.included).toContain("Larja me makineri ekstraktimi: 1 divan");
+    expect(mixed.included).toContain("Larja e qilimave: 1 qilim ose tapet");
+    const unsure = checklistFor("divane", { carpets: 1, material: "nuk-e-di" }, ctx);
+    expect(unsure.clarify.join(" ")).not.toMatch(/ekstraktim/);
+    expect(validateAnswers("divane", { carpets: 99 }).answers.carpets).toBe(10);
+  });
 });

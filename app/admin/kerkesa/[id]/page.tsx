@@ -10,6 +10,7 @@ import { formatDateSq, formatTimeSq, tzDate } from "@/lib/booking/time";
 import { actionLabel, statusLabel, syncLabel } from "@/lib/booking/labels";
 import { siteUrl } from "@/lib/seo";
 import { formatBytes } from "@/lib/booking/media";
+import { preferredTimeLabel } from "@/lib/booking/preferred-time";
 import {
   addressAction,
   approveAction,
@@ -99,6 +100,12 @@ export default async function RequestDetail({ params, searchParams }: { params: 
           {r.name} · <a href={`tel:${r.phone}`} className="font-semibold text-primary underline">{r.phone}</a> · preferon {r.channel === "TELEFON" ? "telefonatë" : "WhatsApp"}
         </p>
         <p className="mt-1">Zona: {r.area ?? "-"}{r.outsideTirana ? " (jashtë Tiranës)" : ""}</p>
+        {r.email && (
+          <p className="mt-1">
+            Email: <a href={`mailto:${r.email}`} className="font-semibold text-primary underline">{r.email}</a>
+          </p>
+        )}
+        {preferredTimeLabel(r.preferredTime) && <p className="mt-1">Koha e preferuar: {preferredTimeLabel(r.preferredTime)}</p>}
         {r.note && <p className="mt-2 whitespace-pre-line rounded-lg bg-bg-muted p-3">{r.note}</p>}
         <div className="mt-4 flex flex-wrap gap-3">
           <a className={primary} href={`https://wa.me/${r.phone.replace(/\D/g, "")}?text=${encodeURIComponent(waText)}`} target="_blank" rel="noopener noreferrer">

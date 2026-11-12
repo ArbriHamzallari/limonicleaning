@@ -9,7 +9,7 @@
 
 import { DEEP_CLEAN_RATE_LEK, ESTIMATE_MAX_M2, ESTIMATE_MIN_M2, formatLek } from "../quote";
 
-export const CATALOG_VERSION = "2026-11-05.1";
+export const CATALOG_VERSION = "2026-11-12.4";
 
 export type ServiceKey =
   | "apartamente"
@@ -73,7 +73,7 @@ export const services: Record<ServiceKey, ServiceDefinition> = {
   "me-themel": {
     key: "me-themel",
     label: "Pastrim me themel",
-    blurb: "Pastrim i thellë: kuzhina, banja, xhamat dhe vendet që harrohen.",
+    blurb: "Pastrim i detajuar: kuzhina, banja, xhamat dhe vendet që harrohen.",
     mediaHint: "Kuzhina, banja, divani dhe dyshekët, si dhe çdo zonë që ka nevojë për më shumë kujdes.",
     questions: [
       {
@@ -100,7 +100,7 @@ export const services: Record<ServiceKey, ServiceDefinition> = {
   },
   apartamente: {
     key: "apartamente",
-    label: "Pastrim gjeneral",
+    label: "Pastrim i rregullt",
     blurb: "Pastrim i rregullt i apartamentit ose shtëpisë, një herë ose periodikisht.",
     mediaHint: "Kuzhina, banja dhe dhomat kryesore.",
     questions: [
@@ -155,7 +155,7 @@ export const services: Record<ServiceKey, ServiceDefinition> = {
   divane: {
     key: "divane",
     label: "Larje divanesh dhe dyshekësh",
-    blurb: "Divane, kënde, kolltuqe, karrige me pëlhurë dhe dyshekë, me makineri ekstraktimi.",
+    blurb: "Divane, kënde, kolltuqe, karrige me pëlhurë dhe dyshekë me makineri ekstraktimi, si dhe qilima.",
     mediaHint: "Çdo divan ose dyshek nga larg, plus një foto nga afër e pëlhurës dhe e njollave.",
     questions: [
       { id: "sofas", type: "count", label: "Divane", min: 0, max: 10 },
@@ -164,6 +164,7 @@ export const services: Record<ServiceKey, ServiceDefinition> = {
       { id: "chairs", type: "count", label: "Karrige me pëlhurë", min: 0, max: 24 },
       { id: "mattressSingle", type: "count", label: "Dyshekë teke", min: 0, max: 12 },
       { id: "mattressDouble", type: "count", label: "Dyshekë dopio", min: 0, max: 12 },
+      { id: "carpets", type: "count", label: "Qilima ose tapete", min: 0, max: 10 },
       {
         id: "material",
         type: "choice",
@@ -227,11 +228,10 @@ export const services: Record<ServiceKey, ServiceDefinition> = {
   hotele: {
     key: "hotele",
     label: "Hotel",
-    blurb: "Dhoma dhe ambiente të përbashkëta për hotele dhe apart-hotele.",
-    mediaHint: "Një dhomë tipike dhe ambientet e përbashkëta.",
+    blurb: "Housekeeping i dhomave për hotele dhe apart-hotele.",
+    mediaHint: "Një dhomë tipike dhe banja e saj.",
     questions: [
       { id: "rooms", type: "count", label: "Sa dhoma?", min: 1, max: 200 },
-      { id: "commonAreas", type: "choice", label: "Edhe ambientet e përbashkëta?", options: [o("po", "Po"), o("jo", "Jo")] },
       { id: "frequency", type: "choice", label: "Si ju duhet?", options: [o("rregullisht", "Rregullisht"), o("sezon", "Vetëm gjatë sezonit"), o("njehere", "Një herë")] },
     ],
   },
@@ -251,7 +251,8 @@ export function isServiceKey(value: unknown): value is ServiceKey {
   return typeof value === "string" && (serviceKeys as string[]).includes(value);
 }
 
-function visible(q: Question, a: Answers): boolean {
+/** Whether a question applies, given the answers so far (a `showIf` on another answer). */
+export function isQuestionVisible(q: Question, a: Answers): boolean {
   if (!q.showIf) return true;
   const v = a[q.showIf.question];
   return typeof v === "string" && q.showIf.in.includes(v);
@@ -285,7 +286,7 @@ export function validateAnswers(service: ServiceKey, raw: unknown): { answers: A
     }
   }
   for (const q of services[service].questions) {
-    if (!visible(q, answers)) delete answers[q.id];
+    if (!isQuestionVisible(q, answers)) delete answers[q.id];
     else if (q.type === "choice" && q.required && answers[q.id] == null) errors[q.id] = "Zgjidhni një përgjigje.";
   }
   return { answers, errors };
@@ -439,8 +440,15 @@ export function checklistFor(service: ServiceKey, a: Answers, ctx: { outsideTira
       ];
       const picked = items.filter(([id]) => num(a, id) > 0).map(([id, one, many]) => plural(num(a, id), one, many));
       included.push("Heqja e pluhurit dhe e papastërtisë së thatë");
-      included.push(picked.length ? `Larja me makineri ekstraktimi: ${picked.join(", ")}` : "Larja me makineri ekstraktimi e sendeve që do të na tregoni");
-      if (str(a, "material") === "lekure" || str(a, "material") === "nuk-e-di") clarify.push("Materiali: a lahet me ekstraktim, e konfirmojmë pas fotove ose vlerësimit");
+      const carpets = num(a, "carpets");
+      if (picked.length) included.push(`Larja me makineri ekstraktimi: ${picked.join(", ")}`);
+      if (carpets > 0) {
+        included.push(`Larja e qilimave: ${plural(carpets, "qilim ose tapet", "qilima ose tapete")}`);
+        clarify.push("Përmasat dhe materiali i qilimave, për t'i shënuar në ofertë");
+      }
+      if (!picked.length && carpets === 0) included.push("Larja me makineri ekstraktimi e sendeve që do të na tregoni");
+      const extraction = picked.length > 0 || carpets === 0;
+      if (extraction && (str(a, "material") === "lekure" || str(a, "material") === "nuk-e-di")) clarify.push("Materiali: a lahet me ekstraktim, e konfirmojmë pas fotove ose vlerësimit");
       if (str(a, "stains") !== "jo") clarify.push("Njollat e vjetra: disa mund të mos hiqen plotësisht");
       excluded.push("Garanci që çdo njollë do të hiqet", "Tharje e menjëhershme: koha varet nga materiali dhe ajrimi");
       break;
@@ -470,10 +478,9 @@ export function checklistFor(service: ServiceKey, a: Answers, ctx: { outsideTira
       excluded.push("Ashensorët e pallatit", "Pastrimi brenda apartamenteve");
       break;
     case "hotele":
-      included.push("Dhomat sipas planit të dakordësuar");
-      if (str(a, "commonAreas") === "po") included.push("Ambientet e përbashkëta");
+      included.push("Housekeeping i dhomave sipas planit të dakordësuar", "Shtrimi i shtretërve me çarçafët e pastër të hotelit");
       clarify.push("Oraret e check-in-it dhe check-out-it dhe periudhat me më shumë punë");
-      excluded.push("Larja dhe hekurosja e çarçafëve dhe e peshqirëve", "Rimbushja e produkteve të konsumit");
+      excluded.push("Ambientet e përbashkëta, recepsioni dhe kuzhina e hotelit", "Larja dhe hekurosja e çarçafëve dhe e peshqirëve", "Rimbushja e produkteve të konsumit");
       break;
     case "tjeter":
       clarify.push("Punët e sakta: i përcaktojmë bashkë pas vlerësimit");

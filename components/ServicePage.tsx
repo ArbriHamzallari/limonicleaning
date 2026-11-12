@@ -3,7 +3,8 @@ import { Breadcrumbs } from "./Breadcrumbs";
 import { LeadActions } from "./LeadActions";
 import { Photo } from "./Photo";
 import { PortfolioVideo } from "./PortfolioVideo";
-import { Closer } from "./Closer";
+import { FaqItem } from "./FaqItem";
+import { BookingSection } from "./booking/BookingSection";
 import { TextLink } from "./TextLink";
 import { Checklist } from "./Checklist";
 import { PracticalInfo } from "./PracticalInfo";
@@ -17,8 +18,9 @@ export function ServicePage({ slug }: { slug: ServiceSlug }) {
   return <ServicePageView page={getService(slug)} />;
 }
 
-// Fixed parts: breadcrumbs, hero, the page's own sections in its own order, a one-line
-// "Mund t'ju interesojë edhe" row, and the closer (with FAQ only when there are 3+).
+// Fixed parts: breadcrumbs, hero, the overview (what the service is and how it differs from the
+// nearest other kind of cleaning), the page's own sections in its own order, a one-line
+// "Mund t'ju interesojë edhe" row, the FAQ (only with 3+ entries) and the booking section.
 // Used by every service page and by /per-biznese (which sits outside "Shërbimet").
 export function ServicePageView({ page }: { page: ServicePageContent }) {
   const breadcrumbItems = [
@@ -27,6 +29,7 @@ export function ServicePageView({ page }: { page: ServicePageContent }) {
     { name: page.navLabel, path: page.path },
   ];
   const related = page.related.map(pageLink);
+  const compare = page.overview.compare.map(pageLink);
   const { hero, heroVideo } = page;
   const hasMedia = !!(hero || heroVideo);
 
@@ -64,6 +67,28 @@ export function ServicePageView({ page }: { page: ServicePageContent }) {
               className="mx-auto w-full max-w-xs lg:col-span-5"
             />
           )}
+        </div>
+      </Section>
+
+      <Section tone="muted" id="cfare-eshte">
+        <div className="grid gap-10 lg:grid-cols-2 lg:gap-14">
+          <div className="max-w-prose">
+            <SectionTitle>Çfarë bëjmë</SectionTitle>
+            <p className="mt-4 text-text-muted">{page.overview.what}</p>
+          </div>
+          <div className="max-w-prose">
+            <SectionTitle>{page.overview.differsTitle}</SectionTitle>
+            <p className="mt-4 text-text-muted">{page.overview.differs}</p>
+            {compare.length > 0 && (
+              <p className="mt-3 flex flex-wrap gap-x-6">
+                {compare.map((link) => (
+                  <TextLink key={link.href} href={link.href} className="text-primary">
+                    {link.label}
+                  </TextLink>
+                ))}
+              </p>
+            )}
+          </div>
         </div>
       </Section>
 
@@ -123,14 +148,23 @@ export function ServicePageView({ page }: { page: ServicePageContent }) {
         </p>
       </Section>
 
-      <Closer
-        service={page.key}
-        placement={`service_${page.key}`}
-        title={page.closer?.title}
-        text={page.closer?.text}
-        faq={page.faq.length >= 3 ? page.faq : undefined}
-        faqTitle="Pyetje për këtë shërbim"
-      />
+      {page.faq.length >= 3 && (
+        <Section className="border-t border-border">
+          <div className="max-w-3xl">
+            <SectionTitle>Pyetje për këtë shërbim</SectionTitle>
+            <div className="mt-6 border-t border-border">
+              {page.faq.map((entry) => (
+                <FaqItem key={entry.question} question={entry.question} answer={entry.answer} />
+              ))}
+            </div>
+            <TextLink href="/faq" className="mt-4 text-primary">
+              Të gjitha pyetjet
+            </TextLink>
+          </div>
+        </Section>
+      )}
+
+      <BookingSection preset={page.key === "biznese" ? undefined : page.key} intro={page.closer?.text} />
     </>
   );
 }
@@ -256,7 +290,7 @@ function SectionBlock({ section }: { section: ServiceSection }) {
     case "note":
       return (
         <Section id={section.id} className="py-6! sm:py-8!">
-          <div className="max-w-3xl border-l-4 border-accent pl-5">
+          <div className="max-w-3xl rounded-lg bg-bg-warm p-5 sm:p-6">
             <p className="text-xl font-semibold">{section.text}</p>
             {section.link && (
               <TextLink href={section.link.href} className="text-lg text-primary">
