@@ -44,8 +44,9 @@ are not fetched before the `load` event.
 
 ### Visual system
 
-- **Display face**: Barlow Condensed 800 through `next/font/google`, subsets latin and
-  latin-ext (ë, ç), exposed as `--font-display`, headings only. Inter stays for everything else.
+- **Display face**: Barlow Condensed 800, self-hosted through `next/font/local`
+  (`app/fonts/`, latin subset, which holds ë and ç), exposed as `--font-display` (wrapping `--font-barlow`), headings only.
+  Inter (also self-hosted) stays for everything else.
 - Uppercase only on display headings, photo-card captions and short kickers. Body copy keeps
   sentence case.
 - Shared pieces: `DisplayHeading` (white or ink line plus a lemon or green second line),

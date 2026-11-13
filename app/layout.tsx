@@ -1,5 +1,5 @@
 import type { Metadata, Viewport } from "next";
-import { Barlow_Condensed, Inter } from "next/font/google";
+import localFont from "next/font/local";
 import "./globals.css";
 import { Header } from "@/components/Header";
 import { Footer } from "@/components/Footer";
@@ -9,19 +9,24 @@ import { InstallPromptListener } from "@/components/InstallShortcut";
 import { AttributionCapture } from "@/components/AttributionCapture";
 import { JsonLd, siteGraphJsonLd, siteUrl } from "@/lib/seo";
 
-const inter = Inter({
+// Fonts are self-hosted (app/fonts, SIL Open Font License) so the build never fetches from
+// Google Fonts. The latin files (U+0000-00FF plus common punctuation) hold every Albanian
+// letter, ë and ç included.
+const inter = localFont({
+  src: "./fonts/inter-latin-var.woff2",
   variable: "--font-inter",
-  subsets: ["latin", "latin-ext"],
-  weight: ["400", "500", "600", "700", "800"],
+  weight: "100 900",
+  display: "swap",
 });
 
-// Display headings only (uppercase, condensed). The latin subset (U+0000-00FF) already holds
-// ë and ç. Not preloaded: on most pages it is below the fold, and a preload competes with the
-// hero image; the size-matched fallback shows until it arrives.
-const display = Barlow_Condensed({
+// Display headings only (uppercase, condensed). Not preloaded: on most pages it is below the
+// fold, and a preload competes with the hero image; the size-matched fallback shows until it
+// arrives.
+const display = localFont({
+  src: "./fonts/barlow-condensed-800-latin.woff2",
   variable: "--font-barlow",
-  subsets: ["latin"],
   weight: "800",
+  display: "swap",
   preload: false,
 });
 

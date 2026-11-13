@@ -25,7 +25,9 @@ This section supersedes the older sections below where they disagree.
   compare) from `lib/services.ts`; `/sherbime` adds a situation picker and a regular versus
   deep-clean comparison.
 - **Display type**: Barlow Condensed 800 (`--font-barlow`, `components/DisplayHeading.tsx`)
-  for a few uppercase headings, latin subset, not preloaded.
+  for a few uppercase headings, latin subset, not preloaded. Inter and Barlow are self-hosted
+  through `next/font/local` (`app/fonts/`, OFL licences beside them), so the build never
+  fetches from Google Fonts.
 - **Checks**: `npm test` (vitest), `npm run check:media` (every `public/` file referenced
   from code exists and is tracked), `npm run build`, `npm run lint`.
 - Media triage and consent: `docs/media-triage-2026-11.md`. Audit and plan:
