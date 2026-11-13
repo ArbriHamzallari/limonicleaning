@@ -11,7 +11,7 @@ export function GET() {
   const lines = [
     `# ${business.name}`,
     "",
-    `> Kompani pastrimi në Tiranë, Shqipëri, me bazë në Komunën e Parisit. Ekip me mbi 10 vjet përvojë në pastrim (përvoja e ekipit; kompania është e re). Mbi 50 prona të pastruara. Pastrim për biznese dhe shtëpi: pastrim me themel, pastrim gjeneral dhe mirëmbajtje e rregullt. ${serviceAreaLine} Ofertat jepen pasi flasim për ambientin (për punët më të mëdha, vizita për vlerësim është pa pagesë); faqja nuk publikon çmime.`,
+    `> Kompani pastrimi në Tiranë, Shqipëri, me bazë në Komunën e Parisit. Ekip me mbi 10 vjet përvojë në pastrim (përvoja e ekipit; kompania është e re). Mbi 50 prona të pastruara. Pastrim për biznese dhe shtëpi: pastrim me themel, pastrim i rregullt dhe mirëmbajtje e rregullt. ${serviceAreaLine} Pastrimi me themel i apartamenteve ka një çmim orientues nga 250 lekë të reja/m² (për 80 m², 20.000 lekë të reja), me larjen e divanit dhe të të gjithë dyshekëve të apartamentit të përfshirë; totali konfirmohet pas vlerësimit. Shtëpitë, vilat dhe shërbimet e tjera ofertohen pas vlerësimit. Plani i pastrimit dhe oferta me shkrim jepen pa pagesë.`,
     "",
     `Kontakt: telefon dhe WhatsApp ${business.phoneDisplay} (${business.whatsappUrl})${business.email ? `, email ${business.email}` : ""}.`,
     "",

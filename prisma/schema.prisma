@@ -7,7 +7,7 @@ generator client {
 }
 
 datasource db {
-  provider = "postgresql"
+  provider  = "postgresql"
   url       = env("DATABASE_URL")
   // Migrations need a direct (non-pooled) connection. Neon via Vercel sets this variable
   // automatically; locally it can be the same value as DATABASE_URL.
@@ -36,23 +36,23 @@ enum BookingStatus {
 }
 
 model Booking {
-  id            String        @id @default(cuid())
-  reference     String        @unique
-  propertyType  PropertyType
-  typology      String
-  cleaningType  CleaningType
-  date          DateTime      @db.Date
-  time          String
-  extras        String[]      @default([])
+  id                String        @id @default(cuid())
+  reference         String        @unique
+  propertyType      PropertyType
+  typology          String
+  cleaningType      CleaningType
+  date              DateTime      @db.Date
+  time              String
+  extras            String[]      @default([])
   estimatedPriceAll Int?
-  name          String
-  phone         String
-  email         String?
-  address       String?
-  notes         String?
-  status        BookingStatus @default(E_RE)
-  createdAt     DateTime      @default(now())
-  updatedAt     DateTime      @updatedAt
+  name              String
+  phone             String
+  email             String?
+  address           String?
+  notes             String?
+  status            BookingStatus @default(E_RE)
+  createdAt         DateTime      @default(now())
+  updatedAt         DateTime      @updatedAt
 
   @@index([createdAt])
   @@map("bookings")
@@ -74,11 +74,17 @@ model ContactMessage {
 // Prompt 03: one model for every enquiry (form on any page). The two tables above are kept
 // for history only; nothing writes to them any more. Don't drop them.
 
+// Manual pipeline, updated by hand (Prisma Studio / SQL). A submitted form is E_RE, never a
+// booking. FITUAR = cleaning confirmed (scope, total and date agreed). See docs/sales-handoff.md.
 enum LeadStatus {
   E_RE
   KONTAKTUAR
+  VLERESIM
   OFERTE_DERGUAR
   FITUAR
+  PERFUNDUAR
+  PAGUAR
+  NE_PRITJE
   HUMBUR
 }
 
@@ -88,25 +94,208 @@ enum ContactChannel {
 }
 
 model Lead {
-  id           String         @id @default(cuid())
-  service      String // slug from lib/service-index.ts, or "tjeter"
-  name         String
-  phone        String // E.164, e.g. +355689007252
-  area         String? // zona në Tiranë, free text
-  message      String?
-  channel      ContactChannel @default(WHATSAPP)
-  pagePath     String // where the form was submitted
+  id               String         @id @default(cuid())
+  service          String // slug from lib/service-index.ts, or "tjeter"
+  name             String
+  phone            String // E.164, e.g. +355689007252
+  area             String? // zona në Tiranë, free text
+  message          String?
+  channel          ContactChannel @default(WHATSAPP)
+  pagePath         String // where the form was submitted
   // Optional quote details (Oct 2026 redesign). Values from lib/service-index.ts.
-  propertyType String? // apartament | vile | zyre | pallat | tjeter
-  sizeM2       Int?
-  frequency    String? // njehere | rregullisht
-  timing       String? // sa-me-shpejt | kete-jave | kete-muaj | pa-date
-  businessName String?
-  utmSource    String?
-  utmCampaign  String?
-  status       LeadStatus     @default(E_RE)
-  createdAt    DateTime       @default(now())
+  propertyType     String? // apartament | vile | zyre | pallat | tjeter
+  sizeM2           Int?
+  frequency        String? // njehere | rregullisht
+  timing           String? // sa-me-shpejt | kete-jave | kete-muaj | pa-date
+  businessName     String?
+  // Nov 2026 assessment flow. All optional; values from lib/lead-form.ts.
+  sizeUnknown      Boolean        @default(false) // visitor chose "Nuk e di" for the area
+  condition        String? // banohet | pas-punimeve | bosh
+  preferredDate    String? // YYYY-MM-DD, a preference only
+  assessmentMethod String? // telefon | foto | vizite
+  priorities       String[]       @default([])
+  /// Indicative amount shown to the visitor (lekë të reja), never a confirmed total.
+  estimateLek      Int?
+  /// Random id per form instance: a retried or double submit returns the first row.
+  clientRequestId  String?        @unique
+  // Owner alert results, written by lib/notify.ts after the row is saved. NULL sentAt = not
+  // delivered (skipped because unconfigured, or failed); notifyStatus says which.
+  emailSentAt      DateTime?
+  whatsappSentAt   DateTime?
+  notifyStatus     String?
+  // Filled in by hand after the conversation (reconciliation with real outcomes).
+  quotedTotalLek   Int?
+  statusNote       String?
+  utmSource        String?
+  utmCampaign      String?
+  status           LeadStatus     @default(E_RE)
+  createdAt        DateTime       @default(now())
 
   @@index([createdAt])
   @@map("leads")
+}
+
+// ---------------------------------------------------------------------------------------
+// Booking requests (Nov 2026): service-specific request → owner review → confirmed booking.
+// The website database is the source of truth for status, scope, price and history; Google
+// Calendar only mirrors holds/bookings as private busy blocks. See docs/booking-system.md.
+// ---------------------------------------------------------------------------------------
+
+enum RequestStatus {
+  PENDING_REVIEW // submitted, Arbri hasn't decided
+  AWAITING_INFO // Arbri asked the customer for more information
+  AWAITING_CUSTOMER // a revised proposal waits for the customer's acceptance
+  CONFIRMED // agreed scope, price and date
+  DECLINED // Limoni can't do it, or the customer declined the revised proposal
+  CANCELLED
+  COMPLETED
+}
+
+enum DateMode {
+  NONE // no date chosen
+  PREFERRED // a preferred date only, NOT held
+  HELD // capacity reserved in slot_reservations while pending
+}
+
+enum CalendarSync {
+  NOT_NEEDED
+  PENDING
+  SYNCED
+  FAILED
+  DRIFT // the Google event was moved or deleted by hand; the booking itself is unchanged
+}
+
+model ServiceRequest {
+  id                String         @id @default(cuid())
+  /// SHA-256 of the customer's status-link token. The raw token is never stored in clear.
+  publicTokenHash   String         @unique
+  /// AES-256-GCM of the raw token, so the owner can copy the customer's link again.
+  publicTokenEnc    String
+  clientRequestId   String?        @unique
+  status            RequestStatus  @default(PENDING_REVIEW)
+  service           String
+  catalogVersion    String
+  answers           Json
+  priorities        String[]       @default([])
+  note              String?
+  name              String
+  phone             String
+  channel           ContactChannel @default(WHATSAPP)
+  /// Optional. Shown only in /admin and the owner email; never on the job sheet, calendar, WhatsApp or analytics.
+  email             String?
+  area              String?
+  outsideTirana     Boolean        @default(false)
+  dateMode          DateMode       @default(NONE)
+  preferredDate     String? // YYYY-MM-DD (Europe/Tirane) when dateMode = PREFERRED
+  preferredTime     String? // "paradite" | "pasdite" | "nuk-ka-rendesi" (lib/booking/preferred-time.ts), a preference only
+  dateNote          String? // why there is no hold (e.g. calendar unavailable)
+  feasibilityOk     Boolean        @default(false) // owner confirmed location + service feasibility
+  plannedCrews      Int? // internal planning, not shown to the customer
+  plannedMinutes    Int?
+  address           String? // added by the owner after confirmation, shown on the job sheet
+  jobSheetTokenHash String?        @unique
+  jobSheetTokenEnc  String?
+  pagePath          String         @default("/kerko-oferte")
+  utmSource         String?
+  utmCampaign       String?
+  emailSentAt       DateTime?
+  whatsappSentAt    DateTime?
+  notifyStatus      String?
+  calendarEventId   String?
+  calendarSync      CalendarSync   @default(NOT_NEEDED)
+  calendarSyncError String?
+  calendarSyncedAt  DateTime?
+  calendarAttempts  Int            @default(0)
+  createdAt         DateTime       @default(now())
+  updatedAt         DateTime       @updatedAt
+
+  proposals    Proposal[]
+  media        RequestMedia[]
+  reservations SlotReservation[]
+  events       RequestEvent[]
+
+  @@index([status, createdAt])
+  @@map("service_requests")
+}
+
+enum ProposalStatus {
+  PROPOSED
+  ACCEPTED
+  SUPERSEDED
+  REJECTED
+}
+
+/// Every version of the scope/price/date, never edited after creation (a template change
+/// later can't silently alter what a customer saw).
+model Proposal {
+  id          String         @id @default(cuid())
+  requestId   String
+  request     ServiceRequest @relation(fields: [requestId], references: [id], onDelete: Cascade)
+  version     Int
+  /// "submitted" (customer's own, from the templates) | "revised" (owner change)
+  kind        String
+  createdBy   String
+  createdAt   DateTime       @default(now())
+  snapshot    Json
+  status      ProposalStatus @default(PROPOSED)
+  respondedAt DateTime?
+  respondedBy String?
+
+  @@unique([requestId, version])
+  @@map("proposals")
+}
+
+model RequestMedia {
+  id           String          @id @default(cuid())
+  requestId    String?
+  request      ServiceRequest? @relation(fields: [requestId], references: [id], onDelete: Cascade)
+  /// Random key the browser holds before the request exists; unclaimed drafts are deleted.
+  draftKeyHash String
+  storageKey   String          @unique
+  originalName String
+  contentType  String
+  sizeBytes    Int
+  kind         String // photo | video
+  status       String          @default("uploading") // uploading | ready | rejected
+  createdAt    DateTime        @default(now())
+  verifiedAt   DateTime?
+
+  @@index([draftKeyHash])
+  @@index([requestId])
+  @@map("request_media")
+}
+
+/// Crew capacity. An exclusion constraint (migration SQL, not expressible in Prisma) forbids
+/// two active rows for the same crew with overlapping [startsAt, endsAt).
+model SlotReservation {
+  id         String         @id @default(cuid())
+  requestId  String
+  request    ServiceRequest @relation(fields: [requestId], references: [id], onDelete: Cascade)
+  /// Crew number 1…crews. NULL = a confirmed job placed by the owner while crew capacity isn't
+  /// configured: it gets a calendar block but is never counted against a crew.
+  crew       Int?
+  startsAt   DateTime // job start (UTC)
+  endsAt     DateTime // job end + buffer (UTC)
+  jobEndsAt  DateTime // job end without buffer
+  status     String         @default("held") // held | confirmed | released
+  createdAt  DateTime       @default(now())
+  releasedAt DateTime?
+
+  @@index([requestId])
+  @@index([startsAt])
+  @@map("slot_reservations")
+}
+
+/// Audit log: who did what, when.
+model RequestEvent {
+  id        String         @id @default(cuid())
+  requestId String
+  request   ServiceRequest @relation(fields: [requestId], references: [id], onDelete: Cascade)
+  at        DateTime       @default(now())
+  actor     String // "klienti", "sistemi" or the owner's username
+  action    String
+  detail    Json?
+
+  @@index([requestId, at])
+  @@map("request_events")
 }

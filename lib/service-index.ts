@@ -1,5 +1,5 @@
 // The small, client-safe part of the service catalogue: slugs, routes and short labels.
-// Header, sticky bar and LeadForm import this; the full page copy lives in lib/services.ts
+// Header, sticky bar and the booking section import this; the full page copy lives in lib/services.ts
 // so it never ends up in the client bundle.
 
 export const serviceSlugs = [
@@ -46,7 +46,7 @@ export const serviceIndex: Record<ServiceSlug, ServiceIndexEntry> = {
   apartamente: {
     path: "/pastrim-apartamentesh-tirane",
     navLabel: "Apartamente dhe shtëpi",
-    chipLabel: "Pastrim gjeneral",
+    chipLabel: "Pastrim i rregullt",
   },
   "me-themel": {
     path: "/pastrim-me-themel-tirane",
@@ -100,8 +100,11 @@ export function pageKeyForPath(pathname: string): PageKey | undefined {
 // ---------------------------------------------------------------------------------------
 // Optional form fields (Lead.propertyType / frequency / timing). Values are stored as-is.
 // ---------------------------------------------------------------------------------------
+// "apartament" meant "apartment or house" before 5 Nov 2026; since then houses are "shtepi"
+// (only apartments get the deep-cleaning reference price).
 export const propertyTypes = [
-  { value: "apartament", label: "Apartament ose shtëpi" },
+  { value: "apartament", label: "Apartament" },
+  { value: "shtepi", label: "Shtëpi" },
   { value: "vile", label: "Vilë" },
   { value: "zyre", label: "Zyrë ose dyqan" },
   { value: "pallat", label: "Pallat ose kompleks" },
@@ -114,11 +117,13 @@ export const frequencies = [
   { value: "rregullisht", label: "Rregullisht" },
 ] as const;
 
+/** Preferred timing. "date" reveals a date picker; every choice is a preference, never a slot. */
 export const timings = [
   { value: "sa-me-shpejt", label: "Sa më shpejt" },
   { value: "kete-jave", label: "Këtë javë" },
   { value: "kete-muaj", label: "Këtë muaj" },
-  { value: "pa-date", label: "Nuk kam datë të caktuar" },
+  { value: "date", label: "Kam një datë" },
+  { value: "pa-date", label: "Jam fleksibël" },
 ] as const;
 
 /** The business-name field only makes sense for these property types. */

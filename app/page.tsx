@@ -1,238 +1,299 @@
 import Link from "next/link";
 import { Section } from "@/components/Section";
-import { LeadActions } from "@/components/LeadActions";
 import { Photo } from "@/components/Photo";
+import { PhotoCard } from "@/components/PhotoCard";
+import { HeroReel } from "@/components/HeroReel";
+import { RotatingWords } from "@/components/RotatingWords";
+import { DisplayHeading } from "@/components/DisplayHeading";
+import { QuoteButton } from "@/components/QuoteButton";
+import { WhatsAppButton } from "@/components/WhatsAppButton";
 import { BeforeAfterSlider } from "@/components/BeforeAfterSlider";
-import { WorkLoop } from "@/components/WorkLoop";
-import { Closer } from "@/components/Closer";
+import { FaqItem } from "@/components/FaqItem";
 import { TextLink } from "@/components/TextLink";
-import { CheckList } from "@/components/icons";
-import { trustFacts, homeFaq, quoteSteps, priceFactors } from "@/lib/content";
+import { CheckIcon } from "@/components/icons";
+import { FounderVideo } from "@/components/FounderVideo";
+import { BookingSection } from "@/components/booking/BookingSection";
+import { faqArea, homeFaq, howItWorks } from "@/lib/content";
 import { businessPath, serviceIndex } from "@/lib/service-index";
-import { businessCtaLabel } from "@/lib/nav";
+import { bookingCtaLabel } from "@/lib/nav";
+import { business } from "@/lib/business";
 import { photos, videos, beforeAfter, naturalAspect } from "@/lib/photos";
-import { waQuoteTemplate } from "@/lib/whatsapp-messages";
+import { assessmentBenefit } from "@/lib/assessment";
+import { DEEP_CLEAN_RATE_LEK, deepCleanExampleLine } from "@/lib/quote";
 import { pageMetadata } from "@/lib/seo";
 
 export const metadata = pageMetadata({
   title: "Kompani pastrimi në Tiranë | Limoni Cleaning",
   absoluteTitle: true,
   description:
-    "Pastrim me themel, pastrim gjeneral dhe mirëmbajtje e rregullt për biznese dhe shtëpi në Tiranë. Na shkruani në WhatsApp për të marrë ofertën tuaj.",
+    "Pastrim për shtëpi, zyra dhe pallate në Tiranë dhe zonat përreth: pastrim me themel, pas ndërtimit, larje divanesh dhe pastrim i rregullt me kontratë. Kërkoni ofertë online ose në WhatsApp.",
   path: "/",
 });
 
 const h2 = "text-3xl leading-tight font-extrabold tracking-tight sm:text-4xl";
+const lead = "mt-4 max-w-[65ch] text-xl text-[var(--fg-muted)]";
 
-// The two doors: homes and businesses. Labels are the reviewed short names, not navLabels.
-const doors = [
+// The service picker: two groups, each card a real photo from our work. Short names, not navLabels.
+const pickerGroups = [
   {
     title: "Për shtëpinë",
-    text: "Apartamente, shtëpi dhe vila, një herë ose rregullisht.",
-    links: [
-      { label: "Pastrim gjeneral", href: serviceIndex.apartamente.path },
-      { label: "Pastrim me themel", href: serviceIndex["me-themel"].path },
-      { label: "Vila", href: serviceIndex.vila.path },
-      { label: "Pastrim pas rinovimit", href: serviceIndex["pas-ndertimit"].path },
-      { label: "Larje divanesh dhe dyshekësh", href: serviceIndex.divane.path },
-      { label: "Airbnb", href: serviceIndex.airbnb.path },
+    cards: [
+      { key: "apartamente", title: "Pastrim i rregullt", text: "Çdo javë ose çdo muaj", photo: photos.livingKitchenAfter },
+      { key: "me-themel", title: "Pastrim me themel", text: "Çdo cep, edhe brenda dollapëve", photo: photos.steamGrout },
+      { key: "vila", title: "Vila", text: "Kate, dhoma dhe xhama të mëdhenj", photo: photos.villaSalon },
+      { key: "pas-ndertimit", title: "Pas ndërtimit ose rinovimit", text: "Pluhuri, xhamat dhe kornizat pas punimeve", photo: photos.constructionGlass },
+      { key: "divane", title: "Larje divanesh dhe dyshekësh", text: "Me makinë ekstraktimi, në vend", photo: photos.armchairExtraction },
     ],
   },
   {
     title: "Për biznesin",
-    text: "Zyra, dyqane, hotele dhe pallate, me plan sipas orarit tuaj.",
-    links: [
-      { label: "Zyra", href: serviceIndex.zyra.path },
-      { label: "Ambientet e pallateve", href: serviceIndex.ambiente.path },
-      { label: "Hotele", href: serviceIndex.hotele.path },
-      { label: "Mirëmbajtje e rregullt", href: businessPath },
+    note: "Me kontratë për pastrim të rregullt.",
+    cards: [
+      { key: "zyra", title: "Zyra dhe dyqane", text: "Sipas orarit tuaj", photo: photos.officeRenovation },
+      { key: "ambiente", title: "Ambientet e pallatit", text: "Shkallë, holle dhe hyrje", photo: photos.stairsTeam },
+      { key: "hotele", title: "Hotele dhe apart-hotele", text: "Me staf shtesë sipas nevojës", photo: photos.guestRoom },
+      { key: "airbnb", title: "Airbnb dhe qira ditore", text: "Pastrim pas çdo largimi", photo: photos.bedroom },
     ],
+  },
+] as const;
+
+const reasons = [
+  {
+    title: "E shihni punën para se të vendosni",
+    text: "Fotot dhe videot në faqe janë nga punët tona, jo foto stoku.",
+  },
+  {
+    title: "Çmimi shpjegohet që në fillim",
+    text: `Pastrimi me themel i apartamentit nis nga ${DEEP_CLEAN_RATE_LEK} lekë të reja/m², si vlerësim orientues. Për shërbimet e tjera, oferta vjen pas vlerësimit.`,
+  },
+  {
+    title: "Divani dhe dyshekët përfshihen",
+    text: "Në pastrimin me themel të apartamentit lajmë divanin dhe dyshekët. Në ofertë shkruhen të gjitha.",
+  },
+  {
+    title: assessmentBenefit,
+    text: "Mbi 50 prona të pastruara deri tani, nga një ekip me mbi 10 vjet përvojë.",
   },
 ];
 
-const gallery = [
-  { photo: photos.constructionBefore, caption: "Apartament i ri para pastrimit pas punimeve" },
-  { photo: photos.kitchen, caption: "Pastrimi i kuzhinës" },
-  { photo: photos.villaSalon, caption: "Salloni i një vile pas pastrimit" },
-];
+// Hero heading: "Pastërti për ... tuaj", one place at a time (confirmed services only).
+const heroPlaces = [
+  "shtëpinë tuaj",
+  "zyrën tuaj",
+  "hotelin tuaj",
+  "vilën tuaj",
+  "dyqanin tuaj",
+  "pallatin tuaj",
+] as const;
+const heroSentence = "Pastërti për shtëpinë, zyrën, hotelin, vilën, dyqanin dhe pallatin tuaj";
 
 export default function Home() {
   return (
     <>
-      {/* Hero */}
-      <Section flush className="pt-8 pb-12 sm:pt-14 sm:pb-16">
-        <div className="grid items-center gap-10 lg:grid-cols-12 lg:gap-12">
-          <div className="lg:col-span-5">
-            <h1 className="text-4xl leading-[1.08] font-extrabold tracking-tight sm:text-5xl lg:text-6xl">
-              Pastrim profesional për biznese dhe shtëpi në Tiranë
-            </h1>
-            <p className="mt-6 max-w-xl text-xl text-text-muted">
-              Pastrim me themel, pastrim gjeneral dhe mirëmbajtje e rregullt. Anëtarët e ekipit kanë mbi 10
-              vjet përvojë në pastrim.
-            </p>
-            <LeadActions placement="home_hero" className="mt-8" />
-            <TextLink href="/puna-jone" className="mt-3 text-primary">
-              Shikoni punën tonë
-            </TextLink>
-          </div>
-          <Photo
-            src={photos.windowsTeam.src}
-            alt={photos.windowsTeam.alt}
-            aspect={naturalAspect(photos.windowsTeam)}
-            sizes="(min-width: 1024px) 58vw, 100vw"
-            className="lg:col-span-7"
-            bleed
-            priority
+      {/* Hero: the work reel first on phones, beside the text on desktop */}
+      <Section tone="dark" flush data-hero className="pb-12 sm:pt-14 sm:pb-16">
+        <div className="grid items-center gap-8 lg:grid-cols-12 lg:gap-12">
+          <HeroReel
+            src={videos.workReel.src}
+            poster={videos.workReel.poster}
+            label={videos.workReel.label}
+            className="-mx-4 sm:mx-0 sm:mt-0 sm:rounded-xl lg:order-last lg:col-span-5"
           />
+          <div className="lg:col-span-7">
+            <DisplayHeading as="h1" size="xl" onDark second={<RotatingWords words={heroPlaces} />}>
+              <span className="sr-only">{heroSentence}. </span>
+              <span aria-hidden>Pastërti për</span>
+            </DisplayHeading>
+            <p className="mt-6 max-w-[55ch] text-xl text-text-on-dark-muted">
+              Pastrim për shtëpi, zyra dhe pallate në Tiranë dhe zonat përreth. Ekip me mbi 10 vjet përvojë.
+            </p>
+            <div className="mt-8 flex flex-wrap gap-3">
+              <QuoteButton href="/kerko-oferte" placement="home_hero" jump>
+                {bookingCtaLabel}
+              </QuoteButton>
+              <WhatsAppButton placement="home_hero" variant="outline" size="lg">
+                Na shkruani në WhatsApp
+              </WhatsAppButton>
+            </div>
+          </div>
         </div>
       </Section>
 
-      {/* Three plain facts */}
-      <section aria-label="Pse Limoni Cleaning" className="mx-auto max-w-6xl px-4 sm:px-6 lg:px-8">
-        <ul className="grid border-y border-border text-lg font-semibold sm:grid-cols-3 sm:divide-x sm:divide-border">
-          {trustFacts.map((fact) => (
-            <li key={fact} className="border-b border-border py-4 last:border-b-0 sm:border-b-0 sm:px-6 sm:first:pl-0">
-              {fact}
-            </li>
-          ))}
-        </ul>
-      </section>
-
-      {/* Two doors: homes and businesses */}
+      {/* Picker */}
       <Section>
-        <div className="grid gap-12 md:grid-cols-2 md:gap-14">
-          {doors.map((door) => (
-            <div key={door.title}>
-              <h2 className={h2}>{door.title}</h2>
-              <p className="mt-3 text-lg text-text-muted">{door.text}</p>
-              <ul className="mt-6 border-t border-border">
-                {door.links.map((link) => (
-                  <li key={link.href} className="border-b border-border">
-                    <Link
-                      href={link.href}
-                      className="flex min-h-14 items-center text-xl font-semibold underline decoration-border decoration-2 underline-offset-8 hover:text-primary hover:decoration-primary"
-                    >
-                      {link.label}
-                    </Link>
-                  </li>
-                ))}
-              </ul>
-            </div>
-          ))}
-        </div>
-        <TextLink href="/sherbime" className="mt-6 text-primary">
-          Shikoni të gjitha shërbimet
+        <h2 className={h2}>Çfarë ju duhet?</h2>
+        <p className={lead}>
+          Zgjidhni shërbimin. Në çdo faqe shihni çfarë përfshihet, foto nga puna dhe si llogaritet çmimi.
+        </p>
+        {pickerGroups.map((group) => (
+          <div key={group.title} className="mt-12">
+            <h3 className="text-2xl font-bold tracking-tight">{group.title}</h3>
+            {"note" in group && <p className="mt-1 text-lg text-text-muted">{group.note}</p>}
+            <ul className="mt-5 grid gap-4 sm:grid-cols-2 lg:grid-cols-3">
+              {group.cards.map((card) => (
+                <li key={card.key}>
+                  <PhotoCard
+                    href={serviceIndex[card.key].path}
+                    src={card.photo.src}
+                    alt={card.photo.alt}
+                    title={card.title}
+                    text={card.text}
+                    sizes="(min-width: 1024px) 33vw, (min-width: 640px) 50vw, 100vw"
+                  />
+                </li>
+              ))}
+            </ul>
+          </div>
+        ))}
+        <TextLink href="/sherbime" className="mt-8 text-primary">
+          Krahasoni të gjitha shërbimet
         </TextLink>
       </Section>
 
-      {/* Businesses: the one dark section */}
-      <Section tone="dark">
+      {/* Why Limoni */}
+      <Section tone="muted">
         <div className="grid items-center gap-10 lg:grid-cols-12 lg:gap-14">
-          <Photo
-            src={photos.stairsTeam.src}
-            alt={photos.stairsTeam.alt}
-            aspect={naturalAspect(photos.stairsTeam)}
-            sizes="(min-width: 1024px) 38vw, 100vw"
-            className="mx-auto w-full max-w-sm lg:col-span-5 lg:max-w-none"
-          />
           <div className="lg:col-span-7">
-            <h2 className={h2}>Zyra, dyqane dhe pallate: pastrim sipas orarit tuaj</h2>
-            <p className="mt-5 text-xl">
-              Vijmë para hapjes, pas mbylljes ose në ditët që zgjidhni. Për ambientet më të mëdha, vijmë
-              fillimisht për një vizitë pa pagesë dhe ju dërgojmë ofertën me shkrim.
-            </p>
-            <CheckList
-              items={[
-                "Një herë ose çdo javë / çdo muaj",
-                "Përpiqemi të dërgojmë të njëjtin ekip sa herë që është e mundur",
-                "Ofertë sipas ambientit tuaj",
-              ]}
-              iconClassName="text-accent"
-              className="mt-6 text-lg"
-            />
-            <LeadActions service="biznese" label={businessCtaLabel} placement="home_business" className="mt-8" />
-            <TextLink href={businessPath} className="mt-3 text-accent">
-              Pastrimi për biznese
-            </TextLink>
+            <h2 className={h2}>Pse Limoni</h2>
+            <ul className="mt-8 space-y-7">
+              {reasons.map((r) => (
+                <li key={r.title} className="flex gap-4">
+                  <CheckIcon className="mt-1.5 h-6 w-6 shrink-0 text-primary" />
+                  <div>
+                    <p className="text-xl font-bold">{r.title}</p>
+                    <p className="mt-1 max-w-[60ch] text-lg text-text-muted">{r.text}</p>
+                  </div>
+                </li>
+              ))}
+            </ul>
           </div>
+          <Photo
+            src={photos.showerTeam.src}
+            alt={photos.showerTeam.alt}
+            aspect={naturalAspect(photos.showerTeam)}
+            sizes="(min-width: 1024px) 38vw, 100vw"
+            className="mx-auto w-full max-w-md lg:col-span-5 lg:max-w-none"
+          />
         </div>
       </Section>
 
-      {/* Before/after, the widest element on the page, then real photos */}
-      <Section tone="muted">
-        <h2 className={h2}>Shikoni ndryshimin para dhe pas</h2>
+      {/* Proof: before and after */}
+      <Section>
+        <h2 className={h2}>Para dhe pas</h2>
+        <p className={lead}>Pamje nga punët tona, pa filtra.</p>
         <BeforeAfterSlider {...beforeAfter} className="mt-8" bleed />
-        <div className="mt-10 grid items-start gap-6 sm:grid-cols-[2fr_3fr]">
+        <div className="mt-8 grid gap-6 sm:grid-cols-2">
           <Photo
-            src={gallery[0].photo.src}
-            alt={gallery[0].photo.alt}
-            caption={gallery[0].caption}
-            aspect={naturalAspect(gallery[0].photo)}
-            sizes="(min-width: 640px) 40vw, 100vw"
+            src={photos.drainBefore.src}
+            alt={photos.drainBefore.alt}
+            caption="Sifoni i dushit para pastrimit"
+            aspect={naturalAspect(photos.drainBefore)}
+            sizes="(min-width: 640px) 50vw, 100vw"
           />
-          <div className="grid gap-6">
-            {gallery.slice(1).map(({ photo, caption }) => (
-              <Photo
-                key={photo.src}
-                src={photo.src}
-                alt={photo.alt}
-                caption={caption}
-                aspect={photo.ratio === "4/3" ? naturalAspect(photo) : "aspect-[4/3]"}
-                sizes="(min-width: 640px) 55vw, 100vw"
-              />
-            ))}
-          </div>
+          <Photo
+            src={photos.drainAfter.src}
+            alt={photos.drainAfter.alt}
+            caption="I njëjti sifon pas pastrimit"
+            aspect={naturalAspect(photos.drainAfter)}
+            sizes="(min-width: 640px) 50vw, 100vw"
+          />
         </div>
         <TextLink href="/puna-jone" className="mt-6 text-primary">
-          Shikoni më shumë foto
+          Shikoni më shumë nga puna jonë
         </TextLink>
       </Section>
 
-      {/* Ekipi në punë: the one moving image (same muted block continues) */}
-      <Section tone="muted" className="pt-0!">
-        <div className="grid items-center gap-10 border-t border-border pt-14 sm:pt-20 lg:grid-cols-12 lg:gap-14">
-          <div className="lg:col-span-7">
-            <h2 className={h2}>Ekipi në punë</h2>
-            <p className="mt-5 max-w-xl text-xl text-text-muted">
-              Larja e një divani me makineri ekstraktimi në shtëpinë e klientit. Pamje reale nga puna jonë.
-            </p>
-            <TextLink href="/rreth-nesh" className="mt-4 text-primary">
-              Më shumë për ne
-            </TextLink>
-          </div>
-          <WorkLoop
-            src={videos.sofaExtraction.src}
-            poster={videos.sofaExtraction.poster}
-            label={videos.sofaExtraction.label}
-            className="mx-auto w-full max-w-xs lg:col-span-5"
-          />
-        </div>
-      </Section>
-
-      {/* Si përgatitet oferta: no prices, but nothing hidden either */}
-      <Section>
-        <h2 className={h2}>Si përgatitet oferta</h2>
+      {/* How it works (the "Si funksionon" nav item lands here) */}
+      <Section tone="muted" id="si-funksionon" className="scroll-mt-20">
+        <h2 className={h2}>Si funksionon</h2>
         <ol className="mt-8 grid gap-x-10 sm:grid-cols-2 lg:grid-cols-4">
-          {quoteSteps.map((step, i) => (
+          {howItWorks.map((step, i) => (
             <li key={step.title} className="border-t-2 border-primary py-5">
-              <p className="text-lg font-bold">
+              <p className="text-xl font-bold">
                 <span aria-hidden className="mr-2 text-primary">
                   {i + 1}
                 </span>
                 {step.title}
               </p>
-              <p className="mt-2 text-text-muted">{step.text}</p>
+              <p className="mt-2 text-lg text-text-muted">{step.text}</p>
             </li>
           ))}
         </ol>
-        <div className="mt-10 max-w-3xl">
-          <h3 className="text-2xl font-bold tracking-tight">Nga çfarë varet çmimi</h3>
-          <CheckList items={priceFactors} className="mt-5 text-lg" />
+      </Section>
+
+      {/* The one public price */}
+      <Section tone="warm">
+        <div className="max-w-3xl">
+          <h2 className={h2}>
+            Pastrim me themel apartamenti: nga {DEEP_CLEAN_RATE_LEK} lekë të reja/m²
+          </h2>
+          <p className="mt-4 text-xl">
+            Vlerësim orientues. Për shembull, {deepCleanExampleLine}; totali konfirmohet pas vlerësimit. Larja e
+            divanit dhe e të gjithë dyshekëve të apartamentit përfshihet.
+          </p>
+          <p className="mt-3 text-lg text-text-muted">
+            Shtëpitë, vilat dhe shërbimet e tjera marrin ofertë pas vlerësimit.
+          </p>
+          <TextLink href={serviceIndex["me-themel"].path} className="mt-5 text-primary">
+            Shikoni çfarë përfshihet
+          </TextLink>
         </div>
       </Section>
 
-      {/* Closer: WhatsApp, phone, form, FAQ */}
-      <Closer whatsappMessage={waQuoteTemplate} placement="home" showSteps={false} faq={homeFaq} />
+      {/* Businesses */}
+      <Section tone="dark">
+        <div className="max-w-3xl">
+          <DisplayHeading size="md" onDark>
+            Jeni kompani?
+          </DisplayHeading>
+          <p className="mt-5 text-xl">
+            Pastrim i rregullt me kontratë për zyra, dyqane, hotele dhe pallate. Punojmë çdo ditë të javës, edhe
+            në fundjavë, sipas orarit tuaj.
+          </p>
+          <div className="mt-8 flex flex-wrap items-center gap-x-8 gap-y-3">
+            <TextLink href={businessPath} className="text-accent">
+              Pastrimi për biznese
+            </TextLink>
+            <a
+              href={`tel:${business.phoneE164}`}
+              className="inline-flex min-h-12 items-center text-lg font-semibold underline decoration-2 underline-offset-8"
+            >
+              Telefononi {business.phoneDisplay}
+            </a>
+          </div>
+        </div>
+      </Section>
+
+      {/* Service area */}
+      <Section>
+        <div className="max-w-3xl">
+          <h2 className={h2}>Ku punojmë</h2>
+          <p className="mt-4 text-xl text-text-muted">{faqArea.answer}</p>
+        </div>
+      </Section>
+
+      {/* FAQ */}
+      <Section tone="muted">
+        <div className="max-w-3xl">
+          <h2 className={h2}>Pyetje të shpeshta</h2>
+          <div className="mt-6 border-t border-border">
+            {homeFaq.map((f) => (
+              <FaqItem key={f.question} question={f.question} answer={f.answer} />
+            ))}
+          </div>
+          <Link
+            href="/faq"
+            className="mt-6 inline-flex min-h-12 items-center text-lg font-semibold text-primary underline decoration-primary/40 decoration-2 underline-offset-8 hover:decoration-primary"
+          >
+            Të gjitha pyetjet
+          </Link>
+        </div>
+      </Section>
+
+      {/* Founder video: renders nothing until a real, captioned file is configured. */}
+      <FounderVideo placement="home" className="mx-auto max-w-4xl px-4 py-14 sm:px-6 sm:py-20 lg:px-8" />
+
+      <BookingSection />
     </>
   );
 }

@@ -1,19 +1,25 @@
 import { Breadcrumbs } from "@/components/Breadcrumbs";
-import { Button } from "@/components/Button";
-import { Checklist } from "@/components/Checklist";
+import { QuoteButton } from "@/components/QuoteButton";
 import { FaqItem } from "@/components/FaqItem";
-import { LeadForm } from "@/components/LeadForm";
+import { FounderVideo } from "@/components/FounderVideo";
+import { BookingSection } from "@/components/booking/BookingSection";
 import { Photo } from "@/components/Photo";
 import { PortfolioVideo } from "@/components/PortfolioVideo";
 import { Section } from "@/components/Section";
 import { TextLink } from "@/components/TextLink";
+import { TrackView } from "@/components/TrackView";
 import { WhatsAppButton } from "@/components/WhatsAppButton";
+import { CheckIcon, MinusIcon } from "@/components/icons";
 import { photos, videos, naturalAspect } from "@/lib/photos";
 import { latestApartmentPhotos, latestApartmentVideos } from "@/lib/latest-project-media";
-import { getService } from "@/lib/services";
+import { getService, pageLink } from "@/lib/services";
+import { deepCleanFaq } from "@/lib/content";
+import { assessmentBenefit, assessmentBenefitText, assessmentRoutes, visitNote } from "@/lib/assessment";
+import { DEEP_CLEAN_EXAMPLE_M2, DEEP_CLEAN_RATE_LEK, formatLek } from "@/lib/quote";
 import { JsonLd, breadcrumbJsonLd, serviceJsonLd } from "@/lib/seo";
 
 const deepCleaning = getService("me-themel");
+const compare = deepCleaning.overview.compare.map(pageLink);
 
 // Keep the current photography in place until the new phone files are converted and
 // committed. The new images depict post-construction cleaning, and are captioned as such.
@@ -27,10 +33,12 @@ const breadcrumbs = [
   { name: "Pastrim me themel", path: "/pastrim-me-themel-tirane" },
 ];
 
+const exampleTotal = formatLek(DEEP_CLEAN_EXAMPLE_M2 * DEEP_CLEAN_RATE_LEK);
+
 const included = [
   {
     label: "Kuzhina",
-    text: "Banakët, dollapët nga brenda sipas marrëveshjes, pajisjet dhe sipërfaqet e përdorimit të përditshëm.",
+    text: "Banakët, dollapët nga brenda, furra, frigoriferi dhe sipërfaqet e përdorimit të përditshëm.",
   },
   {
     label: "Banja",
@@ -46,49 +54,76 @@ const included = [
   },
 ];
 
-const steps = [
-  {
-    title: "Na tregoni çfarë duhet pastruar",
-    description: "Na dërgoni sipërfaqen, zonën dhe disa foto të ambientit.",
-  },
-  {
-    title: "Merrni një ofertë të përshtatur",
-    description: "Vlerësojmë gjendjen e pronës dhe ju propozojmë shërbimin dhe datën.",
-  },
-  {
-    title: "Ekipi kryen pastrimin",
-    description: "Pastrojmë ambientin me kujdes, deri te detajet e dakordësuara.",
-  },
+const priceChanges = [
+  "Gjendja e apartamentit dhe sa kohë ka që nuk është pastruar me themel",
+  "Mbetjet pas punimeve: ky pastrim vlerësohet veçmas",
+  "Sa divane dhe dyshekë ka, përmasat, materiali dhe gjendja e tyre",
+  "Zona: për vendet jashtë Tiranës sqarojmë paraprakisht transportin",
 ];
+
+const excluded = [
+  "Larja dhe hekurosja e rrobave",
+  "Largimi i mbetjeve të mëdha të ndërtimit dhe lyerja e mureve",
+  "Rimbushja e produkteve të konsumit",
+];
+
+const preparation = [
+  "Largoni nga sipërfaqet sendet personale dhe të vlefshme",
+  "Na tregoni për sende të brishta, njolla të vjetra ose zona ku nuk duhet të prekim",
+];
+
+const h2 = "text-3xl font-extrabold tracking-tight sm:text-4xl";
+
+function Bullet({ children, minus = false }: { children: React.ReactNode; minus?: boolean }) {
+  return (
+    <li className="flex gap-3">
+      {minus ? (
+        <MinusIcon className="mt-1 h-5 w-5 shrink-0 text-text-muted" />
+      ) : (
+        <CheckIcon className="mt-1 h-5 w-5 shrink-0 text-primary" />
+      )}
+      <span>{children}</span>
+    </li>
+  );
+}
 
 export function ResidentialDeepCleaningLanding() {
   return (
     <>
       <JsonLd data={serviceJsonLd(deepCleaning.h1, deepCleaning.intro, deepCleaning.path)} />
       <JsonLd data={breadcrumbJsonLd(breadcrumbs)} />
+      <TrackView service="me-themel" />
 
+      {/* Hero: outcome, honest starting price, the two actions. Nothing here needs the video. */}
       <Section className="pt-7! sm:pt-10!">
         <Breadcrumbs items={breadcrumbs} />
         <div className="mt-6 grid items-center gap-10 lg:grid-cols-12 lg:gap-14">
           <div className="lg:col-span-6">
             <h1 className="max-w-2xl text-4xl leading-[1.14] font-extrabold tracking-tight sm:text-5xl">
-              Pastrim me themel, deri në detaj.
+              Pastrim me themel në Tiranë, deri në detaj
             </h1>
             <p className="mt-5 max-w-xl text-xl text-text-muted">
-              Ka vende që pastrimi i përditshëm nuk i arrin. Kujdesemi për
-              kuzhinën, banjën, xhamat dhe papastërtitë e fshehura në apartamente,
-              shtëpi e vila në Tiranë.
+              Kuzhina, banja, xhamat dhe vendet që pastrimi i përditshëm nuk i arrin. Për apartamente, në paketë
+              përfshihet edhe larja e divanit dhe e të gjithë dyshekëve.
             </p>
+            <div className="mt-6 max-w-xl rounded-lg bg-bg-warm p-5">
+              <p className="text-2xl font-extrabold tracking-tight">Apartamente: nga {DEEP_CLEAN_RATE_LEK} lekë të reja/m²</p>
+              <p className="mt-1 text-text-muted">
+                Për shembull, {DEEP_CLEAN_EXAMPLE_M2} m² × {DEEP_CLEAN_RATE_LEK} = {exampleTotal} lekë të reja. Është
+                vlerësim orientues: totalin e konfirmojmë pas vlerësimit. Shtëpitë dhe vilat marrin ofertë pas
+                vlerësimit.
+              </p>
+            </div>
             <div className="mt-8 flex flex-col gap-3 sm:flex-row sm:flex-wrap">
-              <Button href="#merrni-oferten" variant="secondary" size="lg">
-                Merrni ofertën tuaj
-              </Button>
+              <QuoteButton href="/kerko-oferte?sherbimi=me-themel" service="me-themel" placement="deep_cleaning_hero" jump>
+                Kërko vlerësim
+              </QuoteButton>
               <WhatsAppButton service="me-themel" placement="deep_cleaning_hero" variant="outline" size="lg">
                 Na shkruani në WhatsApp
               </WhatsAppButton>
             </div>
-            <p className="mt-5 text-base text-text-muted">
-              Na dërgoni disa foto ose sipërfaqen në m². Çmimi përcaktohet sipas gjendjes dhe përmasave të pronës.
+            <p className="mt-4 text-base text-text-muted">
+              Fotot nuk janë të detyrueshme. Mund ta nisim me një telefonatë.
             </p>
           </div>
           <Photo
@@ -121,26 +156,35 @@ export function ResidentialDeepCleaningLanding() {
         </div>
       </Section>
 
+      {/* What the service is and how it differs from regular and post-construction cleaning. */}
+      <Section id="cfare-eshte">
+        <div className="grid gap-10 lg:grid-cols-2 lg:gap-14">
+          <div className="max-w-prose">
+            <h2 className={h2}>Çfarë bëjmë</h2>
+            <p className="mt-5 text-text-muted">{deepCleaning.overview.what}</p>
+          </div>
+          <div className="max-w-prose">
+            <h2 className={h2}>{deepCleaning.overview.differsTitle}</h2>
+            <p className="mt-5 text-text-muted">{deepCleaning.overview.differs}</p>
+            <p className="mt-3 flex flex-wrap gap-x-6">
+              {compare.map((link) => (
+                <TextLink key={link.href} href={link.href} className="text-primary">
+                  {link.label}
+                </TextLink>
+              ))}
+            </p>
+          </div>
+        </div>
+      </Section>
+
+      {/* What's included, upholstery as part of the package (not a promotion). */}
       <Section id="cfare-perfshin">
         <div className="grid gap-10 lg:grid-cols-12 lg:gap-14">
           <div className="lg:col-span-5">
-            <h2 className="text-3xl font-extrabold tracking-tight sm:text-4xl">
-              Më shumë se një pastrim i zakonshëm
-            </h2>
+            <h2 className={h2}>Çfarë përfshihet</h2>
             <p className="mt-5 text-text-muted">
-              Nuk ndalemi vetëm te sipërfaqet që duken. Puna planifikohet
-              sipas ambientit tuaj dhe përfshin edhe detajet që shpesh lihen pas dore.
-            </p>
-            <div className="mt-7">
-              <Checklist items={[
-                "Brenda dollapëve dhe sirtarëve, sipas gjendjes",
-                "Prapa dhe poshtë mobilieve që mund të lëvizen në mënyrë të sigurt",
-                "Kornizat, bazamentet dhe këndet",
-                "Furra, frigoriferi dhe pajisjet e kuzhinës sipas kërkesës",
-              ]} />
-            </div>
-            <p className="mt-5 text-base text-text-muted">
-              Shtrirjen e saktë të punës e përcaktojmë përpara pastrimit.
+              Puna planifikohet sipas pronës suaj dhe përfshin edhe detajet që shpesh lihen pas dore: brenda
+              dollapëve, prapa dhe poshtë mobilieve që lëvizen në mënyrë të sigurt, kornizat dhe bazamentet.
             </p>
           </div>
           <div className="grid gap-6 sm:grid-cols-2 lg:col-span-7">
@@ -150,22 +194,75 @@ export function ResidentialDeepCleaningLanding() {
                 <p className="mt-3 text-text-muted">{item.text}</p>
               </div>
             ))}
+            <div className="rounded-lg bg-bg-warm p-5 sm:col-span-2">
+              <h3 className="text-xl font-bold">Divani dhe dyshekët e apartamentit</h3>
+              <p className="mt-3">
+                Në pastrimin me themel të një apartamenti përfshihet larja e divanit dhe e të gjithë dyshekëve me
+                makineri ekstraktimi. Gjatë vlerësimit shënojmë sa janë, përmasat, materialin dhe gjendjen, dhe në
+                ofertën me shkrim shkruajmë saktë cilat përfshihen.
+              </p>
+              <p className="mt-3 text-text-muted">
+                Pëlhura nuk thahet menjëherë: koha varet nga materiali dhe ajrimi. Nëse ju duhen po atë ditë, na e
+                thoni që ta planifikojmë.
+              </p>
+            </div>
           </div>
         </div>
       </Section>
 
-      <Section tone="muted" id="puna-jone">
+      {/* How the price works: one worked example, what changes it, where it doesn't apply. */}
+      <Section tone="warm" id="cmimi">
+        <div className="grid gap-10 lg:grid-cols-12 lg:gap-14">
+          <div className="lg:col-span-6">
+            <h2 className={h2}>Si llogaritet çmimi</h2>
+            <div className="mt-7 rounded-lg border border-border bg-bg p-6">
+              <p className="text-text-muted">Shembull për një apartament</p>
+              <p className="mt-2 text-3xl font-extrabold tracking-tight sm:text-4xl">
+                {DEEP_CLEAN_EXAMPLE_M2} m² × {DEEP_CLEAN_RATE_LEK} = {exampleTotal} lekë të reja
+              </p>
+              <p className="mt-3 text-text-muted">
+                Vlerësim orientues; totali konfirmohet pas vlerësimit. {exampleTotal} lekë të reja janë{" "}
+                {formatLek(DEEP_CLEAN_EXAMPLE_M2 * DEEP_CLEAN_RATE_LEK * 10)} lekë të vjetra.
+              </p>
+            </div>
+            <p className="mt-5 text-text-muted">
+              Çmimi orientues vlen vetëm për pastrimin me themel të apartamenteve, ku jetohet ose që janë bosh.
+              Shtëpitë, vilat, zyrat dhe shërbimet e tjera marrin ofertën e tyre pas vlerësimit.
+            </p>
+          </div>
+          <div className="lg:col-span-6">
+            <h3 className="text-2xl font-bold tracking-tight">Çfarë mund ta ndryshojë totalin</h3>
+            <ul className="mt-5 space-y-3">
+              {priceChanges.map((item) => (
+                <Bullet key={item}>{item}</Bullet>
+              ))}
+            </ul>
+            <p className="mt-6 text-text-muted">
+              Totalin e konfirmuar e merrni me shkrim, me të gjitha kostot, përpara se të rezervoni. Nuk ka tarifa të
+              papritura në ditën e pastrimit.
+            </p>
+            <p className="mt-4">
+              Prona është pas punimeve?{" "}
+              <TextLink href="/pastrim-pas-ndertimit-tirane" className="text-primary">
+                Shikoni pastrimin pas ndërtimit
+              </TextLink>
+            </p>
+          </div>
+        </div>
+      </Section>
+
+      {/* Founder video: renders nothing until a real, captioned file is configured. */}
+      <FounderVideo placement="deep_cleaning" className="mx-auto max-w-6xl px-4 pt-14 sm:px-6 sm:pt-20 lg:px-8" />
+
+      <Section id="puna-jone">
         <div className="max-w-3xl">
-          <h2 className="text-3xl font-extrabold tracking-tight sm:text-4xl">
-            Shikoni ekipin në punë
-          </h2>
+          <h2 className={h2}>Shikoni ekipin në punë</h2>
           <p className="mt-4 text-text-muted">
-            Pamje reale nga pastrime me themel dhe pas punimeve të kryera nga
-            ekipi Limoni Cleaning. Materialet vijnë nga ambiente të ndryshme
-            dhe tregojnë punën në proces, jo domosdoshmërisht rezultatin përfundimtar.
+            Pamje reale nga punët e ekipit Limoni Cleaning: një pastrim me themel në një shtëpi me disa kate dhe pastrime
+            pas punimeve. Tregojnë punën në proces, jo domosdoshmërisht rezultatin përfundimtar.
           </p>
         </div>
-        <div className="mt-9 grid items-start gap-8 sm:grid-cols-2 lg:grid-cols-3">
+        <div className="mt-9 grid grid-cols-2 items-start gap-4 sm:gap-8 lg:grid-cols-3">
           <Photo
             src={detailPhoto.src}
             alt={detailPhoto.alt}
@@ -185,7 +282,7 @@ export function ResidentialDeepCleaningLanding() {
             poster={detailVideo.poster}
             caption={detailVideo.caption}
             label={detailVideo.label}
-            className="max-w-sm"
+            className="col-span-2 mx-auto w-full max-w-60 sm:col-span-1 sm:max-w-sm"
           />
         </div>
         <TextLink href="/puna-jone" className="mt-7 text-primary">
@@ -193,59 +290,68 @@ export function ResidentialDeepCleaningLanding() {
         </TextLink>
       </Section>
 
-      <Section>
-        <h2 className="text-3xl font-extrabold tracking-tight sm:text-4xl">Si funksionon?</h2>
-        <ol className="mt-9 grid gap-8 sm:grid-cols-3">
-          {steps.map((step, index) => (
-            <li key={step.title} className="border-t-2 border-primary pt-5">
-              <p className="text-xl font-bold">
-                <span className="mr-3 text-primary">{index + 1}.</span>
-                {step.title}
-              </p>
-              <p className="mt-3 text-text-muted">{step.description}</p>
-            </li>
+      {/* The customer benefit for asking: a deliverable, prepared after the assessment. */}
+      <Section tone="muted" id="vleresimi">
+        <div className="max-w-3xl">
+          <h2 className={h2}>{assessmentBenefit}</h2>
+          <p className="mt-4 text-xl text-text-muted">{assessmentBenefitText}</p>
+        </div>
+        <div className="mt-9 grid gap-8 md:grid-cols-3">
+          {assessmentRoutes.map((route) => (
+            <div key={route.title} className="border-t-2 border-primary pt-5">
+              <h3 className="text-xl font-bold">{route.title}</h3>
+              <p className="mt-3 text-text-muted">{route.text}</p>
+            </div>
           ))}
-        </ol>
+        </div>
+        <p className="mt-8 max-w-3xl text-text-muted">{visitNote}</p>
+        <p className="mt-3 max-w-3xl text-text-muted">
+          Pastrimi rezervohet vetëm pasi të pranoni ofertën dhe të caktojmë bashkë datën. Ekipi sjell pajisjet dhe
+          solucionet.
+        </p>
       </Section>
 
-      <Section id="merrni-oferten" tone="warm" className="scroll-mt-20">
-        <div className="grid gap-9 lg:grid-cols-12 lg:gap-14">
-          <div className="lg:col-span-5">
-            <h2 className="text-3xl font-extrabold tracking-tight sm:text-4xl">
-              Sa kohë ka që shtëpia juaj nuk është pastruar me themel?
-            </h2>
-            <p className="mt-5 text-text-muted">
-              Na tregoni sipërfaqen, zonën dhe çfarë ju shqetëson më shumë.
-              Ekipi ynë ju kontakton për një ofertë të personalizuar.
-            </p>
-            <div className="mt-7">
-              <WhatsAppButton service="me-themel" placement="deep_cleaning_form" variant="outline" size="lg">
-                Dërgoni foto në WhatsApp
-              </WhatsAppButton>
-            </div>
+      <Section tone="muted" id="para-pastrimit">
+        <div className="grid gap-10 md:grid-cols-2 md:gap-14">
+          <div>
+            <h2 className="text-2xl font-bold tracking-tight sm:text-3xl">Çfarë nuk përfshihet</h2>
+            <span className="sr-only">Këto nuk përfshihen:</span>
+            <ul className="mt-5 space-y-3">
+              {excluded.map((item) => (
+                <Bullet key={item} minus>
+                  {item}
+                </Bullet>
+              ))}
+            </ul>
           </div>
-          <div className="lg:col-span-7">
-            <LeadForm page="me-themel" placement="deep_cleaning_inline_form" />
+          <div>
+            <h2 className="text-2xl font-bold tracking-tight sm:text-3xl">Para pastrimit</h2>
+            <ul className="mt-5 space-y-3">
+              {preparation.map((item) => (
+                <Bullet key={item}>{item}</Bullet>
+              ))}
+            </ul>
           </div>
         </div>
       </Section>
 
       <Section>
-        <h2 className="text-3xl font-extrabold tracking-tight sm:text-4xl">
-          Pyetjet që na bëni më shpesh
-        </h2>
+        <h2 className={h2}>Pyetjet që na bëni më shpesh</h2>
         <div className="mt-7 max-w-3xl border-t border-border">
-          {deepCleaning.faq.map((item) => (
+          {deepCleanFaq.map((item) => (
             <FaqItem key={item.question} question={item.question} answer={item.answer} />
           ))}
         </div>
-        <p className="mt-7 text-text-muted">
-          Keni nevojë për pastrim pas ndërtimit?{" "}
-          <TextLink href="/pastrim-pas-ndertimit-tirane" className="text-primary">
-            Shikoni shërbimin për pastrim pas punimeve.
-          </TextLink>
-        </p>
+        <TextLink href="/faq" className="mt-5 text-primary">
+          Të gjitha pyetjet
+        </TextLink>
       </Section>
+
+      <BookingSection
+        preset="me-themel"
+        title="Kërkoni vlerësim për pronën tuaj"
+        intro="Zgjidhni datën që ju përshtatet dhe na tregoni për pronën. Për apartamente shihni vlerësimin orientues para se ta dërgoni; planin dhe ofertën me shkrim jua dërgojmë pa pagesë."
+      />
     </>
   );
 }

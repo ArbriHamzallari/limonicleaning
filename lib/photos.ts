@@ -110,6 +110,84 @@ export const photos = {
     orientation: "portrait",
     ratio: "9/16",
   },
+  // 26 Oct to 9 Nov 2026 jobs (docs/media-triage-2026-11.md), GPS stripped, 1600px long edge.
+  drainBefore: {
+    src: "/images/sifon-para-pastrimit.jpg",
+    alt: "Sifon dyshemeje në banjë, i zënë me ndotje dhe gëlqere, para pastrimit",
+    caption: "Sifoni i banjës para pastrimit",
+    orientation: "portrait",
+    ratio: "3/4",
+  },
+  drainAfter: {
+    src: "/images/sifon-pas-pastrimit.jpg",
+    alt: "I njëjti sifon dyshemeje pas pastrimit, i pastër dhe pa gëlqere",
+    caption: "I njëjti sifon pas pastrimit",
+    orientation: "portrait",
+    ratio: "3/4",
+  },
+  balconyDoorTeam: {
+    src: "/images/ekipi-pastrim-dritaresh-apartament.jpg",
+    alt: "Punonjëse e Limoni Cleaning duke pastruar me fshirëse xhami derën e ballkonit në një apartament në Tiranë",
+    caption: "Pastrimi i xhamave të ballkonit",
+    orientation: "portrait",
+    ratio: "3/4",
+  },
+  showerTeam: {
+    src: "/images/ekipi-pastrim-kabine-dushi.jpg",
+    alt: "Punonjës i Limoni Cleaning duke pastruar kabinën e dushit në një banjë apartamenti",
+    caption: "Pastrimi i kabinës së dushit",
+    orientation: "portrait",
+    ratio: "3/4",
+  },
+  machineTank: {
+    src: "/images/uji-i-ndotur-ne-depozite-te-makines.jpg",
+    alt: "Depozita e makinerisë së larjes me ujin e ndotur që doli gjatë larjes",
+    caption: "Uji i ndotur në depozitën e makinerisë",
+    orientation: "portrait",
+    ratio: "3/4",
+  },
+  tilesBefore: {
+    src: "/images/pllaka-te-ndotura-para-pastrimit.jpg",
+    alt: "Pllaka dyshemeje me fuga të nxira dhe njolla, para pastrimit",
+    caption: "Dyshemeja para pastrimit",
+    orientation: "portrait",
+    ratio: "3/4",
+  },
+  steamGrout: {
+    src: "/images/pastrim-me-avull-pllakash-kuzhine.jpg",
+    alt: "Punonjëse e Limoni Cleaning duke pastruar me avull fugat e pllakave të dyshemesë në një kuzhinë",
+    caption: "Pastrimi me avull i fugave të dyshemesë",
+    orientation: "portrait",
+    ratio: "3/4",
+  },
+  balconyGlassTeam: {
+    src: "/images/ekipi-pastrim-xhamash-ballkoni.jpg",
+    alt: "Punonjëse duke pastruar me shkop xhamat e lartë të një ballkoni të mbyllur",
+    caption: "Xhamat e lartë të ballkonit të mbyllur",
+    orientation: "portrait",
+    ratio: "3/4",
+  },
+  steamWindowFrame: {
+    src: "/images/pastrim-me-avull-korniza-dritareje.jpg",
+    alt: "Punonjëse e Limoni Cleaning duke pastruar me avull kornizën e një dritareje",
+    caption: "Pastrimi me avull i kornizës së dritares",
+    orientation: "portrait",
+    ratio: "3/4",
+  },
+  armchairExtraction: {
+    src: "/images/larje-kolltuku-me-ekstraktim.jpg",
+    alt: "Punonjëse e Limoni Cleaning duke larë një kolltuk me makineri ekstraktimi",
+    caption: "Larja e kolltukut me makineri ekstraktimi",
+    orientation: "portrait",
+    ratio: "3/4",
+  },
+  livingKitchenAfter: {
+    src: "/images/sallon-dhe-kuzhine-pas-pastrimit.jpg",
+    alt: "Sallon me kuzhinë të hapur dhe dysheme druri, i rregullt pas pastrimit",
+    caption: "Salloni dhe kuzhina pas pastrimit",
+    orientation: "landscape",
+    ratio: "4/3",
+  },
 } satisfies Record<string, PhotoAsset>;
 
 /** Short real clips (H.264, no sound, no location data). `label` is the accessible name. */
@@ -144,6 +222,14 @@ export const videos = {
     poster: "/images/shkalle-pas-pastrimit.jpg",
     label: "Shkallë graniti dhe parmakë druri pas pastrimit",
     caption: "Shkallët dhe parmakët pas pastrimit",
+  },
+  // Homepage hero: 18 s, 720x900, silent, cut from ten of the best November clips.
+  workReel: {
+    src: "/videos/puna-jone-permbledhje.mp4",
+    poster: "/images/puna-jone-permbledhje.jpg",
+    label:
+      "Pamje të shkurtra nga puna e ekipit të Limoni Cleaning: banjë, dysheme me avull, divan dhe dyshek me makineri, xhama dhe dhoma pas pastrimit",
+    caption: "Ekipi në punë, në punët e fundit në Tiranë",
   },
 } satisfies Record<string, VideoAsset>;
 

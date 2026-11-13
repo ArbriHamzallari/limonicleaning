@@ -1,13 +1,16 @@
 "use client";
 
-import { useEffect, useState } from "react";
+import { useEffect, useState, type MouseEvent } from "react";
 import Link from "next/link";
 import { usePathname } from "next/navigation";
 import { Logo } from "./Logo";
 import { Button } from "./Button";
 import { WhatsAppButton } from "./WhatsAppButton";
 import { PhoneButton } from "./PhoneButton";
-import { mainNav, mainCtaLabel } from "@/lib/nav";
+import { InstallShortcut } from "./InstallShortcut";
+import { trackEvent } from "@/lib/analytics";
+import { mainNav, mobileMenuExtraLinks, bookingCtaLabel } from "@/lib/nav";
+import { jumpToLeadForm } from "@/lib/jump-to-form";
 import { pageKeyForPath } from "@/lib/service-index";
 
 export function Header() {
@@ -29,10 +32,18 @@ export function Header() {
   }, [open]);
 
   const close = () => setOpen(false);
+  const bookingHref = service ? `/kerko-oferte?sherbimi=${service}` : "/kerko-oferte";
+
+  // Every booking button lands on the page's own booking section when there is one.
+  function onBook(e: MouseEvent<HTMLAnchorElement>, placement: string) {
+    trackEvent("quote_cta_click", { service: service ?? "pergjithshem", placement });
+    close();
+    if (jumpToLeadForm()) e.preventDefault();
+  }
 
   return (
-    <header className="sticky top-0 z-50 border-b border-border bg-bg">
-      <div className="mx-auto flex h-16 max-w-6xl items-center justify-between gap-4 px-4 sm:px-6 lg:h-20 lg:px-8">
+    <header className="sticky top-0 z-50 border-b border-border bg-bg print:hidden">
+      <div className="mx-auto flex h-16 max-w-6xl items-center justify-between gap-2 px-4 sm:gap-4 sm:px-6 lg:h-20 lg:px-8">
         <Link href="/" onClick={close} className="inline-flex min-h-12 items-center" aria-label="Limoni Cleaning, kryefaqja">
           <Logo />
         </Link>
@@ -58,8 +69,8 @@ export function Header() {
         <div className="hidden items-center gap-4 lg:flex">
           <PhoneButton placement="header" variant="link" className="whitespace-nowrap no-underline! text-text hover:text-primary max-xl:hidden!" />
           <PhoneButton placement="header" iconOnly className="xl:hidden!" />
-          <Button href="/kerko-oferte" variant="secondary" className="whitespace-nowrap">
-            {mainCtaLabel}
+          <Button href={bookingHref} variant="secondary" className="whitespace-nowrap" onClick={(e) => onBook(e, "header")}>
+            {bookingCtaLabel}
           </Button>
         </div>
 
@@ -98,12 +109,7 @@ export function Header() {
 
           <nav aria-label="Kryesore" className="mt-6">
             <ul className="border-t border-border">
-              {[
-                { label: "Kryefaqja", href: "/" },
-                ...mainNav,
-                { label: "Kontakt", href: "/kontakt" },
-                { label: "Pyetje të shpeshta", href: "/faq" },
-              ].map(
+              {[...mainNav, ...mobileMenuExtraLinks].map(
                 (item) => (
                   <li key={item.href} className="border-b border-border">
                     <Link
@@ -123,9 +129,11 @@ export function Header() {
             </ul>
           </nav>
 
-          <Button href="/kerko-oferte" variant="secondary" size="lg" className="mt-6 w-full" onClick={close}>
-            {mainCtaLabel}
+          <Button href={bookingHref} variant="secondary" size="lg" className="mt-6 w-full" onClick={(e) => onBook(e, "mobile_menu")}>
+            {bookingCtaLabel}
           </Button>
+
+          <InstallShortcut placement="mobile_menu" className="mt-6 border-t border-border pt-4" />
         </div>
       )}
     </header>

@@ -1,0 +1,186 @@
+<!doctype html>
+<html lang="sq">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>Limoni mockup (Phase 1, not production)</title>
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link href="https://fonts.googleapis.com/css2?family=Barlow+Condensed:wght@700;800&family=Bebas+Neue&family=Inter:wght@400;500;600;700;800&family=Oswald:wght@700&display=swap" rel="stylesheet">
+<!--
+  Static mockup for docs/clarity-audit-2026-11.md, section 6. Not shipped.
+  Brand tokens from CLAUDE.md. Photo overlay is flat #0F3520 at 82% (no gradient),
+  so white and lemon text pass WCAG AA body contrast even over a pure white pixel.
+  Lemon text appears only on green or on the darkened photo, never on white.
+-->
+<style>
+  :root {
+    --green: #184A2C; --green-dark: #0F3520;
+    --lemon: #F5C518; --lemon-hover: #E5B60C;
+    --white: #FFFFFF; --muted-bg: #F8F8F5; --cream: #FEFBEA;
+    --text: #16241C; --muted: #5B6B60; --border: #ECE9E1;
+    --display: "Barlow Condensed", "Inter", sans-serif;
+  }
+  * { box-sizing: border-box; margin: 0; }
+  body { font-family: Inter, sans-serif; color: var(--text); background: var(--white); font-size: 18px; line-height: 1.55; }
+  a { color: inherit; }
+  .wrap { max-width: 1200px; margin: 0 auto; padding: 0 16px; }
+
+  header { background: var(--white); border-bottom: 1px solid var(--border); }
+  header .wrap { display: flex; align-items: center; justify-content: space-between; min-height: 64px; gap: 16px; }
+  .logo { white-space: nowrap; font-weight: 800; font-size: 20px; color: var(--green); text-decoration: none; display: flex; align-items: center; gap: 8px; }
+  .logo span.mark { width: 22px; height: 22px; border-radius: 50% 50% 50% 0; background: var(--lemon); border: 3px solid var(--green); display: inline-block; }
+  nav { display: none; gap: 28px; font-weight: 600; font-size: 16px; }
+  nav a { text-decoration: none; }
+  .head-actions { display: flex; align-items: center; gap: 12px; }
+  .tel { white-space: nowrap; min-height: 48px; display: inline-flex; align-items: center; font-weight: 700; color: var(--green); text-decoration: none; font-size: 16px; }
+  .menu { min-height: 48px; min-width: 48px; border: 1px solid var(--border); border-radius: 10px; background: none; font: 600 16px Inter, sans-serif; padding: 0 14px; }
+
+  .hero { position: relative; color: var(--white); background: var(--green-dark) url("../../../public/images/ekipi-pastrim-xhamash-pas-ndertimit-tirane.jpg") center / cover no-repeat; }
+  .hero::before { content: ""; position: absolute; inset: 0; background: rgba(15, 53, 32, 0.82); }
+  .hero .wrap { position: relative; padding-top: 40px; padding-bottom: 48px; }
+  .hero h1 { font-family: var(--display); font-weight: 800; text-transform: uppercase; font-size: 52px; line-height: 1.02; letter-spacing: 0.01em; }
+  .hero h1 .l2 { display: block; color: var(--lemon); }
+  .hero p { margin-top: 18px; max-width: 34ch; color: var(--cream); }
+  .btns { margin-top: 28px; display: flex; flex-direction: column; gap: 12px; }
+  .btn { min-height: 52px; display: inline-flex; align-items: center; justify-content: center; border-radius: 12px; font-weight: 700; text-decoration: none; padding: 0 24px; font-size: 18px; }
+  .btn-primary { background: var(--lemon); color: var(--text); }
+  .btn-ghost { border: 2px solid var(--white); color: var(--white); }
+
+  section { padding: 56px 0; }
+  h2 { font-family: var(--display); font-weight: 800; text-transform: uppercase; font-size: 40px; line-height: 1; color: var(--green); }
+  .lead { margin-top: 12px; color: var(--muted); max-width: 52ch; }
+
+  .picker { background: var(--muted-bg); }
+  .groups { margin-top: 28px; display: grid; gap: 20px; }
+  .group { background: var(--green); color: var(--white); border-radius: 16px; padding: 24px; }
+  .group h3 { font-family: var(--display); font-weight: 800; text-transform: uppercase; font-size: 30px; line-height: 1; color: var(--lemon); }
+  .group .who { margin-top: 6px; color: var(--cream); font-size: 16px; }
+  .group ul { list-style: none; padding: 0; margin-top: 16px; }
+  .group li a { display: block; min-height: 56px; padding: 12px 0; border-top: 1px solid rgba(255,255,255,0.18); text-decoration: none; }
+  .group li strong { display: block; font-size: 18px; }
+  .group li span { display: block; font-size: 16px; color: var(--cream); }
+
+  .why { display: grid; gap: 28px; }
+  .why img { width: 100%; aspect-ratio: 4 / 3; object-fit: cover; border-radius: 16px; display: block; }
+  .points { list-style: none; padding: 0; margin-top: 24px; display: grid; gap: 22px; }
+  .points strong { display: block; font-size: 20px; color: var(--green); }
+  .points p { color: var(--muted); margin-top: 4px; }
+
+  .fonts { background: var(--green-dark); color: var(--white); }
+  .fonts h2 { color: var(--white); }
+  .specimen { margin-top: 28px; border-top: 1px solid rgba(255,255,255,0.2); padding-top: 20px; }
+  .specimen .name { font-size: 14px; color: var(--cream); font-weight: 600; }
+  .specimen .words { margin-top: 8px; font-size: 48px; line-height: 1.05; text-transform: uppercase; }
+  .specimen .words em { font-style: normal; color: var(--lemon); }
+  .f-bebas { font-family: "Bebas Neue", sans-serif; font-weight: 400; }
+  .f-oswald { font-family: "Oswald", sans-serif; font-weight: 700; }
+  .f-barlow7 { font-family: "Barlow Condensed", sans-serif; font-weight: 700; }
+  .f-barlow8 { font-family: "Barlow Condensed", sans-serif; font-weight: 800; }
+  .f-inter { font-family: Inter, sans-serif; font-weight: 800; letter-spacing: -0.02em; }
+
+  .tel-long { display: none; }
+  .note { font-size: 14px; color: var(--muted); padding: 24px 0 40px; }
+
+  @media (min-width: 900px) {
+    nav { display: flex; }
+    .menu { display: none; }
+    .tel-long { display: inline; } .tel-short { display: none; }
+    .hero .wrap { padding-top: 96px; padding-bottom: 104px; }
+    .hero h1 { font-size: 104px; }
+    .hero p { font-size: 20px; max-width: 46ch; }
+    .btns { flex-direction: row; }
+    h2 { font-size: 56px; }
+    .groups { grid-template-columns: 1fr 1fr; }
+    .why { grid-template-columns: 1.1fr 1fr; align-items: center; gap: 56px; }
+    .specimen .words { font-size: 72px; }
+  }
+</style>
+</head>
+<body>
+
+<header>
+  <div class="wrap">
+    <a class="logo" href="#"><span class="mark" aria-hidden="true"></span>Limoni Cleaning</a>
+    <nav aria-label="Kryesore">
+      <a href="#">Shërbimet</a><a href="#">Për biznese</a><a href="#">Foto nga puna</a><a href="#">Rreth nesh</a>
+    </nav>
+    <div class="head-actions">
+      <a class="tel" href="tel:+355689007252"><span class="tel-long">068 900 7252</span><span class="tel-short">Telefono</span></a>
+      <button class="menu" type="button">Menu</button>
+    </div>
+  </div>
+</header>
+
+<main>
+  <section class="hero" aria-labelledby="h1">
+    <div class="wrap">
+      <h1 id="h1">Pastërti në çdo shtëpi <span class="l2">dhe për biznesin</span></h1>
+      <p>Pastrim për shtëpi, zyra dhe pallate në Tiranë dhe zonat përreth. Ekip me mbi 10 vjet përvojë.</p>
+      <div class="btns">
+        <a class="btn btn-primary" href="#">Merrni ofertën tuaj</a>
+        <a class="btn btn-ghost" href="#">Shkruani në WhatsApp</a>
+      </div>
+    </div>
+  </section>
+
+  <section class="picker" aria-labelledby="picker-h">
+    <div class="wrap">
+      <h2 id="picker-h">Çfarë ju duhet?</h2>
+      <p class="lead">Zgjidhni shërbimin. Në çdo faqe shihni çfarë përfshihet, foto nga puna dhe si llogaritet çmimi.</p>
+      <div class="groups">
+        <div class="group">
+          <h3>Për shtëpinë</h3>
+          <p class="who">Apartamente, shtëpi dhe vila</p>
+          <ul>
+            <li><a href="#"><strong>Pastrim i rregullt</strong><span>Çdo javë ose çdo muaj</span></a></li>
+            <li><a href="#"><strong>Pastrim me themel</strong><span>Çdo cep, edhe brenda dollapëve</span></a></li>
+            <li><a href="#"><strong>Vila</strong><span>Kate, dhoma dhe xhama të mëdhenj</span></a></li>
+            <li><a href="#"><strong>Pas ndërtimit ose rinovimit</strong><span>Pluhuri, xhamat dhe kornizat pas punimeve</span></a></li>
+            <li><a href="#"><strong>Larje divanesh dhe dyshekësh</strong><span>Me makinë ekstraktimi, në vend</span></a></li>
+          </ul>
+        </div>
+        <div class="group">
+          <h3>Për biznesin</h3>
+          <p class="who">Me kontratë për pastrim të rregullt</p>
+          <ul>
+            <li><a href="#"><strong>Zyra dhe dyqane</strong><span>Sipas orarit tuaj</span></a></li>
+            <li><a href="#"><strong>Ambientet e pallatit</strong><span>Shkallë, holle dhe hyrje</span></a></li>
+            <li><a href="#"><strong>Hotele dhe apart-hotele</strong><span>Me staf shtesë sipas nevojës</span></a></li>
+            <li><a href="#"><strong>Airbnb dhe qira ditore</strong><span>Pastrim pas çdo largimi</span></a></li>
+          </ul>
+        </div>
+      </div>
+    </div>
+  </section>
+
+  <section aria-labelledby="why-h">
+    <div class="wrap why">
+      <img src="../../../public/images/pastrim-me-avull-korniza-dere.jpg" alt="Pastrim me avull i kornizës së derës gjatë një pastrimi me themel">
+      <div>
+        <h2 id="why-h">Pse Limoni</h2>
+        <ul class="points">
+          <li><strong>E shihni punën para se të vendosni</strong><p>Fotot dhe videot në faqe janë nga punët tona në Tiranë, jo foto stoku.</p></li>
+          <li><strong>Çmimi shpjegohet që në fillim</strong><p>Pastrim me themel për apartamente: nga 250 lekë të reja/m², vlerësim orientues. Për shërbimet e tjera, çmimi jepet pas vlerësimit.</p></li>
+          <li><strong>Divani dhe dyshekët përfshihen</strong><p>Në pastrimin me themel të apartamentit lajmë divanin dhe dyshekët. Në ofertë shkruhen të gjitha.</p></li>
+          <li><strong>Plan pastrimi dhe ofertë me shkrim, pa pagesë</strong><p>Mbi 50 prona të pastruara deri tani.</p></li>
+        </ul>
+      </div>
+    </div>
+  </section>
+
+  <section class="fonts" id="fonts" aria-labelledby="fonts-h">
+    <div class="wrap">
+      <h2 id="fonts-h" class="f-inter" style="text-transform:none;font-size:28px">Krahasim fontesh (vetëm për rishikim)</h2>
+      <div class="specimen"><div class="name">Bebas Neue 400</div><div class="words f-bebas">Pastërti · Çdo · Shtëpi · <em>Për biznesin</em></div></div>
+      <div class="specimen"><div class="name">Oswald 700</div><div class="words f-oswald">Pastërti · Çdo · Shtëpi · <em>Për biznesin</em></div></div>
+      <div class="specimen"><div class="name">Barlow Condensed 700</div><div class="words f-barlow7">Pastërti · Çdo · Shtëpi · <em>Për biznesin</em></div></div>
+      <div class="specimen"><div class="name">Barlow Condensed 800</div><div class="words f-barlow8">Pastërti · Çdo · Shtëpi · <em>Për biznesin</em></div></div>
+      <div class="specimen"><div class="name">Inter 800 (fonti i vetëm sot)</div><div class="words f-inter">Pastërti · Çdo · Shtëpi · <em>Për biznesin</em></div></div>
+    </div>
+  </section>
+</main>
+
+<div class="wrap note">Mockup statik për rishikim, jo faqe e publikuar.</div>
+</body>
+</html>

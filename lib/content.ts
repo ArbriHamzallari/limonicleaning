@@ -1,8 +1,10 @@
 // Site-wide copy that isn't tied to one service. Service copy lives in lib/services.ts.
 // Wording is the Albanian reviewer's final text (docs/limoni-copy-final.md).
-// No prices, no em dashes, nothing beyond the confirmed facts in CLAUDE.md.
+// One published price only (deep cleaning of homes, lib/quote.ts); no em dashes, nothing beyond
+// the confirmed facts in CLAUDE.md.
 
-import { priceAnswer } from "./services";
+import { deepCleanPriceAnswer, priceAnswer } from "./services";
+import { DEEP_CLEAN_RATE_LEK } from "./quote";
 
 export interface FaqEntry {
   question: string;
@@ -18,34 +20,23 @@ export const trustFacts = [
 ];
 
 /** Service area, everywhere it's mentioned. */
-export const serviceAreaLine = "Punojmë në të gjithë Tiranën dhe në zonat përreth.";
-
-/** Free assessment visit: only for larger jobs (CLAUDE.md, 17 Oct 2026). */
-export const freeVisitLine = "Për punët më të mëdha, vijmë fillimisht për të parë ambientin. Vizita është pa pagesë.";
-
-/** Next to WhatsApp: photos make the offer more precise. */
-export const photosHint =
-  "Nëse keni foto ose një video të shkurtër të ambientit, na i dërgoni në WhatsApp. Kjo na ndihmon t'ju japim një ofertë më të saktë.";
-
-/** What happens after someone writes to us (service page closers and /kerko-oferte). */
-export const closerSteps = [
-  { title: "Na kontaktoni", text: "Na dërgoni në WhatsApp madhësinë, zonën dhe llojin e pronës." },
-  { title: "Ju dërgojmë ofertën", text: "Shqyrtojmë çfarë ju nevojitet dhe ju përgatisim ofertën." },
-  { title: "Vijmë dhe pastrojmë", text: "Caktojmë bashkë ditën dhe orarin, pastaj ekipi vjen në pronë." },
-];
+export const serviceAreaLine = "Punojmë në Tiranë dhe në zonat përreth, si Kamza dhe Durrësi.";
 
 /** Homepage "Si përgatitet oferta". */
 export const quoteSteps = [
   {
     title: "Na tregoni çfarë ju duhet",
-    text: "Plotësoni formularin, na shkruani në WhatsApp ose na telefononi.",
+    text: "Plotësoni formularin, na shkruani në WhatsApp ose na telefononi. Sipërfaqja, zona dhe lloji i pastrimit mjaftojnë.",
   },
   {
-    title: "E shohim ambientin",
-    text: "Shqyrtojmë fotot ose videon që na dërgoni, ose vijmë për një vizitë pa pagesë kur puna është më e madhe.",
+    title: "Bëjmë vlerësimin",
+    text: "Me një telefonatë, me foto nëse doni, ose me vizitë kur gjendja nuk sqarohet dot nga larg.",
   },
-  { title: "Ju dërgojmë ofertën", text: "Ju tregojmë me shkrim çfarë përfshihet dhe sa kushton." },
-  { title: "Caktojmë ditën", text: "Pasi të pranoni ofertën, caktojmë ditën dhe orarin e punës." },
+  {
+    title: "Merrni planin dhe ofertën me shkrim",
+    text: "Punët që përfshihen, ato që nuk përfshihen dhe totali. Pa pagesë dhe pa detyrim.",
+  },
+  { title: "Konfirmojmë datën", text: "Pastrimi rezervohet vetëm pasi të pranoni ofertën dhe të caktojmë ditën." },
 ];
 
 export const priceFactors = [
@@ -55,7 +46,46 @@ export const priceFactors = [
   "Një herë apo rregullisht",
 ];
 
-const faqPrice: FaqEntry = { question: "Sa kushton pastrimi?", answer: priceAnswer };
+const faqPrice: FaqEntry = {
+  question: "Sa kushton pastrimi?",
+  answer: `Për pastrimin me themel të një apartamenti, çmimi orientues nis nga ${DEEP_CLEAN_RATE_LEK} lekë të reja/m²: për 80 m², llogaritja bazë është 20.000 lekë të reja. Totalin e konfirmojmë pas vlerësimit. Për shtëpitë, vilat dhe shërbimet e tjera, ${priceAnswer.charAt(0).toLowerCase()}${priceAnswer.slice(1)}`,
+};
+
+const faqUnits: FaqEntry = {
+  question: "Çmimet janë në lekë të reja apo të vjetra?",
+  answer:
+    "Në lekë të reja. 250 lekë të reja janë 2.500 lekë të vjetra. Për shembull, 20.000 lekë të reja janë 200.000 lekë të vjetra.",
+};
+
+const faqPhotos: FaqEntry = {
+  question: "A duhet t'ju dërgoj foto të shtëpisë?",
+  answer:
+    "Jo. Fotot ndihmojnë, por nuk janë të detyrueshme. Mund ta nisim me një telefonatë. Nëse duhet ta shohim ambientin, caktojmë një vizitë vlerësimi; nëse ajo ka kosto, jua themi përpara.",
+};
+
+const faqRequest: FaqEntry = {
+  question: "A është rezervim kërkesa që dërgoj?",
+  answer:
+    "Jo. Formulari ose mesazhi në WhatsApp është kërkesë për vlerësim. Pastrimi rezervohet vetëm kur biem dakord për punët, totalin dhe datën.",
+};
+
+const faqPlan: FaqEntry = {
+  question: "Çfarë është plani i pastrimit pa pagesë?",
+  answer:
+    "Pas vlerësimit ju dërgojmë me shkrim punët që përfshihen, ato që nuk përfshihen, totalin dhe si ta përgatitni pronën. E përgatisim pa pagesë dhe nuk keni detyrim të rezervoni.",
+};
+
+export const faqUpholsteryIncluded: FaqEntry = {
+  question: "A përfshihet larja e divanit dhe e dyshekëve?",
+  answer:
+    "Në pastrimin me themel të një apartamenti, po: larja e divanit dhe e të gjithë dyshekëve të apartamentit përfshihet në paketë. Gjatë vlerësimit shënojmë sa janë, përmasat, materialin dhe gjendjen, dhe në ofertën me shkrim shkruajmë saktë cilat përfshihen. Larja e divaneve si shërbim më vete ka ofertën e vet.",
+};
+
+export const faqDrying: FaqEntry = {
+  question: "Sa kohë duhet që të thahen divani dhe dyshekët?",
+  answer:
+    "Varet nga materiali dhe ajrimi i dhomës. Nuk thahen menjëherë pas larjes. Nëse ju duhen po atë ditë, na e thoni që ta planifikojmë para rezervimit.",
+};
 
 const faqHowToAsk: FaqEntry = {
   question: "Si mund të kërkoj një ofertë?",
@@ -63,14 +93,16 @@ const faqHowToAsk: FaqEntry = {
     "Na lini emrin dhe numrin te formulari ose na shkruani drejtpërdrejt në WhatsApp. Ju kontaktojmë për të kuptuar nevojat tuaja dhe për të përgatitur ofertën.",
 };
 
-const faqArea: FaqEntry = {
+export const faqArea: FaqEntry = {
   question: "Në cilat zona punoni?",
-  answer: "Punojmë në të gjithë Tiranën dhe në zonat përreth. Baza jonë është në Komunën e Parisit.",
+  answer:
+    "Punojmë në Tiranë dhe në zonat përreth, si Kamza dhe Durrësi. Baza jonë është në Komunën e Parisit. Për zonat jashtë Tiranës, konfirmojmë paraprakisht mundësinë dhe kostot e transportit.",
 };
 
 const faqVisit: FaqEntry = {
   question: "A vini për ta parë ambientin para ofertës?",
-  answer: "Po, për punët më të mëdha. Vizita është pa pagesë.",
+  answer:
+    "Po, kur duhet. Shpesh mjafton një telefonatë. Nëse vizita ka ndonjë kosto, jua themi përpara dhe vijmë vetëm pasi të bini dakord. Plani dhe oferta me shkrim janë pa pagesë.",
 };
 
 const faqSchedule: FaqEntry = {
@@ -79,11 +111,56 @@ const faqSchedule: FaqEntry = {
 };
 
 /** The four shown on the homepage. */
-export const homeFaq: FaqEntry[] = [faqPrice, faqHowToAsk, faqArea, faqVisit];
+export const homeFaq: FaqEntry[] = [faqPrice, faqPhotos, faqRequest, faqVisit];
+
+/** Homepage "Si funksionon": what happens after a request. Never implies a held date or a free visit. */
+export const howItWorks = [
+  {
+    title: "Zgjidhni shërbimin dhe një datë",
+    text: "Data që zgjidhni është e preferuar. Nuk mbahet derisa ta konfirmojmë bashkë.",
+  },
+  {
+    title: "Ju telefonojmë",
+    text: "Sqarojmë punën. Kur duhet, caktojmë një vizitë; nëse ka kosto, jua themi që më parë.",
+  },
+  {
+    title: "Plan dhe ofertë me shkrim",
+    text: "Pa pagesë dhe pa detyrim. Në ofertë shkruhet çfarë përfshihet dhe totali.",
+  },
+  {
+    title: "Konfirmojmë ditën",
+    text: "Ditën dhe orën e caktojmë vetëm pasi të pranoni ofertën.",
+  },
+];
+
+/** Deep-cleaning page: its own price answer plus the shared practical ones. */
+export const deepCleanFaq: FaqEntry[] = [
+  { question: "Sa kushton pastrimi me themel?", answer: deepCleanPriceAnswer },
+  faqUnits,
+  faqUpholsteryIncluded,
+  faqDrying,
+  faqPhotos,
+  faqRequest,
+  {
+    question: "Cili është ndryshimi nga pastrimi pas ndërtimit?",
+    answer:
+      "Çmimi orientues vlen për apartamente ku jetohet ose që janë bosh. Pas punimeve ka pluhur, mbetje ngjitësi ose boje që kërkojnë më shumë kohë, prandaj ai pastrim vlerësohet veçmas dhe nuk llogaritet automatikisht me 250 lekë të reja/m².",
+  },
+  {
+    question: "A vlen ky çmim edhe për shtëpi dhe vila?",
+    answer:
+      "Jo. Për momentin çmimi orientues vlen vetëm për apartamente. Për shtëpitë dhe vilat ju japim planin dhe ofertën me shkrim pas vlerësimit.",
+  },
+  faqArea,
+];
 
 /** Everything on /faq (the only page with FAQPage structured data). */
 export const faqEntries: FaqEntry[] = [
   faqPrice,
+  faqUnits,
+  faqPlan,
+  faqPhotos,
+  faqRequest,
   faqHowToAsk,
   faqArea,
   faqVisit,
@@ -96,8 +173,10 @@ export const faqEntries: FaqEntry[] = [
   {
     question: "Çfarë përfshin pastrimi me themel?",
     answer:
-      "Përfshin gjithçka nga pastrimi i rregullt, plus pastrimin e detajuar të kuzhinës dhe banjës, brenda dollapëve, frigoriferit dhe furrës, si dhe dyerve, bazamenteve dhe kornizave.",
+      "Përfshin gjithçka nga pastrimi i rregullt, plus pastrimin e detajuar të kuzhinës dhe banjës, brenda dollapëve, frigoriferit dhe furrës, si dhe dyerve, bazamenteve dhe kornizave. Për apartamentet, në paketë përfshihet edhe larja e divanit dhe e të gjithë dyshekëve.",
   },
+  faqUpholsteryIncluded,
+  faqDrying,
   {
     question: "A punoni me biznese dhe pallate?",
     answer:
@@ -105,7 +184,8 @@ export const faqEntries: FaqEntry[] = [
   },
   {
     question: "A lani divane dhe dyshekë?",
-    answer: "Po, me makineri ekstraktimi, në shtëpinë ose zyrën tuaj.",
+    answer:
+      "Po, me makineri ekstraktimi, në shtëpinë ose zyrën tuaj. Si shërbim më vete, çmimi varet nga numri, përmasat dhe gjendja.",
   },
   {
     question: "Çfarë përfshin pastrimi Airbnb?",
@@ -129,7 +209,7 @@ export const faqEntries: FaqEntry[] = [
   {
     question: "A bëni pastrim hotelesh?",
     answer:
-      "Po, ndihmojmë hotelet dhe apart-hotelet me pastrimin e dhomave dhe të ambienteve të përbashkëta.",
+      "Po, bëjmë housekeeping për hotele dhe apart-hotele: pastrojmë dhe rregullojmë dhomat midis mysafirëve, sipas orareve të check-in-it dhe check-out-it.",
   },
   {
     question: "Po nëse duhet ta shtyj ose ta anuloj pastrimin?",

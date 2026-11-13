@@ -1,14 +1,14 @@
-import { Button } from "./Button";
+import { QuoteButton } from "./QuoteButton";
 import { WhatsAppButton } from "./WhatsAppButton";
-import { mainCtaLabel } from "@/lib/nav";
+import { bookingCtaLabel } from "@/lib/nav";
 import type { PageKey } from "@/lib/service-index";
 
-// Hero (and the home business block) only. The main button appears in the header and heroes;
-// everywhere else the action is WhatsApp or the phone (ContactActions / Closer).
+// Hero buttons: the booking button jumps to the page's booking section (#rezervo) and falls back
+// to /kerko-oferte with the service preselected; WhatsApp sits beside it.
 export function LeadActions({
   service,
   placement,
-  label = mainCtaLabel,
+  label = bookingCtaLabel,
   className = "",
 }: {
   service?: PageKey;
@@ -20,9 +20,9 @@ export function LeadActions({
 
   return (
     <div className={`flex flex-col gap-3 sm:flex-row sm:flex-wrap ${className}`}>
-      <Button href={quoteHref} variant="secondary" size="lg" className="sm:whitespace-nowrap">
+      <QuoteButton href={quoteHref} service={service} placement={placement} jump className="sm:whitespace-nowrap">
         {label}
-      </Button>
+      </QuoteButton>
       <WhatsAppButton service={service} placement={placement} variant="outline" size="lg" className="sm:whitespace-nowrap">
         WhatsApp
       </WhatsAppButton>

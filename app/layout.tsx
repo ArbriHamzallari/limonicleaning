@@ -1,16 +1,33 @@
-import type { Metadata } from "next";
-import { Inter } from "next/font/google";
+import type { Metadata, Viewport } from "next";
+import localFont from "next/font/local";
 import "./globals.css";
 import { Header } from "@/components/Header";
 import { Footer } from "@/components/Footer";
 import { MobileStickyCta } from "@/components/MobileStickyCta";
 import { Analytics } from "@/components/Analytics";
+import { InstallPromptListener } from "@/components/InstallShortcut";
+import { AttributionCapture } from "@/components/AttributionCapture";
 import { JsonLd, siteGraphJsonLd, siteUrl } from "@/lib/seo";
 
-const inter = Inter({
+// Fonts are self-hosted (app/fonts, SIL Open Font License) so the build never fetches from
+// Google Fonts. The latin files (U+0000-00FF plus common punctuation) hold every Albanian
+// letter, ë and ç included.
+const inter = localFont({
+  src: "./fonts/inter-latin-var.woff2",
   variable: "--font-inter",
-  subsets: ["latin", "latin-ext"],
-  weight: ["400", "500", "600", "700", "800"],
+  weight: "100 900",
+  display: "swap",
+});
+
+// Display headings only (uppercase, condensed). Not preloaded: on most pages it is below the
+// fold, and a preload competes with the hero image; the size-matched fallback shows until it
+// arrives.
+const display = localFont({
+  src: "./fonts/barlow-condensed-800-latin.woff2",
+  variable: "--font-barlow",
+  weight: "800",
+  display: "swap",
+  preload: false,
 });
 
 export const metadata: Metadata = {
@@ -21,11 +38,19 @@ export const metadata: Metadata = {
   },
   description:
     "Pastrim profesional për shtëpi, zyra, vila dhe Airbnb në Tiranë. Na lini numrin ose na shkruani në WhatsApp dhe ju japim ofertën.",
+  applicationName: "Limoni Cleaning",
+  appleWebApp: { capable: true, title: "Limoni", statusBarStyle: "default" },
+};
+
+export const viewport: Viewport = {
+  themeColor: "#FFFFFF",
+  // Lets env(safe-area-inset-bottom) work for the mobile action bar on iPhones.
+  viewportFit: "cover",
 };
 
 export default function RootLayout({ children }: LayoutProps<"/">) {
   return (
-    <html lang="sq" className={`${inter.variable} h-full antialiased`}>
+    <html lang="sq" className={`${inter.variable} ${display.variable} h-full antialiased`}>
       <body className="flex min-h-full flex-col pb-[calc(5rem+env(safe-area-inset-bottom))] lg:pb-0">
         <a
           href="#main-content"
@@ -40,6 +65,8 @@ export default function RootLayout({ children }: LayoutProps<"/">) {
         </main>
         <Footer />
         <MobileStickyCta />
+        <InstallPromptListener />
+        <AttributionCapture />
         <Analytics />
       </body>
     </html>

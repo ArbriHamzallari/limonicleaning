@@ -4,6 +4,35 @@ For a new contributor or AI agent. Describes the site as of 29 September 2026, a
 lead-first refactor (`prompts/03-lead-first-refactor.md`). `CLAUDE.md` holds the rules and
 business facts; this file explains how the code is put together.
 
+## 0. Current state (12 November 2026, clarity restructure)
+
+This section supersedes the older sections below where they disagree.
+
+- **Every public form is the booking section** (`components/booking/BookingSection.tsx`,
+  anchor `#rezervo`), placed once before the footer on each marketing page. Steps: service,
+  preferred date and time (calendar in Europe/Tirane, no past dates), contact and property
+  details, review. It posts to `POST /api/kerkesa` and sends the customer to
+  `/kerkesa/<token>`. `/kerko-oferte` keeps the full flow (`BookingWizard`). `LeadForm`,
+  `Closer` and `WorkLoop` are gone; `POST /api/lead` has no UI caller.
+- **Dates are preferences, not holds**, until live holds are configured
+  (`BOOKING_SETTINGS`). Demo slots appear only outside production with `?orare-demo`.
+- **Navigation**: Kryefaqja · Shërbimet · Si funksionon · Rreth nesh; booking button
+  "Rezervoni pastrimin" in the header, on every service hero and in the mobile bar.
+- **Homepage** opens with `HeroReel`: a silent loop of real work
+  (`public/videos/puna-jone-permbledhje.mp4`, no audio stream), fetched only after the
+  load event, never with reduced motion or Save-Data, with a pause button.
+- **Service pages** carry an `overview` (what it is, how it differs, which services to
+  compare) from `lib/services.ts`; `/sherbime` adds a situation picker and a regular versus
+  deep-clean comparison.
+- **Display type**: Barlow Condensed 800 (`--font-barlow`, `components/DisplayHeading.tsx`)
+  for a few uppercase headings, latin subset, not preloaded. Inter and Barlow are self-hosted
+  through `next/font/local` (`app/fonts/`, OFL licences beside them), so the build never
+  fetches from Google Fonts.
+- **Checks**: `npm test` (vitest), `npm run check:media` (every `public/` file referenced
+  from code exists and is tracked), `npm run build`, `npm run lint`.
+- Media triage and consent: `docs/media-triage-2026-11.md`. Audit and plan:
+  `docs/clarity-audit-2026-11.md`, `docs/phase2-plan-2026-11.md`.
+
 ## 1. What the site does
 
 A lead-first marketing site for a cleaning company in Tirana. Every page explains a service,
@@ -145,5 +174,5 @@ originals live in git-ignored `media-source/`. Never put raw phone files in `pub
 - **Google Business Profile** (service-area business), then real Google reviews, then a
   reviews section linking to the profile. Submit the sitemap in Search Console once the
   domain resolves.
-- **Hours, email address, social profiles:** add to `lib/business.ts` when they exist;
-  `sameAs` in the JSON-LD fills automatically.
+- **Hours:** add to `lib/business.ts` when they exist. Email and the Instagram and Facebook
+  profiles are already there; `sameAs` in the JSON-LD picks up profiles automatically.

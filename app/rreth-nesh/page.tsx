@@ -1,7 +1,7 @@
 import { Section } from "@/components/Section";
 import { SectionHeading } from "@/components/SectionHeading";
 import { Breadcrumbs } from "@/components/Breadcrumbs";
-import { ContactActions } from "@/components/ContactActions";
+import { BookingSection } from "@/components/booking/BookingSection";
 import { Photo } from "@/components/Photo";
 import { JsonLd, breadcrumbJsonLd, pageMetadata } from "@/lib/seo";
 import { aboutValues } from "@/lib/content";
@@ -32,15 +32,17 @@ export default function RrethNeshPage() {
             <p className="mt-4 text-xl text-text-muted">
               Limoni Cleaning është kompani pastrimi në Tiranë, me bazë në Komunën e Parisit. Pastrojmë
               zyra, dyqane, hotele dhe ambientet e përbashkëta të pallateve, si dhe apartamente, shtëpi
-              dhe vila.
+              dhe vila. Lajmë divane, dyshekë dhe qilima, dhe pastrojmë xhama e fasada.
             </p>
             <p className="mt-4 text-text-muted">
               Kompania është e re, por anëtarët e ekipit kanë mbi 10 vjet përvojë në pastrim, të fituar
-              në kompani të tjera pastrimi. Deri tani kemi pastruar mbi 50 prona.
+              në kompani të tjera pastrimi. Deri tani kemi pastruar mbi 50 prona. Punën e drejton
+              themeluesi, Arbri.
             </p>
             <p className="mt-4 text-text-muted">
-              Punojmë në të gjithë Tiranën dhe në zonat përreth, një herë ose rregullisht. Për punët më
-              të mëdha, vijmë fillimisht për të parë ambientin. Vizita është pa pagesë.
+              Punojmë në Tiranë dhe në zonat përreth, si Kamza dhe Durrësi, një herë ose rregullisht.
+              Pas vlerësimit ju japim planin e pastrimit dhe ofertën me shkrim, pa pagesë dhe pa detyrim për
+              të rezervuar.
             </p>
           </div>
           <Photo
@@ -65,10 +67,7 @@ export default function RrethNeshPage() {
         </dl>
       </Section>
 
-      <Section>
-        <SectionHeading title="Flisni me ne" intro="Na tregoni për pronën dhe ju japim ofertën." />
-        <ContactActions placement="rreth_nesh_footer" />
-      </Section>
+      <BookingSection />
     </>
   );
 }
